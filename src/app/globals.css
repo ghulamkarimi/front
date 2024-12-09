@@ -1,21 +1,389 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+
+
+.calendar-container {
+  display: flex;
+  justify-content: center;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+.time-buttons button {
+  background-color: #28a745;
+  color: white;
+  padding: 10px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.time-buttons button:hover {
+  background-color: #218838;
+}
+
+.time-buttons button:disabled {
+  background-color: #dc3545;
+  cursor: not-allowed;
+}
+
+h1, h3 {
+  text-align: center;
+  font-family: 'Arial', sans-serif;
+}
+
+
+
+
+
+
+.even-bg > :nth-child(even) {
+  @apply bg-orange-500 rounded-lg py-1 px-1;
+}
+
+
+
+.text-shadow {
+  text-shadow: 1px 3px 4px #000000;
+}
+.offerCarte {
+  border-radius: 32px 0px;
+}
+
+/* Auswahl des Containers, der die beiden Monate enthält */
+.react-datepicker__month-container {
+  margin-right: 3rem; /* Abstand zwischen den Monaten */
+}
+
+/* CalendarStyles.css */
+
+.react-datepicker {
+  font-size: 1rem; /* Vergrößert die allgemeine Schriftgröße im Kalender */
+  width: 100%;       /* Passt die Breite an */
+}
+
+.react-datepicker__month-container {
+  width: 300px;      /* Breite jedes Monats anpassen */
+}
+@media (min-width: 768px) { /* Ab md-Bildschirmgröße */
+  .react-datepicker__month-container {
+    width: 300px; /* Größere Breite für mittlere Bildschirme */
+  }
+}
+@media (min-width: 1055px) { /* Ab lg-Bildschirmgröße */
+  .react-datepicker__month-container {
+    width: 285px; /* Noch größere Breite für große Bildschirme */
+  }
+  .react-datepicker {
+    font-size: 1rem; /* Vergrößert die allgemeine Schriftgröße im Kalender */
+    width: 100%;       /* Passt die Breite an */
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@media (min-width: 1364px) { /* Ab lg-Bildschirmgröße */
+  .react-datepicker__month-container {
+    width: 250px; /* Noch größere Breite für große Bildschirme */
+  }
+  .react-datepicker {
+    font-size: 1rem; /* Vergrößert die allgemeine Schriftgröße im Kalender */
+    width: 72%;       /* Passt die Breite an */
+  }
+  .react-datepicker__month-container {
+    margin-right: 4rem; /* Abstand zwischen den Monaten */
+  }
 }
+
+.react-datepicker__day,
+.react-datepicker__day-name {
+  width: 3rem;
+  height: 3rem;      /* Höhe und Breite der Tage anpassen */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.react-datepicker__current-month {
+  font-size: 1.5rem; /* Schriftgröße des Monatsnamens */
+}
+
+.react-datepicker__header {
+  padding: 1rem;     /* Abstand im Header */
+}
+
+.react-datepicker__navigation {
+  top: 1.5rem;       /* Anpassung der Navigation-Icons */
+}
+
+
+.register-background {
+  @apply bg-cover bg-center bg-no-repeat min-h-screen flex justify-center items-center flex-col text-white text-center px-4;
+}
+.hintergrund {
+  @apply bg-cover bg-center bg-no-repeat min-h-screen flex justify-center items-center flex-col text-white text-center px-4;
+}
+
+.home-background {
+  @apply bg-cover bg-center bg-no-repeat min-h-screen; 
+}
+
+.cardInfoSell {
+  @apply text-gray-600 flex items-center gap-2 text-[8px] lg:text-[8px] xl:text-[12px] font-bold
+}
+.cardInfoSellIcon {
+  @apply text-orange-500 text-[14px] lg:text-[16px] xl:text-[18px]
+}
+
+.inputRegister {
+  @apply p-2 my-2 bg-white text-black rounded-md w-64 lg:w-80 text-sm lg:text-base xl:text-lg
+}
+
+@layer base {
+  :root {
+
+
+
+    --background: 0 0% 100%;
+
+
+
+    --foreground: 0 0% 3.9%;
+
+
+
+    --card: 0 0% 100%;
+
+
+
+    --card-foreground: 0 0% 3.9%;
+
+
+
+    --popover: 0 0% 100%;
+
+
+
+    --popover-foreground: 0 0% 3.9%;
+
+
+
+    --primary: 0 0% 9%;
+
+
+
+    --primary-foreground: 0 0% 98%;
+
+
+
+    --secondary: 0 0% 96.1%;
+
+
+
+    --secondary-foreground: 0 0% 9%;
+
+
+
+    --muted: 0 0% 96.1%;
+
+
+
+    --muted-foreground: 0 0% 45.1%;
+
+
+
+    --accent: 0 0% 96.1%;
+
+
+
+    --accent-foreground: 0 0% 9%;
+
+
+
+    --destructive: 0 84.2% 60.2%;
+
+
+
+    --destructive-foreground: 0 0% 98%;
+
+
+
+    --border: 0 0% 89.8%;
+
+
+
+    --input: 0 0% 89.8%;
+
+
+
+    --ring: 0 0% 3.9%;
+
+
+
+    --chart-1: 12 76% 61%;
+
+
+
+    --chart-2: 173 58% 39%;
+
+
+
+    --chart-3: 197 37% 24%;
+
+
+
+    --chart-4: 43 74% 66%;
+
+
+
+    --chart-5: 27 87% 67%;
+
+
+
+    --radius: 0.5rem
+  }
+
+  .dark {
+
+
+
+    --background: 0 0% 3.9%;
+
+
+
+    --foreground: 0 0% 98%;
+
+
+
+    --card: 0 0% 3.9%;
+
+
+
+    --card-foreground: 0 0% 98%;
+
+
+
+    --popover: 0 0% 3.9%;
+
+
+
+    --popover-foreground: 0 0% 98%;
+
+
+
+    --primary: 0 0% 98%;
+
+
+
+    --primary-foreground: 0 0% 9%;
+
+
+
+    --secondary: 0 0% 14.9%;
+
+
+
+    --secondary-foreground: 0 0% 98%;
+
+
+
+    --muted: 0 0% 14.9%;
+
+
+
+    --muted-foreground: 0 0% 63.9%;
+
+
+
+    --accent: 0 0% 14.9%;
+
+
+
+    --accent-foreground: 0 0% 98%;
+
+
+
+    --destructive: 0 62.8% 30.6%;
+
+
+
+    --destructive-foreground: 0 0% 98%;
+
+
+
+    --border: 0 0% 14.9%;
+
+
+
+    --input: 0 0% 14.9%;
+
+
+
+    --ring: 0 0% 83.1%;
+
+
+
+    --chart-1: 220 70% 50%;
+
+
+
+    --chart-2: 160 60% 45%;
+
+
+
+    --chart-3: 30 80% 55%;
+
+
+
+    --chart-4: 280 65% 60%;
+
+
+
+    --chart-5: 340 75% 55%
+  }
+}
+
+
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-dots {
+  display: flex;
+  gap: 5rem; /* Space between dots */
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #FFA500; /* Change to your desired color */
+  animation: glow 1s infinite alternate;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s; /* Slightly delay the second dot */
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s; /* Slightly delay the third dot */
+}
+
+@keyframes glow {
+  0% {
+      transform: scale(1);
+      opacity: 0.5;
+  }
+  100% {
+      transform: scale(1.5);
+      opacity: 1;
+  }
+}
+
+ 
