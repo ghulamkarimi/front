@@ -125,6 +125,14 @@ const carRentSlice = createSlice({
     setIsLoading: (state, action) => {
       state.loading = action.payload;
     },
+    setRentalDetails: (state, action) => {
+      // Update der gewünschten Felder in den Mietdetails
+      state.pickupDate = action.payload.pickupDate || state.pickupDate;
+      state.pickupTime = action.payload.pickupTime || state.pickupTime;
+      state.returnDate = action.payload.returnDate || state.returnDate;
+      state.returnTime = action.payload.returnTime || state.returnTime;
+      state.age = action.payload.age || state.age;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -173,7 +181,8 @@ export const {
   setIsMediumDetailsActive,
   setIsPremiumDetailsActive,
   setSelectedSchutzPackage,
-  setIsLoading
+  setIsLoading,
+  setRentalDetails,
 } = carRentSlice.actions;
 
 export const { selectAll: getAllRentCars, selectById: getRentCarById } =

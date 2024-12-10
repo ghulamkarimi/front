@@ -36,9 +36,7 @@ const carBuySlice = createSlice({
     name: 'carBuy',
     initialState,
     reducers: {
-        carBuyCreated: carBuyAdapter.addOne,
-        carBuyUpdated: carBuyAdapter.updateOne,
-        carBuyDeleted: carBuyAdapter.removeOne,
+     
     },
     extraReducers: (builder) => {
         builder
@@ -59,21 +57,8 @@ const carBuySlice = createSlice({
     }
 })
 
-export const { carBuyCreated, carBuyUpdated, carBuyDeleted } = carBuySlice.actions;
+
 export const { selectAll: displayCarBuys, selectById: displayCarBuyById } = carBuyAdapter.getSelectors<RootState>((state) => state.carBuys);
 export default carBuySlice.reducer;
 
-// WebSocket-Ereignisse abonnieren und Aktionen dispatchen
-export const subscribeToSocketEvents = (dispatch: AppDispatch) => {
-    socket.on('carBuyCreated', (newCarBuy: ICarBuy) => {
-        dispatch(carBuyCreated(newCarBuy));
-    });
 
-    socket.on('carBuyUpdated', (updatedCarBuy: ICarBuy) => {
-        dispatch(carBuyUpdated({ id: updatedCarBuy._id, changes: updatedCarBuy }));
-    });
-
-    socket.on('carBuyDeleted', (deletedCarBuyId: string) => {
-        dispatch(carBuyDeleted(deletedCarBuyId));
-    });
-}
