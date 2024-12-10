@@ -17,11 +17,19 @@ const UserCalendar: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
     const { status } = useSelector((state: RootState) => state.appointments);
     const items = useSelector((state: RootState) => displayAppointments(state));
-    const userId= localStorage.getItem("userId");
+    const [userId, setUserId] = useState<string | null>(null);
     const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
     const [formattedSelectedDate, setFormattedSelectedDate] = useState<string | null>(null);
     const [selectedTime, setSelectedTime] = useState<string | null>(null);
     const [isClient, setIsClient] = useState(false);
+
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const storedUserId = localStorage.getItem("userId");
+            setUserId(storedUserId);
+        }
+    }, []);
 
     useEffect(() => {
         setIsClient(true);
@@ -61,15 +69,15 @@ const UserCalendar: React.FC = () => {
         const isToday = selectedDate
             ? now.toDateString() === selectedDate.toDateString()
             : false;
-    
+
         return availableTimes.map((time) => {
             // Split time into hours and minutes
             const [hours, minutes] = time.split(":").map(Number);
-            
+
             // Create a Date object for the selected time
             const timeDate = new Date(selectedDate || now);
             timeDate.setHours(hours, minutes, 0, 0);
-            
+
             // Check if the time is already booked or blocked
             const isBookedOrBlocked = items.some((appointment: IAppointment) => {
                 const appointmentDate = formatDate(new Date(appointment.date));
@@ -77,18 +85,17 @@ const UserCalendar: React.FC = () => {
                 const isSameTime = appointment.time.padStart(5, "0") === time;
                 return isSameDate && isSameTime && appointment.isBookedOrBlocked;
             });
-    
+
             // Check if the time is in the past (for today's date)
             const isPastTime = isToday && timeDate < now;
-    
+
             return (
                 <button
                     key={time}
-                    className={`px-4 py-2 m-2 rounded-lg text-white ${
-                        isBookedOrBlocked || isPastTime
+                    className={`px-4 py-2 m-2 rounded-lg text-white ${isBookedOrBlocked || isPastTime
                             ? "bg-red-500 cursor-not-allowed"
                             : "bg-green-500 hover:bg-green-600"
-                    }`}
+                        }`}
                     disabled={isBookedOrBlocked || isPastTime}
                     onClick={() => {
                         setSelectedTime(time || "");
@@ -99,7 +106,7 @@ const UserCalendar: React.FC = () => {
             );
         });
     };
-    
+
 
     const initialValues: Omit<IAppointment, "_id" | "isBookedOrBlocked"> = {
         service: "",
@@ -141,15 +148,15 @@ const UserCalendar: React.FC = () => {
     const handleSubmit = async (values: typeof initialValues, { resetForm }: { resetForm: () => void }) => {
 
         console.log("Form data submitted:", values);
-       try {
-        const payload = userId ? { ...values, userId } : values;
-        const response = await dispatch (createAppointmentApi(values as IAppointment)).unwrap();
-        NotificationService.success(response.message || "Appointment created successfully");
-        resetForm()
-      
-       } catch (error:any) {
-        NotificationService.error(error?.response?.data?.message || "Error creating appointment");
-       }
+        try {
+            const payload = userId ? { ...values, userId } : values;
+            const response = await dispatch(createAppointmentApi(values as IAppointment)).unwrap();
+            NotificationService.success(response.message || "Appointment created successfully");
+            resetForm()
+
+        } catch (error: any) {
+            NotificationService.error(error?.response?.data?.message || "Error creating appointment");
+        }
     };
 
     return (
@@ -159,10 +166,10 @@ const UserCalendar: React.FC = () => {
             <div className="">
                 <div className="p-6  min-h-screen py-20">
                     <h1 className="text-2xl font-bold mb-4 text-center text-gray-200">Willkommen zu Ihrem persönlichen Werkstatt-Terminplaner – Einfach. Schnell. Bequem.</h1>
-                 <div className="text-center text-gray-200 text-2xl font-bold py-6">
-                 <p>Usere Öffnungszeit</p>
-                 <p>Montag - Samstag: 07:30 - 18:00 Uhr</p>
-                 </div>
+                    <div className="text-center text-gray-200 text-2xl font-bold py-6">
+                        <p>Usere Öffnungszeit</p>
+                        <p>Montag - Samstag: 07:30 - 18:00 Uhr</p>
+                    </div>
 
                     <p className="text-center mb-4 text-xl font-bold text-gray-200">Bitte wählen Sie das Datum und die Uhrzeit für Ihren Termin im Kalender aus.</p>
                     <div className="calendar-container flex justify-center mb-6">

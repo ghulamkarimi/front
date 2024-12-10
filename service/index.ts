@@ -2,7 +2,6 @@ import axios from "axios";
 import {
   IChangePassword,
   TAppointment,
-  TCarRent,
   TReservation,
   TUser,
 } from "../interface";
