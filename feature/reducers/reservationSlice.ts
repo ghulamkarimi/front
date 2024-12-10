@@ -7,7 +7,7 @@ import { RootState } from "../store/store";
 export interface IReservationState{
     status: "idle" | "loading" | "succeeded" | "failed";
     error: string | null;
-    reservationId:string | undefined
+    reservationId:string | null
 }
 
 

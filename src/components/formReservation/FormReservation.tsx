@@ -5,11 +5,12 @@ import { useParams, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../feature/store/store";
 import { getRentCarById } from "../../../feature/reducers/carRentSlice";
-import { createReservationApi } from "../../../feature/reducers/reservationSlice";
+import { createReservationApi, getOneReservation } from "../../../feature/reducers/reservationSlice";
 import { NotificationService } from "../../../service/NotificationService";
 import { TReservation } from "../../../interface";
 import FahrerDetails from "./FahrerDetails";
 import PayPalSection from "./PayPalSection";
+
 
 interface FormReservationProps {
   returnDate: string | null;
@@ -23,11 +24,13 @@ const FormReservation: React.FC<FormReservationProps> = ({
   pickupDate,
   returnTime,
   pickupTime,
-}) =>{
+}) => {
   const { id: carRentIdRaw } = useParams();
   const carRentId =
     typeof carRentIdRaw === "string" ? carRentIdRaw : carRentIdRaw?.[0] || "";
-
+  const { reservationId } = useSelector((state: RootState) => state.reservation)
+  const getReservation = useSelector((state: RootState) => getOneReservation(state, reservationId || ""))
+  console.log("getReservation", getReservation)
   const userId = localStorage.getItem("userId") || "";
   console.log("carRentId", carRentId);
   const dispatch = useDispatch<AppDispatch>();
@@ -37,8 +40,8 @@ const FormReservation: React.FC<FormReservationProps> = ({
     getRentCarById(state, carRentId! as string)
   );
 
-  const [step, setStep] = useState(1); 
-  const router = useRouter();  
+  const [step, setStep] = useState(1);
+  const router = useRouter();
 
   const pickupDateLocal = localStorage.getItem("pickupDate") || "";
   const returnDateLocal = localStorage.getItem("returnDate") || "";
@@ -95,7 +98,7 @@ const FormReservation: React.FC<FormReservationProps> = ({
       try {
         console.log("value", values);
         const response = await dispatch(createReservationApi(values)).unwrap();
-        localStorage.setItem("email",values.email||"")
+        localStorage.setItem("email", values.email || "")
         NotificationService.success(response.message);
         setStep(2);
       } catch (error: any) {
@@ -110,7 +113,7 @@ const FormReservation: React.FC<FormReservationProps> = ({
       const gesamtPreis = localStorage.getItem("gesamtPreice") || "0.00";
       const carRentId = localStorage.getItem("carRentId");
       const userId = localStorage.getItem("userId");
-  const email = localStorage.getItem("email")
+      const email = localStorage.getItem("email")
       console.log("Form values:", formik.values);
       console.log("gesamtPreis", gesamtPreis);
       console.log("carRentId", carRentId);
@@ -144,7 +147,7 @@ const FormReservation: React.FC<FormReservationProps> = ({
 
       const orderData = await response.json();
       return orderData.orderId;
-    } catch (error:any) {
+    } catch (error: any) {
       setPaymentError(error.message || "Fehler bei der Bestellung.");
       console.error("Fehler bei der Bestellung:", error);
     } finally {
@@ -152,7 +155,7 @@ const FormReservation: React.FC<FormReservationProps> = ({
     }
   };
 
-  const onApproveHandler = async (data:any) => {
+  const onApproveHandler = async (data: any) => {
     setLoading(true);
     try {
       const { orderID, payerID } = data;
@@ -163,20 +166,20 @@ const FormReservation: React.FC<FormReservationProps> = ({
           headers: { "Content-Type": "application/json" },
         }
       );
-  
+
       const result = await response.json();
-  
+
       // Überprüfen, ob die Zahlung erfolgreich war, indem wir den Status prüfen und nicht nur die Nachricht
       if (response.ok && result.message && result.message.includes("Zahlung erfolgreich abgeschlossen!")) {
         // Zahlung war erfolgreich
         NotificationService.success(`Zahlung erfolgreich abgeschlossen! Bestell-ID: ${orderID}`);
-        router.push("/fahrzeugvermietung");  
+        router.push("/fahrzeugvermietung");
       } else {
         // Fehlerbehandlung für unerwartete Ergebnisse
         throw new Error(result.message || "Zahlung konnte nicht abgeschlossen werden.");
       }
-      
-    } catch (error:any) {
+
+    } catch (error: any) {
       // Fehlerbehandlung, wenn die Anfrage fehlschlägt
       setPaymentError(error.message || "Fehler bei der Zahlungsabwicklung.");
       console.error("Fehler bei der Zahlungsabwicklung:", error);
@@ -184,9 +187,9 @@ const FormReservation: React.FC<FormReservationProps> = ({
       setLoading(false);
     }
   };
-  
-  
-  
+
+
+
 
   return (
     <div className="container mx-auto p-6">

@@ -32,19 +32,13 @@ export default function MainLayout({ children }: LayoutProps) {
   
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
-
-  const carId = localStorage.getItem("carRentId");
+  const carId = typeof window !== "undefined" ? localStorage.getItem("carRentId") : null;
 
   useEffect(() => {
-   
-    if (typeof window !== "undefined") {
-      
-
-      if (carId) {
-        dispatch(setCarId(carId));
-      }
+    if (carId) {
+      dispatch(setCarId(carId));
     }
-  }, [dispatch,carId]);
+  }, [dispatch, carId]);
 
   useEffect(() => {
     
