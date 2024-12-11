@@ -148,7 +148,7 @@ const Page = () => {
                     <p>Kilometerstand: {singleCar?.carKilometers}</p>
                     <p>Leistung: {singleCar?.carHorsePower} PS</p>
                     <p>Kraftstoffart: {singleCar?.fuelType}</p>
-                <p>Außen Farbe: {singleCar?.carColor}</p>
+                    <p>Außen Farbe: {singleCar?.carColor}</p>
                     <p>Klimaanlages: {singleCar?.carAirConditioning ? "Ja" : "Nein"}</p>
                     <p>Navigationssystem: {singleCar?.carNavigation ? "Ja" : "Nein"}</p>
                     <p>Unfallfrei: {singleCar?.damagedCar ? "Nein" : "Ja"}</p>
@@ -156,7 +156,7 @@ const Page = () => {
                     <p>Vorbesitzer {singleCar?.owner}</p>
                     <p>Kateogorie: {singleCar?.carCategory}</p>
                     <p>Sitzer: {singleCar?.carSeat}</p>
-                    <p>Motor: {singleCar?.carMotor}</p>  
+                    <p>Motor: {singleCar?.carMotor}</p>
                 </div>
             </div>
 
