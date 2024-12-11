@@ -151,7 +151,7 @@ const Page = () => {
                     <p>Außen Farbe: {singleCar?.carColor}</p>
                     <p>Klimaanlages: {singleCar?.carAirConditioning ? "Ja" : "Nein"}</p>
                     <p>Navigationssystem: {singleCar?.carNavigation ? "Ja" : "Nein"}</p>
-                    <p>Unfallfrei: {singleCar?.damagedCar ? "Nein" : "Ja"}</p>
+                    <p>Unfallfrei: {singleCar?.damagedCar ? "Ja" : "Nein"}</p>
                     <p>Parkassistent: {singleCar?.carParkAssist ? "Ja" : "Nein"}</p>
                     <p>Vorbesitzer {singleCar?.owner}</p>
                     <p>Kateogorie: {singleCar?.carCategory}</p>

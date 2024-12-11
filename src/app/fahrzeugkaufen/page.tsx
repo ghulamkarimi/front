@@ -15,7 +15,7 @@ import { ICarBuy } from "../../../interface";
 import { useDispatch } from "react-redux";
 import Image from "next/image";
 
-const carCategories = ["Transporter", "PKW", "Wohnwagen"];
+const carCategories = ["Transporter", "PKW", "Wohnwagen", "LKW", "Motorrad", "Wohnmobil", "Oldtimer", "Sonstiges"];
 
 const Page = () => {
     const cars = useSelector(displayCarBuys);
@@ -29,7 +29,8 @@ const Page = () => {
         const filtered = cars.filter((car) => {
             const matchesCategory = category === "All" || car.carCategory === category;
             const matchesSearchTerm = car?.carTitle?.toLowerCase().includes(searchTerm.toLowerCase());
-            return matchesCategory && matchesSearchTerm;
+            const matchesSearchTerm2 = car?.carIdentificationNumber?.toLowerCase().includes(searchTerm.toLowerCase());
+            return matchesCategory && matchesSearchTerm || matchesSearchTerm2;
         });
         setFilteredCars(filtered);
     }, [cars, category, searchTerm]);
@@ -44,7 +45,7 @@ const Page = () => {
                 <div className="mb-4">
                     <input
                         type="text"
-                        placeholder="Nach Fahrzeugtitel suchen..."
+                        placeholder="Nach Fahrzeugtitel oder KFZ-ID suchen..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
