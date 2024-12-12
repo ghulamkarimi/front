@@ -45,6 +45,10 @@ const UserCalendar: React.FC = () => {
     }, [selectedDate]);
 
     const formatDate = (date: Date): string => {
+        if (!date || isNaN(date.getTime())) {
+            console.error("Invalid date passed to formatDate", date);
+            return "";
+        }
         return new Intl.DateTimeFormat("en-CA", {
             year: "numeric",
             month: "2-digit",
