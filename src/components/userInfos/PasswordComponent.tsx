@@ -40,7 +40,10 @@ const PasswordComponent = () => {
     }),
     onSubmit: async (values, { resetForm }) => {
       try {
-        await dispatch(changePasswordApi(values)).unwrap();
+        await dispatch(changePasswordApi({
+          ...values,
+          password: values.newPassword
+        })).unwrap();
         NotificationService.success("Passwort erfolgreich geändert!");
         router.push("/login");
         resetForm();
