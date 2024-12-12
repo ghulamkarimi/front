@@ -12,7 +12,7 @@ import {
   getRentCarById,
   setRentalDetails,
 } from "../../../../feature/reducers/carRentSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FaUserTie } from "react-icons/fa6";
 import { GiCarDoor } from "react-icons/gi";
 import { MdOutlineSevereCold } from "react-icons/md";
@@ -34,15 +34,12 @@ const page = () => {
     getRentCarById(state, carRentId! as string)
   );
 
-const allSchutzPaket = useSelector(getAllSchutzPacket)
-  const storedTotalPrice = parseFloat(
-    localStorage.getItem("totalPrice") || "0"
-  );
- 
-
+  const allSchutzPaket = useSelector(getAllSchutzPacket);
+  const [packet, setPacket] = useState<string | null>(null);
+  const [storedTotalPrice, setStoredTotalPrice] = useState<number>(0);
 
   useEffect(() => {
- if (typeof window !== "undefined") {
+    if (typeof window !== "undefined") {
       const rentalDetails = {
         pickupDate: localStorage.getItem("pickupDate"),
         returnDate: localStorage.getItem("returnDate"),
@@ -53,10 +50,11 @@ const allSchutzPaket = useSelector(getAllSchutzPacket)
       };
 
       dispatch(setRentalDetails(rentalDetails));
-    }
 
-  
-  }, [dispatch, storedTotalPrice]);
+      const price = parseFloat(localStorage.getItem("totalPrice") || "0");
+      setStoredTotalPrice(price);
+    }
+  }, [dispatch]);
 
   const formattedPickupDate = pickupDate
     ? new Date(pickupDate).toLocaleDateString()
@@ -77,26 +75,21 @@ const allSchutzPaket = useSelector(getAllSchutzPacket)
 
     if (!schutzPacket) return "0.00";
 
-    let localPriceArray = [];
     const dailyRate = schutzPacket.dailyRate;
     const gesamtPrice = (dailyRate * rentalDays).toFixed(2);
 
-    // Speichern des Schutzpakets-IDs und des Preises als Array im localStorage
-    const priceArray = { id: schutzPacketId, price: gesamtPrice };
-    localPriceArray.push(priceArray);
-    localStorage.setItem("PriceSchutz", JSON.stringify(localPriceArray));
-
-
+    if (typeof window !== "undefined") {
+      const localPriceArray = [{ id: schutzPacketId, price: gesamtPrice }];
+      localStorage.setItem("PriceSchutz", JSON.stringify(localPriceArray));
+    }
 
     return gesamtPrice;
   };
-   
+
+
   const { gesamteSchutzInfo } = useSelector(
     (state: RootState) => state.app
   );
-
-
-
 
   return (
     <div className=" max-w-full">
@@ -116,7 +109,7 @@ const allSchutzPaket = useSelector(getAllSchutzPacket)
             <p className=" flex flex-col ">
               <span>Gesamt</span>
               <span className="  font-bold">
-                {localStorage.getItem("gesamtPreice")}€
+                {storedTotalPrice}€
               </span>
             </p>
           </div>
@@ -162,11 +155,11 @@ const allSchutzPaket = useSelector(getAllSchutzPacket)
             </div>
             <div className=" mt-2 flex items-center justify-between">
               <span>
-                {localStorage.getItem("packet")} für ({rentalDays}{" "}
-                Tage)
+              {packet} für ({rentalDays} Tage)
+              
               </span>
               <span className=" font-bold">
-              {localStorage.getItem("gesamtPreice")} €
+              {storedTotalPrice} €
               </span>
             </div>
             <div className=" mt-3">
@@ -210,7 +203,7 @@ const allSchutzPaket = useSelector(getAllSchutzPacket)
             <div className=" w-full border-2 border-black h-[0.1px] mt-2" />
             <div className=" mt-3 flex items-center justify-around">
               <p>Gesamt</p>
-              <p className=" font-bold">{localStorage.getItem("gesamtPreice")} €</p>
+              <p className=" font-bold">{storedTotalPrice} €</p>
             </div>
           </div>
         </div>

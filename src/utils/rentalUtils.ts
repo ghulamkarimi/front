@@ -1,70 +1,59 @@
 import { useDispatch } from 'react-redux';
-import { setSelectedSchutzPackage } from '../../feature/reducers/carRentSlice';
+import { setSelectedSchutzPackage, setTotalPrice } from '../../feature/reducers/carRentSlice';
+//import { getAllSchutzPacket, setSchutzPacketId } from '../../feature/reducers/schutzPacketSlice';
+
+//const allSchutzPaket = useSelector(getAllSchutzPacket);
+
+export const calculateRentalDays = (
+  pickupDate: string | "",
+  pickupTime: string| "",
+  returnDate: string| "",
+  returnTime: string| ""
+): number => {
 
 
+  // Bereinige die Zeitangaben
+  const cleanedPickupTime = pickupTime?.replace(/[^0-9:]/g, "") || "";
+  const cleanedReturnTime = returnTime?.replace(/[^0-9:]/g, "") || "";
 
+  // Erstelle die Start- und End-Datetime
+  const start = `${pickupDate?.split("T")[0]}T${cleanedPickupTime}`;
+  const end = `${returnDate?.split("T")[0]}T${cleanedReturnTime}`;
+  // Geplante Rückgabezeit (inkl. 3-Stunden-Toleranz)
+  const plannedReturnTime = new Date(start);
+  plannedReturnTime.setHours(plannedReturnTime.getHours() + 3);
 
-
-
-export const calculateRentalDays = (pickupDate: string, pickupTime: string, returnDate: string, returnTime: string) => {
-  
-  const cleanedPickupTime = pickupTime ? pickupTime.replace(/[^0-9:]/g, '') : '';
-  const cleanedReturnTime = returnTime ? returnTime.replace(/[^0-9:]/g, '') : '';
-
-
-  if (!cleanedPickupTime || !cleanedReturnTime) {
-    console.error('Invalid pickupTime or returnTime values');
-    return NaN;
+  // Rückgabe innerhalb der Toleranz → mindestens 1 Tag berechnen
+  if (new Date(end) <= plannedReturnTime) {
+    return 1;
   }
 
-  // Check if the dates are valid
-  const start = new Date(pickupDate);
-  const end = new Date(returnDate);
+  // Berechne volle Miettage
+  const startDay = new Date(new Date(start).getFullYear(), new Date(start).getMonth(), new Date(start).getDate());
+  const endDay = new Date(new Date(end).getFullYear(), new Date(end).getMonth(), new Date(end).getDate());
 
-  if (isNaN(start.getTime()) || isNaN(end.getTime())) {
-    console.error('Invalid date values');
-    return NaN;
+  let dayDiff = Math.ceil((endDay.getTime() - startDay.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+
+  // Überprüfe, ob der letzte Tag innerhalb der Toleranz ist
+  const finalReturnTime = new Date(startDay);
+  finalReturnTime.setDate(startDay.getDate() + dayDiff - 1);
+  finalReturnTime.setHours(new Date(start).getHours() + 3);
+
+  if (new Date(end) > finalReturnTime) {
+    return dayDiff;
   }
 
-  // Combine the date and cleaned time to create a full datetime string
-  const startDateTime = new Date(`${pickupDate.split('T')[0]}T${cleanedPickupTime}`);
-  const endDateTime = new Date(`${returnDate.split('T')[0]}T${cleanedReturnTime}`);
-
-  // Ensure the datetime values are valid
-  if (isNaN(startDateTime.getTime()) || isNaN(endDateTime.getTime())) {
-    console.error('Invalid combined date/time values');
-    return NaN;
-  }
-
-  // Calculate the time difference in hours
-  const timeDiffInMilliseconds = endDateTime.getTime() - startDateTime.getTime();
-  const timeDiffInHours = timeDiffInMilliseconds / (1000 * 60 * 60); // in hours
-
-  // Calculate the planned return time (pickup time + 3 hours tolerance)
-  const plannedReturnTime = new Date(`${returnDate.split('T')[0]}T${cleanedPickupTime}`);
-  plannedReturnTime.setHours(plannedReturnTime.getHours() + 3); // add 3 hours tolerance
-
-  // If the actual return time is within 3 hours of the planned return time, treat it as the same day
-  if (endDateTime <= plannedReturnTime) {
-    return 2; // If return is within 3 hours tolerance, return 2 days
-  }
-
-  // Otherwise, calculate the number of rental days based on the time difference
-  const rentalDays = Math.ceil(timeDiffInHours / 24); 
-
-  return rentalDays; // return rentalDays if it's more than 3 hours
+  return dayDiff - 1;
 };
-
-
-
-
 
 export const useSelectPacket = () => {
   const dispatch = useDispatch();
 
   const handleSelectPacket = (packet: string) => {
+  
     dispatch(setSelectedSchutzPackage(packet));
     localStorage.setItem("packet", packet);
+
   };
 
   return handleSelectPacket;

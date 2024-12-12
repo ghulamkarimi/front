@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,7 +23,6 @@ const UserCalendar: React.FC = () => {
     const [selectedTime, setSelectedTime] = useState<string | null>(null);
     const [isClient, setIsClient] = useState(false);
 
-
     useEffect(() => {
         if (typeof window !== "undefined") {
             const storedUserId = localStorage.getItem("userId");
@@ -39,8 +38,11 @@ const UserCalendar: React.FC = () => {
     }, [status, dispatch]);
 
     useEffect(() => {
-        if (selectedDate) {
+        if (selectedDate && !isNaN(selectedDate.getTime())) {
             setFormattedSelectedDate(formatDate(selectedDate));
+        } else {
+            console.error("Invalid selected date", selectedDate);
+            setFormattedSelectedDate(null);
         }
     }, [selectedDate]);
 
@@ -57,9 +59,9 @@ const UserCalendar: React.FC = () => {
     };
 
     const handleDateChange = (value: CalendarValue) => {
-        if (value instanceof Date) {
+        if (value instanceof Date && !isNaN(value.getTime())) {
             setSelectedDate(value);
-        } else if (Array.isArray(value)) {
+        } else if (Array.isArray(value) && value[0] instanceof Date && !isNaN(value[0].getTime())) {
             setSelectedDate(value[0]);
         } else {
             setSelectedDate(null);
@@ -75,22 +77,18 @@ const UserCalendar: React.FC = () => {
             : false;
 
         return availableTimes.map((time) => {
-            // Split time into hours and minutes
             const [hours, minutes] = time.split(":").map(Number);
 
-            // Create a Date object for the selected time
             const timeDate = new Date(selectedDate || now);
             timeDate.setHours(hours, minutes, 0, 0);
 
-            // Check if the time is already booked or blocked
             const isBookedOrBlocked = items.some((appointment: IAppointment) => {
-                const appointmentDate = formatDate(new Date(appointment.date));
+                const appointmentDate = appointment.date ? formatDate(new Date(appointment.date)) : "";
                 const isSameDate = appointmentDate === formattedSelectedDate;
-                const isSameTime = appointment.time.padStart(5, "0") === time;
+                const isSameTime = (appointment.time || "").padStart(5, "0") === time;
                 return isSameDate && isSameTime && appointment.isBookedOrBlocked;
             });
 
-            // Check if the time is in the past (for today's date)
             const isPastTime = isToday && timeDate < now;
 
             return (
@@ -110,7 +108,6 @@ const UserCalendar: React.FC = () => {
             );
         });
     };
-
 
     const initialValues: Omit<IAppointment, "_id" | "isBookedOrBlocked"> = {
         service: "",
@@ -150,14 +147,12 @@ const UserCalendar: React.FC = () => {
     });
 
     const handleSubmit = async (values: typeof initialValues, { resetForm }: { resetForm: () => void }) => {
-
         console.log("Form data submitted:", values);
         try {
             const payload = userId ? { ...values, userId } : values;
             const response = await dispatch(createAppointmentApi(values as IAppointment)).unwrap();
             NotificationService.success(response.message || "Appointment created successfully");
-            resetForm()
-
+            resetForm();
         } catch (error: any) {
             NotificationService.error(error?.response?.data?.message || "Error creating appointment");
         }
@@ -165,7 +160,7 @@ const UserCalendar: React.FC = () => {
 
     return (
         <div
-            style={{ backgroundImage: ` url(/background.jpg)` }}
+            style={{ backgroundImage: `url(/background.jpg)` }}
             className="home-background">
             <div className="">
                 <div className="p-6  min-h-screen py-20">
@@ -183,11 +178,10 @@ const UserCalendar: React.FC = () => {
                                 value={selectedDate}
                                 className="shadow-lg rounded-lg p-4 bg-gray-300 w-full max-w-3xl text-black"
                                 tileDisabled={({ date }) => {
-                                    // Disable past dates and Sundays
                                     const today = new Date();
                                     return (
-                                        date.getDay() === 0 || // Disable Sundays
-                                        date < new Date(today.getFullYear(), today.getMonth(), today.getDate()) // Disable past dates
+                                        date.getDay() === 0 ||
+                                        date < new Date(today.getFullYear(), today.getMonth(), today.getDate())
                                     );
                                 }}
                             />
