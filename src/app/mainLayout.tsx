@@ -1,37 +1,55 @@
-'use client'
+'use client';
 
-import { useRouter } from "next/navigation";
-import "./globals.css";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../feature/store/store";
-import { setCarId, setIsDetailsSchutzPacketActive, setIsCarVerfügbar } from "../../feature/reducers/carRentSlice";
-import { useEffect } from "react";
-import { FaCheck } from "react-icons/fa6";
-import { getSchutzPacketById } from "../../feature/reducers/schutzPacketSlice";
+import { useRouter } from 'next/navigation';
+import './globals.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../feature/store/store';
+import { useEffect, useState } from 'react';
+import {
+  setCarId,
+  setIsDetailsSchutzPacketActive,
+  setIsCarVerfügbar,
+} from '../../feature/reducers/carRentSlice';
+import { FaCheck } from 'react-icons/fa6';
+import { getSchutzPacketById } from '../../feature/reducers/schutzPacketSlice';
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 export default function MainLayout({ children }: LayoutProps) {
-  const { isCarVerfügbar, totalPrice, isDetailsSchutzPacketActive } = useSelector((state: RootState) => state.carRent);
+  const { isCarVerfügbar, totalPrice, isDetailsSchutzPacketActive } = useSelector(
+    (state: RootState) => state.carRent
+  );
   const { gesamteSchutzInfo } = useSelector((state: RootState) => state.app);
   const dispatch = useDispatch();
   const router = useRouter();
-  const storedCarId = localStorage.getItem("carRentId");
-  const schutzPacketId = localStorage.getItem("SchutzPacketId");
+
+  // Lokale State-Variablen für localStorage-Daten
+  const [storedCarId, setStoredCarId] = useState<string | null>(null);
+  const [schutzPacketId, setSchutzPacketId] = useState<string | null>(null);
+
+  // Zugriff auf localStorage nur im Browser
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setStoredCarId(localStorage.getItem('carRentId'));
+      setSchutzPacketId(localStorage.getItem('SchutzPacketId'));
+    }
+  }, []);
 
   useEffect(() => {
     if (storedCarId) {
       dispatch(setCarId(storedCarId));
     }
-  }, [storedCarId]);
+  }, [storedCarId, dispatch]);
 
-  const getOneSchutzPacket = useSelector((state: RootState) => getSchutzPacketById(state, schutzPacketId!));
+  const getOneSchutzPacket = useSelector((state: RootState) =>
+    getSchutzPacketById(state, schutzPacketId!)
+  );
 
   return (
     <main className="relative z-10">
-      <div className={isCarVerfügbar ? "blur-sm" : ""}>{children}</div>
+      <div className={isCarVerfügbar ? 'blur-sm' : ''}>{children}</div>
 
       {isCarVerfügbar && (
         <div className="fixed inset-0 flex items-center justify-center z-50 md:w-full">
@@ -51,7 +69,7 @@ export default function MainLayout({ children }: LayoutProps) {
               <button
                 onClick={() => {
                   if (storedCarId) {
-                    localStorage.setItem("totalPrice", totalPrice.toString());
+                    localStorage.setItem('totalPrice', totalPrice.toString());
                     setTimeout(() => {
                       router.push(`/fahrzeugvermietung/${storedCarId}`);
                       dispatch(setIsCarVerfügbar(false));
@@ -79,11 +97,15 @@ export default function MainLayout({ children }: LayoutProps) {
             <div className="flex items-start justify-center gap-2">
               <div className="flex flex-col justify-start">
                 <p className="text-lg font-semibold">{gesamteSchutzInfo?.name}</p>
-                <p className="text-sm text-gray-600">Selbstbeteiligung: {gesamteSchutzInfo?.deductible} €</p>
+                <p className="text-sm text-gray-600">
+                  Selbstbeteiligung: {gesamteSchutzInfo?.deductible} €
+                </p>
               </div>
               <div className="border-2 border-black w-1 h-8 mx-4" />
               <div className="flex flex-col justify-start">
-                <p className="text-lg font-semibold">{gesamteSchutzInfo?.dailyRate}</p>
+                <p className="text-lg font-semibold">
+                  {gesamteSchutzInfo?.dailyRate}
+                </p>
               </div>
             </div>
             <div className="flex flex-wrap items-center w-full">
@@ -92,14 +114,30 @@ export default function MainLayout({ children }: LayoutProps) {
                   <FaCheck className="text-green-400 text-sm" />
                   <p className="text-black font-bold">
                     {gesamteSchutzInfo?.features.map((feature, index) => (
-                      <span className=" flex flex-col gap-4" key={index}>{feature}</span>
+                      <span className="flex flex-col gap-4" key={index}>
+                        {feature}
+                      </span>
                     ))}
                   </p>
                 </div>
               </div>
               <div className="flex items-center w-full justify-around mt-6">
-                <button onClick={() => dispatch(setIsDetailsSchutzPacketActive(false))} className="px-8 py-2 border-2 border-orange-400 rounded-md">Zurück zu Ihrer Buchung</button>
-                <button onClick={() => dispatch(setIsDetailsSchutzPacketActive(false))} className="bg-yellow-400 font-bold md:text-lg px-6 py-2 rounded-md">Auswählen</button>
+                <button
+                  onClick={() =>
+                    dispatch(setIsDetailsSchutzPacketActive(false))
+                  }
+                  className="px-8 py-2 border-2 border-orange-400 rounded-md"
+                >
+                  Zurück zu Ihrer Buchung
+                </button>
+                <button
+                  onClick={() =>
+                    dispatch(setIsDetailsSchutzPacketActive(false))
+                  }
+                  className="bg-yellow-400 font-bold md:text-lg px-6 py-2 rounded-md"
+                >
+                  Auswählen
+                </button>
               </div>
             </div>
           </div>
