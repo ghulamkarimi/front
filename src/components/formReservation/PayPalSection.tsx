@@ -13,7 +13,7 @@ const PayPalSection = ({
       <h2 className="font-bold text-xl mb-3">2. PayPal Zahlung</h2>
       <PayPalScriptProvider
         options={{
-          "client-id": "AbEcs8NfNF1i7uraUy-uhPwhvANzzKrKXbUGQtqkFFNG5A-97e0lmHZqrnLnx1VciiyTGGiEzXlXCuwl",
+          clientId: "AbEcs8NfNF1i7uraUy-uhPwhvANzzKrKXbUGQtqkFFNG5A-97e0lmHZqrnLnx1VciiyTGGiEzXlXCuwl",
           currency: "EUR",
         }}
       >

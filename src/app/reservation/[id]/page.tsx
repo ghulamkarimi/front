@@ -88,7 +88,9 @@ const allSchutzPaket = useSelector(getAllSchutzPacket)
     return gesamtPrice;
   };
    
-
+  const { gesamteSchutzInfo } = useSelector(
+    (state: RootState) => state.app
+  );
 
 
 
@@ -182,9 +184,9 @@ const allSchutzPaket = useSelector(getAllSchutzPacket)
                 <p>
                  
                    {selectedSchutzPacket === "Medium"
-                    ? `${calculateGesamtePriceSchutzPacket('11.1')} €`
+                    ? `${gesamteSchutzInfo?.gesamtPrice} €`
                     : selectedSchutzPacket === "Premium"
-                    ? `${calculateGesamtePriceSchutzPacket('14.2')} €`
+                    ? `${gesamteSchutzInfo?.gesamtPrice} €`
                     : "Inklusive"}
                  €
                 </p>
