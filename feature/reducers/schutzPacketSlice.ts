@@ -53,7 +53,7 @@ export const fetchAllSchutzPacketApi = createAsyncThunk("/schutzPacket/fetchAllS
   })
 
 
-  const {setSchutzPacketId} = schutzPacketSlice.actions
+ export  const {setSchutzPacketId} = schutzPacketSlice.actions
 export const {selectAll:getAllSchutzPacket,selectById:getSchutzPacketById} = schutzPacketAdapter.getSelectors((state:RootState)=>state.schutzPacket)
 
 

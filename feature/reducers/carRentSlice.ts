@@ -10,16 +10,15 @@ import { RootState } from "../store/store";
 
 
 export interface ICarRentState {
-  orderDetails: { amount: string; customerEmail: string; carId: string; userId: string } | null,
+  orderDetails: { amount: string; customerEmail: string; carId: string; userId: string } | null;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
   carId: string | null;
   selectedSchutzPacket: "Basic" |"Medium"|"Premium";
   totalPrice: number;
   isCarVerfügbar: boolean;
-  isBasicDetailsActive: boolean;
-  isMediumDetailsActive: boolean;
-  isPremiumDetailsActive: boolean;
+  isDetailsSchutzPacketActive: boolean;
+ 
   loading:boolean
   rentalDays: number;
   pickupDate: string | null;
@@ -41,9 +40,8 @@ const initialState: ICarRentState & EntityState<ICarRent, string> =
     totalPrice: 0,
     isCarVerfügbar: false,
     carId: "",
-    isBasicDetailsActive: false,
-    isMediumDetailsActive: false,
-    isPremiumDetailsActive: false,
+    isDetailsSchutzPacketActive: false,
+  
     loading:false,
     selectedSchutzPacket: "Basic",
     rentalDays: 0,
@@ -82,8 +80,8 @@ export const getCarRentByIdApi = createAsyncThunk(
 
 export const createPayPalOrderApi = createAsyncThunk< 
 
-  { amount: string; customerEmail: string; carId: string; userId: string }
-
+  { amount: string; customerEmail: string; carId: string; userId: string } 
+ 
 >(
   'carRent/paypalPayment',
   async (orderDetails) => {
@@ -91,7 +89,7 @@ export const createPayPalOrderApi = createAsyncThunk<
       const response = await createPayPalOrder(orderDetails);
       return response; 
     } catch (error:any) {
-      return(error.response?.data || 'Unbekannter Fehler');
+      return (error.response?.data || 'Unbekannter Fehler');
     }
   }
 );
@@ -103,35 +101,39 @@ const carRentSlice = createSlice({
     setCarId: (state, action) => {
       state.carId = action.payload;
     },
- 
+    setRentalDetails: (state, action) => {
+      const {
+        rentalDays,
+        pickupDate,
+        pickupTime,
+        returnDate,
+        returnTime,
+        pickupLocation,
+        age,
+      } = action.payload;
+      state.rentalDays = action.payload.rentalDays ?? state.rentalDays;
+      state.pickupDate = action.payload.pickupDate ?? state.pickupDate;
+      state.pickupTime = action.payload.pickupTime ?? state.pickupTime;
+      state.returnDate = action.payload.returnDate ?? state.returnDate;
+      state.returnTime = action.payload.returnTime ?? state.returnTime;
+      state.pickupLocation = action.payload.pickupLocation ?? state.pickupLocation;
+      state.age = action.payload.age ?? state.age;
+    },
     setTotalPrice: (state, action) => {
       state.totalPrice = action.payload;
     },
     setIsCarVerfügbar: (state, action) => {
       state.isCarVerfügbar = action.payload;
     },
-    setIsBasicDetailsActive: (state, action) => {
-      state.isBasicDetailsActive = action.payload;
+    setIsDetailsSchutzPacketActive: (state, action) => {
+      state.isDetailsSchutzPacketActive = action.payload;
     },
-    setIsMediumDetailsActive: (state, action) => {
-      state.isMediumDetailsActive = action.payload;
-    },
-    setIsPremiumDetailsActive: (state, action) => {
-      state.isPremiumDetailsActive = action.payload;
-    },
+   
     setSelectedSchutzPackage: (state, action) => {
       state.selectedSchutzPacket = action.payload;
     },
     setIsLoading: (state, action) => {
       state.loading = action.payload;
-    },
-    setRentalDetails: (state, action) => {
-      // Update der gewünschten Felder in den Mietdetails
-      state.pickupDate = action.payload.pickupDate || state.pickupDate;
-      state.pickupTime = action.payload.pickupTime || state.pickupTime;
-      state.returnDate = action.payload.returnDate || state.returnDate;
-      state.returnTime = action.payload.returnTime || state.returnTime;
-      state.age = action.payload.age || state.age;
     },
   },
   extraReducers: (builder) => {
@@ -177,12 +179,10 @@ export const {
   setTotalPrice,
   setIsCarVerfügbar,
   setCarId,
-  setIsBasicDetailsActive,
-  setIsMediumDetailsActive,
-  setIsPremiumDetailsActive,
+  setIsDetailsSchutzPacketActive,
   setSelectedSchutzPackage,
-  setIsLoading,
   setRentalDetails,
+  setIsLoading
 } = carRentSlice.actions;
 
 export const { selectAll: getAllRentCars, selectById: getRentCarById } =

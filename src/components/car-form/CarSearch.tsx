@@ -31,13 +31,6 @@ const CarSearch = () => {
     useState<boolean>(false);
   const [showTimeReturn, setIsShowTimeReturn] = useState<boolean>(false);
  
-
-
-
-
- 
-
- 
   const {
     age,
     pickupDate,

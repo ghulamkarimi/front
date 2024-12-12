@@ -75,10 +75,10 @@ const OfferCards = () => {
                                 {offer.discountPercentage}% OFF
                             </span>
                         </h2>
-                        <p className="text-gray-700 mt-2">{offer?.description}</p>
+                        <p className="text-black font-bold mt-2">{offer?.description}</p>
                         <div className="flex items-center gap-3 mt-5 text-lg">
                             <p className="font-semibold text-gray-500">Preis:</p>
-                            <p className="text-gray-400 font-semibold line-through">
+                            <p className="text-red-400 font-semibold line-through">
                                 {offer?.oldPrice ? `${offer?.oldPrice} €` : ""}
                             </p>
                             <p className="text-green-600 font-bold text-xl">

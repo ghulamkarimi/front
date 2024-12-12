@@ -1,0 +1,14 @@
+{
+    "cSpell.language": "en,de",
+    "cSpell.dictionaries": ["de", "en"],
+    "cSpell.checkComments": false, // Kommentare ignorieren
+    "cSpell.checkStrings": false,
+    "cSpell.words": [
+        "daygrid",
+        "embla",
+        "fullcalendar",
+        "lightbox",
+        "mainsite",
+        "timegrid"
+    ] // Strings ignorieren
+}

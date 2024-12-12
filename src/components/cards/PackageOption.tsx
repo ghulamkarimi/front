@@ -1,9 +1,10 @@
 import { AiOutlineClose } from "react-icons/ai";
 import { FaCheck } from "react-icons/fa6";
-
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {  setGesamtSchutzInfo } from "../../../feature/reducers/appSlice";
 import { RootState } from "../../../feature/store/store";
+import { useEffect } from "react";
+
 
 interface PackageOptionProps {
   name: string;
@@ -14,7 +15,8 @@ interface PackageOptionProps {
   onSelect: () => void;
   onToggleDetails: () => void;
   isDetailsActive: boolean;
-  gesamteSchutzPrice: string;
+  gesamteSchutzPrice: string; // Wird aus den Props dynamisch übergeben
+
 }
 
 const PackageOption = ({
@@ -27,18 +29,29 @@ const PackageOption = ({
   onToggleDetails,
   isDetailsActive,
   gesamteSchutzPrice,
+ 
 }: PackageOptionProps) => {
   const dispatch = useDispatch();
-  const {
-    isBasicDetailsActive,
-    isMediumDetailsActive,
-    isPremiumDetailsActive,
-  } = useSelector((state: RootState) => state.carRent);
+  const { gesamteSchutzInfo } = useSelector(
+    (state: RootState) => state.app
+  );
 
-  
+
+ 
+
   return (
-    <div className=" w-full flex xl:flex-row flex-col items-center justify-center">
-      <div className=" w-full px-2 mt-2 ">
+    <div 
+    onClick={()=>{
+      dispatch(setGesamtSchutzInfo({
+        name:name,
+        deductible:deductible,
+        dailyRate:dailyRate,
+        features:features,
+        gesamtPrice:gesamteSchutzPrice
+      }))
+    }}
+    className="w-full flex xl:flex-row flex-col items-center justify-center">
+      <div className="w-full px-2 mt-2">
         <fieldset
           className={`border-2 ${
             isSelected ? "border-green-400" : "border-orange-300"
@@ -54,11 +67,11 @@ const PackageOption = ({
           <div className="font-bold">
             <h1>{name}</h1>
             <p>Selbstbeteiligung: {deductible} €</p>
-            <p className="mt-4">{name === "Basic" ? "Inklusive" : `Preis: ${dailyRate} / Tag`}</p>
-           {/* Conditionally render gesamtePrice for Medium and Premium */}
-           {name === "Medium" || name === "Premium" ? (
-              <p>{gesamteSchutzPrice}</p>
-            ) : null}
+            <p className="mt-4">Preis: {dailyRate} € / Tag</p>
+            {/* Zeige gesamteSchutzPrice dynamisch für jedes Paket */}
+            <p className="text-lg mt-2">
+              Gesamtpreis: <span className="font-bold">{gesamteSchutzPrice} €</span>
+            </p>
           </div>
           <div className="bg-gray-300 w-13 h-[2px] px-2 mt-7" />
           <div className="mt-4 flex flex-col gap-3">
@@ -76,11 +89,32 @@ const PackageOption = ({
             ))}
           </div>
           <div className="mt-5 flex items-center justify-around">
-            <button onClick={onToggleDetails} className="cursor-pointer">
+            {/* Toggle Details Button */}
+            <button
+              onClick={onToggleDetails}
+              className="cursor-pointer text-blue-600 underline"
+            >
               {isDetailsActive ? "Weniger Details" : "Weitere Details"} &#8594;
             </button>
+            {/* Select Button */}
             <button
-              onClick={onSelect}
+              onClick={()=>{
+                onSelect()
+           
+                dispatch(setGesamtSchutzInfo({
+                  name:name,
+                  deductible:deductible,
+                  dailyRate:dailyRate,
+                  features:features,
+                  gesamtPrice:gesamteSchutzPrice
+                }))
+
+
+                  console.log("GesamtSchutzInfo packageOption",gesamteSchutzInfo)
+               
+              }
+              
+              }
               className={`px-6 py-2 rounded-md ${
                 isSelected ? "bg-gray-300" : "bg-orange-400 text-black"
               } `}
@@ -90,7 +124,6 @@ const PackageOption = ({
           </div>
         </fieldset>
       </div>
-    
     </div>
   );
 };

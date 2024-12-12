@@ -1,69 +1,37 @@
-"use client"; 
+'use client'
 
 import { useRouter } from "next/navigation";
 import "./globals.css";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../feature/store/store";
-import {
-  setCarId, 
-  setIsCarVerfügbar,
-  setIsLoading,
-} from "../../feature/reducers/carRentSlice";
-import {  useEffect } from "react";
-import { FaCarSide } from "react-icons/fa6";
-import { WiFog } from "react-icons/wi";
-import { subscribeToSocketEvents } from '../../feature/reducers/offerSlice'; // Passe den Pfad an
-import { AppDispatch } from '../../feature/store/store';
-
+import { setCarId, setIsDetailsSchutzPacketActive, setIsCarVerfügbar } from "../../feature/reducers/carRentSlice";
+import { useEffect } from "react";
+import { FaCheck } from "react-icons/fa6";
+import { getSchutzPacketById } from "../../feature/reducers/schutzPacketSlice";
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 export default function MainLayout({ children }: LayoutProps) {
-  const {
-    isCarVerfügbar,
-    totalPrice,
-    isBasicDetailsActive,
-    isMediumDetailsActive,
-    isPremiumDetailsActive,
-    loading,
-  } = useSelector((state: RootState) => state.carRent);
-  
-  const dispatch = useDispatch<AppDispatch>();
+  const { isCarVerfügbar, totalPrice, isDetailsSchutzPacketActive } = useSelector((state: RootState) => state.carRent);
+  const { gesamteSchutzInfo } = useSelector((state: RootState) => state.app);
+  const dispatch = useDispatch();
   const router = useRouter();
-  const carId = typeof window !== "undefined" ? localStorage.getItem("carRentId") : null;
+  const storedCarId = localStorage.getItem("carRentId");
+  const schutzPacketId = localStorage.getItem("SchutzPacketId");
 
   useEffect(() => {
-    if (carId) {
-      dispatch(setCarId(carId));
+    if (storedCarId) {
+      dispatch(setCarId(storedCarId));
     }
-  }, [dispatch, carId]);
+  }, [storedCarId]);
 
-  useEffect(() => {
-    
-    subscribeToSocketEvents(dispatch);
-  }, [dispatch]);
+  const getOneSchutzPacket = useSelector((state: RootState) => getSchutzPacketById(state, schutzPacketId!));
 
   return (
     <main className="relative z-10">
-      {/* Apply blur to children when isCarVerfügbar is true */}
-      <div className={isCarVerfügbar || loading? "blur-sm" : ""}>{children}</div>
-
-      {loading && (
-        <div className="fixed inset-0 z-50 flex justify-center items-center">
-          <div className=" flex items-center gap-5 border-t-transparent rounded-full antialiased">
-            <div className=" flex items-center gap-1 text-3xl text-orange-400">
-              <WiFog className="animate-pulse" />
-              <WiFog className="animate-pulse" />
-              <WiFog className="animate-pulse" />
-            </div>
-            <div>
-              <FaCarSide className="text-orange-400 text-5xl sm:text-[8rem] animate-bounce" />
-            </div>
-          </div>
-        </div>
-      )}
+      <div className={isCarVerfügbar ? "blur-sm" : ""}>{children}</div>
 
       {isCarVerfügbar && (
         <div className="fixed inset-0 flex items-center justify-center z-50 md:w-full">
@@ -82,12 +50,11 @@ export default function MainLayout({ children }: LayoutProps) {
             <div className="flex py-4 justify-center gap-4 mt-4">
               <button
                 onClick={() => {
-                  if (carId) {
+                  if (storedCarId) {
                     localStorage.setItem("totalPrice", totalPrice.toString());
                     setTimeout(() => {
-                      router.push(`/fahrzeugvermietung/${carId}`);
+                      router.push(`/fahrzeugvermietung/${storedCarId}`);
                       dispatch(setIsCarVerfügbar(false));
-                      dispatch(setIsLoading(false))
                     }, 2000);
                   }
                 }}
@@ -96,10 +63,7 @@ export default function MainLayout({ children }: LayoutProps) {
                 Weiter mit diesem Fahrzeug
               </button>
               <button
-                onClick={() => 
-                  {dispatch(setIsLoading(false))
-                  dispatch(setIsCarVerfügbar(false))}
-                }
+                onClick={() => dispatch(setIsCarVerfügbar(false))}
                 className="border-2 border-orange-400 text-orange-400 font-bold px-6 py-2 rounded-md"
               >
                 Ein anderes Fahrzeug auswählen
@@ -109,20 +73,36 @@ export default function MainLayout({ children }: LayoutProps) {
         </div>
       )}
 
-      {/* Dark background overlay for additional states */}
-      {isBasicDetailsActive && (
+      {isDetailsSchutzPacketActive && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          {/* Inhalt hier */}
-        </div>
-      )}
-      {isMediumDetailsActive && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          {/* Inhalt hier */}
-        </div>
-      )}
-      {isPremiumDetailsActive && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          {/* Inhalt hier */}
+          <div className="mt-3 md:w-5/6 xl:w-1/2 w-full h-5/6 xl:h-full border border-gray-300 bg-white shadow-lg rounded-md py-5 px-3 mx-2 md:mx-0">
+            <div className="flex items-start justify-center gap-2">
+              <div className="flex flex-col justify-start">
+                <p className="text-lg font-semibold">{gesamteSchutzInfo?.name}</p>
+                <p className="text-sm text-gray-600">Selbstbeteiligung: {gesamteSchutzInfo?.deductible} €</p>
+              </div>
+              <div className="border-2 border-black w-1 h-8 mx-4" />
+              <div className="flex flex-col justify-start">
+                <p className="text-lg font-semibold">{gesamteSchutzInfo?.dailyRate}</p>
+              </div>
+            </div>
+            <div className="flex flex-wrap items-center w-full">
+              <div className="flex flex-col gap-4 mt-4">
+                <div className="flex gap-3 items-center">
+                  <FaCheck className="text-green-400 text-sm" />
+                  <p className="text-black font-bold">
+                    {gesamteSchutzInfo?.features.map((feature, index) => (
+                      <span className=" flex flex-col gap-4" key={index}>{feature}</span>
+                    ))}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center w-full justify-around mt-6">
+                <button onClick={() => dispatch(setIsDetailsSchutzPacketActive(false))} className="px-8 py-2 border-2 border-orange-400 rounded-md">Zurück zu Ihrer Buchung</button>
+                <button onClick={() => dispatch(setIsDetailsSchutzPacketActive(false))} className="bg-yellow-400 font-bold md:text-lg px-6 py-2 rounded-md">Auswählen</button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </main>

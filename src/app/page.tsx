@@ -4,9 +4,9 @@ import HeroCards from "@/components/cards/HeroCards";
 import HomeCarouselHero from "@/components/carousel/HomeCarouselHero";
 import dynamic from "next/dynamic";
 
-// Dynamisches Laden der OfferCards-Komponente
+
 const OfferCards = dynamic(() => import("@/components/offer/OfferCards"), {
-  ssr: false, // Verhindert serverseitiges Rendern
+  ssr: false, 
 });
 
 export default function Home() {
@@ -31,7 +31,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Dynamisch geladene OfferCards */}
+   
       <OfferCards />
 
       <div className="relative z-10 w-full">
