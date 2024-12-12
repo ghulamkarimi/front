@@ -40,20 +40,23 @@ const allSchutzPaket = useSelector(getAllSchutzPacket)
   );
  
 
-  useEffect(() => {}, [storedTotalPrice]);
 
   useEffect(() => {
-    const rentalDetails = {
-      pickupDate: localStorage.getItem("pickupDate"),
-      returnDate: localStorage.getItem("returnDate"),
-      pickupTime: localStorage.getItem("pickupTime"),
-      returnTime: localStorage.getItem("returnTime"),
-      pickupLocation: localStorage.getItem("pickupLocation"),
-      age: localStorage.getItem("age"),
-    };
+ if (typeof window !== "undefined") {
+      const rentalDetails = {
+        pickupDate: localStorage.getItem("pickupDate"),
+        returnDate: localStorage.getItem("returnDate"),
+        pickupTime: localStorage.getItem("pickupTime"),
+        returnTime: localStorage.getItem("returnTime"),
+        pickupLocation: localStorage.getItem("pickupLocation"),
+        age: localStorage.getItem("age"),
+      };
 
-    dispatch(setRentalDetails(rentalDetails));
-  }, [dispatch]);
+      dispatch(setRentalDetails(rentalDetails));
+    }
+
+  
+  }, [dispatch, storedTotalPrice]);
 
   const formattedPickupDate = pickupDate
     ? new Date(pickupDate).toLocaleDateString()

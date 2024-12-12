@@ -47,11 +47,12 @@ const CarSearch = () => {
   const [showPrice, setShowPrice] = useState(false);
 
   useEffect(() => {
-    if (pickupDate) localStorage.setItem("pickupDate", pickupDate);
-    if (pickupTime) localStorage.setItem("pickupTime", pickupTime);
-    if (returnDate) localStorage.setItem("returnDate", returnDate);
-    if (returnTime) localStorage.setItem("returnTime", returnTime);
-
+    if (typeof window !== "undefined") {
+      if (pickupDate) localStorage.setItem("pickupDate", pickupDate);
+      if (pickupTime) localStorage.setItem("pickupTime", pickupTime);
+      if (returnDate) localStorage.setItem("returnDate", returnDate);
+      if (returnTime) localStorage.setItem("returnTime", returnTime);
+    }
   }, [pickupDate, pickupTime, returnDate, returnTime]);
 
   const handleDateSelect = (date: Date | null) => {
