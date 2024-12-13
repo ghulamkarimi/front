@@ -1,57 +1,65 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useState } from "react";
+import {  useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../feature/store/store";
-import { getRentCarById } from "../../../feature/reducers/carRentSlice";
-import { createReservationApi, getOneReservation } from "../../../feature/reducers/reservationSlice";
+
+import {
+  createReservationApi,
+  getOneReservation,
+  setReservationId,
+} from "../../../feature/reducers/reservationSlice";
 import { NotificationService } from "../../../service/NotificationService";
 import { TReservation } from "../../../interface";
 import FahrerDetails from "./FahrerDetails";
 import PayPalSection from "./PayPalSection";
+import { getRentCarById } from "../../../feature/reducers/carRentSlice";
 
 
-interface FormReservationProps {
-  returnDate: string | null;
-  pickupDate: string | null;
-  returnTime: string | null;
-  pickupTime: string | null;
+
+interface FormReservationProps{
+  rentalDays:number
 }
 
-const FormReservation: React.FC<FormReservationProps> = ({
-  returnDate,
-  pickupDate,
-  returnTime,
-  pickupTime,
-}) => {
+function ensureString(param: string | string[] | undefined): string {
+  return typeof param === "string" ? param : param?.[0] || "";
+}
+const FormReservation = ({rentalDays}:FormReservationProps) => {
   const { id: carRentIdRaw } = useParams();
-  const carRentId =
-    typeof carRentIdRaw === "string" ? carRentIdRaw : carRentIdRaw?.[0] || "";
-  const { reservationId } = useSelector((state: RootState) => state.reservation)
-  const getReservation = useSelector((state: RootState) => getOneReservation(state, reservationId || ""))
-  console.log("getReservation", getReservation)
+  const carRentId = ensureString(carRentIdRaw);
+  
+  
   const userId = localStorage.getItem("userId") || "";
-  console.log("carRentId", carRentId);
   const dispatch = useDispatch<AppDispatch>();
-
-  const rentalDays = localStorage.getItem("rentalDays");
-  const getOneCar = useSelector((state: RootState) =>
-    getRentCarById(state, carRentId! as string)
+  const { reservationId } = useSelector(
+    (state: RootState) => state.reservation
   );
+const getOneCar = useSelector((state:RootState)=>getRentCarById(state,carRentId || ""))
+const {gesamteSchutzInfo} = useSelector((state:RootState)=>state.app)
+
+
+  // const getReservation = useSelector((state: RootState) =>
+  //   getOneReservation(state, reservationId || "")
+ 
+  // );
+  // console.log("getReservation",getReservation)
+
+
 
   const [step, setStep] = useState(1);
   const router = useRouter();
 
-  const pickupDateLocal = localStorage.getItem("pickupDate") || "";
-  const returnDateLocal = localStorage.getItem("returnDate") || "";
-  const pickupTimeLocal = localStorage.getItem("pickupTime") || "";
-  const returnTimeLocal = localStorage.getItem("returnTime") || "";
+  const pickupDate = localStorage.getItem("pickupDate") || "";
+  const returnDate = localStorage.getItem("returnDate") || "";
+  const pickupTime = localStorage.getItem("pickupTime") || "";
+  const returnTime = localStorage.getItem("returnTime") || "";
 
   const [loading, setLoading] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
 
-  const gesamtPrice = localStorage.getItem("gesamtPreice") || "";
+  const gesamtPrice = localStorage.getItem("gesamtPrice")
+
   const formSchema = Yup.object({
     vorname: Yup.string().required("Vorname ist erforderlich"),
     nachname: Yup.string().required("Nachname ist erforderlich"),
@@ -85,21 +93,24 @@ const FormReservation: React.FC<FormReservationProps> = ({
       adresse: "",
       postalCode: "",
       stadt: "",
-      gesamtPrice,
+      gesamtPrice:gesamtPrice || "",
       carRentId: carRentId || "",
       userId: userId || "",
-      pickupDate: pickupDateLocal || "",
-      returnDate: returnDateLocal || "",
-      pickupTime: pickupTimeLocal || "",
-      returnTime: returnTimeLocal || "",
+      pickupDate: pickupDate || "",
+      returnDate: returnDate || "",
+      pickupTime: pickupTime || "",
+      returnTime: returnTime || "",
     },
     validationSchema: formSchema,
     onSubmit: async (values: TReservation) => {
       try {
         console.log("value", values);
         const response = await dispatch(createReservationApi(values)).unwrap();
-        localStorage.setItem("email", values.email || "")
+        localStorage.setItem("email", values.email || "");      
+        console.log("responsevalue", response);
         NotificationService.success(response.message);
+       dispatch(setReservationId(localStorage.getItem("storedReservationId")
+       ))
         setStep(2);
       } catch (error: any) {
         NotificationService.error(error.message);
@@ -110,15 +121,17 @@ const FormReservation: React.FC<FormReservationProps> = ({
   const createOrderHandler = async () => {
     setLoading(true);
     try {
-      const gesamtPreis = localStorage.getItem("gesamtPreice") || "0.00";
+      const gesamtPreis = localStorage.getItem("gesamtPrice") || "0.00";
       const carRentId = localStorage.getItem("carRentId");
       const userId = localStorage.getItem("userId");
-      const email = localStorage.getItem("email")
+      const email = localStorage.getItem("email");
+      const reservationId = localStorage.getItem("storedReservationId");
+      console.log("reservationId", reservationId);
       console.log("Form values:", formik.values);
       console.log("gesamtPreis", gesamtPreis);
       console.log("carRentId", carRentId);
       console.log("userId", userId);
-      console.log("customerEmail", email); // Die E-Mail aus dem Zustand verwenden
+      console.log("customerEmail", email); 
 
       if (!gesamtPreis || !carRentId || !userId) {
         throw new Error("Fehlende Daten für die Bestellung");
@@ -134,6 +147,7 @@ const FormReservation: React.FC<FormReservationProps> = ({
             customerEmail: email,
             carId: carRentId,
             userId: userId,
+            reservationId: reservationId,
           }),
         }
       );
@@ -170,15 +184,22 @@ const FormReservation: React.FC<FormReservationProps> = ({
       const result = await response.json();
 
       // Überprüfen, ob die Zahlung erfolgreich war, indem wir den Status prüfen und nicht nur die Nachricht
-      if (response.ok && result.message && result.message.includes("Zahlung erfolgreich abgeschlossen!")) {
+      if (
+        response.ok &&
+        result.message &&
+        result.message.includes("Zahlung erfolgreich abgeschlossen!")
+      ) {
         // Zahlung war erfolgreich
-        NotificationService.success(`Zahlung erfolgreich abgeschlossen! Bestell-ID: ${orderID}`);
+        NotificationService.success(
+          `Zahlung erfolgreich abgeschlossen! Bestell-ID: ${orderID}`
+        );
         router.push("/fahrzeugvermietung");
       } else {
         // Fehlerbehandlung für unerwartete Ergebnisse
-        throw new Error(result.message || "Zahlung konnte nicht abgeschlossen werden.");
+        throw new Error(
+          result.message || "Zahlung konnte nicht abgeschlossen werden."
+        );
       }
-
     } catch (error: any) {
       // Fehlerbehandlung, wenn die Anfrage fehlschlägt
       setPaymentError(error.message || "Fehler bei der Zahlungsabwicklung.");
@@ -188,8 +209,24 @@ const FormReservation: React.FC<FormReservationProps> = ({
     }
   };
 
-
-
+  const handleVorOrtZahlenClick = async () => {
+    setLoading(true);
+    try {
+      const values = formik.values;
+      const response = await dispatch(createReservationApi(values)).unwrap();
+     
+      
+      NotificationService.success(response.message);
+      dispatch(setReservationId(localStorage.getItem("storedReservationId")));
+      setTimeout(()=>{
+        router.push("/fahrzeugvermietung")
+       },2000) ;
+    } catch (error: any) {
+      NotificationService.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="container mx-auto p-6">
@@ -203,6 +240,17 @@ const FormReservation: React.FC<FormReservationProps> = ({
           setPaymentError={setPaymentError}
         />
       )}
+      <button
+           type="submit"
+          className={step === 2 ?  "hidden" : "w-full text-white font-medium py-3 mt-3 px-2 rounded-md bg-green-600 hover:bg-green-700"}
+        onClick={()=>{
+          handleVorOrtZahlenClick();
+       
+         
+        }}
+        >
+          Vor Ort zahlen
+        </button>
     </div>
   );
 };

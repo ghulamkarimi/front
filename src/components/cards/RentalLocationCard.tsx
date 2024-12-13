@@ -45,7 +45,15 @@ const RentalLocationCard = ({
     getRentCarById(state, carRentId)
   );
 
+  useEffect(() => {
+    const gesamtPrice = (
+      Number(getOneCar?.carPrice || 0) * Number(rentalDays || 0) +
+      Number(gesamteSchutzInfo?.gesamtPrice || 0)
+    ).toFixed(2);
   
+    // Gesamtpreis in localStorage speichern
+    localStorage.setItem("gesamtPrice", gesamtPrice);
+  }, [getOneCar?.carPrice, rentalDays, gesamteSchutzInfo?.gesamtPrice]);
 
   return (
     <div>
