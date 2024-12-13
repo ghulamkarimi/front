@@ -12,7 +12,7 @@ import {
   getRentCarById,
   setRentalDetails,
 } from "../../../../feature/reducers/carRentSlice";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { FaUserTie } from "react-icons/fa6";
 import { GiCarDoor } from "react-icons/gi";
 import { MdOutlineSevereCold } from "react-icons/md";
@@ -34,26 +34,25 @@ const page = () => {
     getRentCarById(state, carRentId! as string)
   );
 
-  const allSchutzPaket = useSelector(getAllSchutzPacket);
-  const [packet, setPacket] = useState<string | null>(null);
-  const [storedTotalPrice, setStoredTotalPrice] = useState<number>(0);
+const allSchutzPaket = useSelector(getAllSchutzPacket)
+  const storedTotalPrice = parseFloat(
+    localStorage.getItem("totalPrice") || "0"
+  );
+ 
+
+  useEffect(() => {}, [storedTotalPrice]);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const rentalDetails = {
-        pickupDate: localStorage.getItem("pickupDate"),
-        returnDate: localStorage.getItem("returnDate"),
-        pickupTime: localStorage.getItem("pickupTime"),
-        returnTime: localStorage.getItem("returnTime"),
-        pickupLocation: localStorage.getItem("pickupLocation"),
-        age: localStorage.getItem("age"),
-      };
+    const rentalDetails = {
+      pickupDate: localStorage.getItem("pickupDate"),
+      returnDate: localStorage.getItem("returnDate"),
+      pickupTime: localStorage.getItem("pickupTime"),
+      returnTime: localStorage.getItem("returnTime"),
+      pickupLocation: localStorage.getItem("pickupLocation"),
+      age: localStorage.getItem("age"),
+    };
 
-      dispatch(setRentalDetails(rentalDetails));
-
-      const price = parseFloat(localStorage.getItem("totalPrice") || "0");
-      setStoredTotalPrice(price);
-    }
+    dispatch(setRentalDetails(rentalDetails));
   }, [dispatch]);
 
   const formattedPickupDate = pickupDate
@@ -75,21 +74,33 @@ const page = () => {
 
     if (!schutzPacket) return "0.00";
 
+    let localPriceArray = [];
     const dailyRate = schutzPacket.dailyRate;
     const gesamtPrice = (dailyRate * rentalDays).toFixed(2);
 
-    if (typeof window !== "undefined") {
-      const localPriceArray = [{ id: schutzPacketId, price: gesamtPrice }];
-      localStorage.setItem("PriceSchutz", JSON.stringify(localPriceArray));
-    }
+    // Speichern des Schutzpakets-IDs und des Preises als Array im localStorage
+    const priceArray = { id: schutzPacketId, price: gesamtPrice };
+    localPriceArray.push(priceArray);
+    localStorage.setItem("PriceSchutz", JSON.stringify(localPriceArray));
+
+
 
     return gesamtPrice;
   };
-
-
+   
   const { gesamteSchutzInfo } = useSelector(
     (state: RootState) => state.app
   );
+
+  interface FormReservationProps {
+    rentalDays: number;
+    returnDate: string | null;
+    pickupDate: string | null;
+    returnTime: string | null;
+    pickupTime: string | null;
+  }
+  
+
 
   return (
     <div className=" max-w-full">
@@ -109,7 +120,7 @@ const page = () => {
             <p className=" flex flex-col ">
               <span>Gesamt</span>
               <span className="  font-bold">
-                {storedTotalPrice}€
+                {localStorage.getItem("gesamtPreice")}€
               </span>
             </p>
           </div>
@@ -118,6 +129,7 @@ const page = () => {
       <div className=" w-full flex lg:flex-row flex-col-reverse ">
        <div className=" lg:w-3/6 xl:w-4/6">
         <FormReservation
+        rentalDays={rentalDays}
        returnDate={returnDate }
        pickupDate={pickupDate}
        returnTime={returnTime}
@@ -155,11 +167,11 @@ const page = () => {
             </div>
             <div className=" mt-2 flex items-center justify-between">
               <span>
-              {packet} für ({rentalDays} Tage)
-              
+                {localStorage.getItem("packet")} für ({rentalDays}{" "}
+                Tage)
               </span>
               <span className=" font-bold">
-              {storedTotalPrice} €
+              {localStorage.getItem("gesamtPreice")} €
               </span>
             </div>
             <div className=" mt-3">
@@ -203,7 +215,7 @@ const page = () => {
             <div className=" w-full border-2 border-black h-[0.1px] mt-2" />
             <div className=" mt-3 flex items-center justify-around">
               <p>Gesamt</p>
-              <p className=" font-bold">{storedTotalPrice} €</p>
+              <p className=" font-bold">{localStorage.getItem("gesamtPreice")} €</p>
             </div>
           </div>
         </div>

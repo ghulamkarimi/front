@@ -6,7 +6,7 @@ import { HiCamera } from "react-icons/hi2";
 import Modal from "../crop/Modal";
 import { NotificationService } from "../../../service/NotificationService";
 import { MdOutlineDownloading } from "react-icons/md";
-
+import Image from "next/image";
 const ProfileComponent = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [userId, setUserId] = useState<string | null>(null);
@@ -72,7 +72,9 @@ const ProfileComponent = () => {
 
       <div className="profile-photo-container mb-6 flex justify-center relative">
         <div className="relative">
-          <img
+          <Image
+            width={160}
+            height={160}
             src={croppedImage || "https://www.example.com/default-avatar.png"}
             alt="Profilbild"
             className="w-40 h-40 rounded-full border-4 border-orange-500 shadow-lg object-cover"

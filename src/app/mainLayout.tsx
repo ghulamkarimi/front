@@ -12,6 +12,7 @@ import {
 } from '../../feature/reducers/carRentSlice';
 import { FaCheck } from 'react-icons/fa6';
 import { getSchutzPacketById } from '../../feature/reducers/schutzPacketSlice';
+import { getOneCarById } from '../../service';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -70,10 +71,10 @@ export default function MainLayout({ children }: LayoutProps) {
                 onClick={() => {
                   if (storedCarId) {
                     localStorage.setItem('totalPrice', totalPrice.toString());
-                    setTimeout(() => {
-                      router.push(`/fahrzeugvermietung/${storedCarId}`);
-                      dispatch(setIsCarVerfügbar(false));
-                    }, 2000);
+
+                    router.push(`/fahrzeugvermietung/${storedCarId}`);
+                    dispatch(setIsCarVerfügbar(false));
+
                   }
                 }}
                 className="bg-yellow-400 font-bold md:text-lg px-6 py-2 rounded-md"

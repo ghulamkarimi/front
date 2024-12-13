@@ -76,6 +76,7 @@ export const userLogoutApi = createAsyncThunk("users/userLogoutApi", async (_, {
         return rejectWithValue(errorMessage);
     }
 });
+
 export const profilePhotoUploadApi = createAsyncThunk(
     "users/profilePhotoUploadApi",
     async (data: File, { rejectWithValue }) => {
