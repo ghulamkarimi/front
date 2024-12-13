@@ -14,6 +14,7 @@ export const socket: Socket = io(SERVER_URL, {
   autoConnect: false, // Automatisches Verbinden vermeiden, bis es explizit verlangt wird
 });
 
+
 export const userRegister = (user: TUser) => {
   const url = `${SERVER_URL}/user/register`;
   return axios.post(url, user);
