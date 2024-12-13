@@ -3,16 +3,10 @@
 import { FaPhoneFlip } from "react-icons/fa6";
 import { FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
 import { IoLogoYoutube } from "react-icons/io5";
-import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { fadeIn } from "@/utils/motin";
-
-
-
 
 const Footer = () => {
-    
 
 function useMediaQuery(query: string) {
     const [matches, setMatches] = useState(false);
@@ -36,12 +30,7 @@ function useMediaQuery(query: string) {
             <div className="flex flex-col gap-4 md:flex-row justify-between border-b-2 border-black shadow-sm pb-4">
 
                 {/* Logo und Kontaktinformation */}
-                <motion.div
-                    variants={fadeIn("left", 0.8)}
-                    initial="hidden"
-                    whileInView="show"
-                    viewport={{ margin: "100px" }}
-                >
+                <div>
                     <div>
                         <div className="flex items-center gap-3">
                             <img className="w-14 rounded-full" src="/logo.png" alt="Logo" />
@@ -73,18 +62,13 @@ function useMediaQuery(query: string) {
                             <span>Deutschland</span>
                         </Link>
                     </div>
-                </motion.div>
+                </div>
 
                 {/* Trennlinie für mobile Ansicht */}
                 <div className="md:hidden border-b-2" />
 
                 {/* Newsletter-Anmeldung */}
-                <motion.div
-                    variants={isMediumScreen ? fadeIn("left", 0.8) : fadeIn("right", 0.8)}
-                    initial="hidden"
-                    whileInView="show"
-                    viewport={{ margin: "100px" }}
-                >
+                <div>
                     <div>
                         <p className="text-2xl">Newsletter</p>
                         <div className="py-4">
@@ -111,7 +95,7 @@ function useMediaQuery(query: string) {
                             <FaTwitter className="hover:text-blue-500 cursor-pointer" />
                         </div>
                     </div>
-                </motion.div>
+                </div>
             </div>
 
             {/* Hier die Karte einfügen */}
@@ -138,5 +122,3 @@ function useMediaQuery(query: string) {
 };
 
 export default Footer;
-
-
