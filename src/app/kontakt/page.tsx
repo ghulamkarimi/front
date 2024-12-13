@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Contact() {
     return (
-        <div className="bg-cover bg-center bg-no-repeat min-h-screen flex justify-center items-center flex-col text-white text-center px-4 py-2"
+        <div className="bg-cover bg-center bg-no-repeat min-h-screen flex justify-center items-center flex-col text-black text-center px-4 py-2"
             style={{ backgroundImage: "url('/hintergrund.webp')" }}
         >
             <div className="bg-gray-100 shadow-md rounded-lg max-w-md w-full p-8">
