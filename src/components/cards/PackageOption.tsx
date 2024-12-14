@@ -6,6 +6,7 @@ import { RootState } from "../../../feature/store/store";
 import { useEffect } from "react";
 
 
+
 interface PackageOptionProps {
   name: string;
   deductible: number;
@@ -37,7 +38,13 @@ const PackageOption = ({
   );
 
 
- 
+  useEffect(() => {
+  
+    const storedGesamtSchutzInfo = localStorage.getItem("GesamtSchutzInfo");
+    if (storedGesamtSchutzInfo) {
+      dispatch(setGesamtSchutzInfo(JSON.parse(storedGesamtSchutzInfo)));
+    }
+  }, [dispatch]);
 
   return (
     <div 
@@ -49,6 +56,7 @@ const PackageOption = ({
         features:features,
         gesamtPrice:gesamteSchutzPrice
       }))
+      
     }}
     className="w-full flex xl:flex-row flex-col items-center justify-center">
       <div className="w-full px-2 mt-2">
@@ -108,7 +116,13 @@ const PackageOption = ({
                   features:features,
                   gesamtPrice:gesamteSchutzPrice
                 }))
-
+                localStorage.setItem("GesamtSchutzInfo", JSON.stringify({
+                  name,
+                  deductible,
+                  dailyRate,
+                  features,
+                  gesamtPrice: gesamteSchutzPrice
+                }));
 
                   console.log("GesamtSchutzInfo packageOption",gesamteSchutzInfo)
                
