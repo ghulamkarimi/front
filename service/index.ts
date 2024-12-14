@@ -15,7 +15,7 @@ export const socket: Socket = io(SERVER_URL, {
 });
 
 
-export const userRegister = (user: TUser) => {
+export const userRegister = (user: TUser): Promise<any> => {
   const url = `${SERVER_URL}/user/register`;
   return axios.post(url, user);
 };
