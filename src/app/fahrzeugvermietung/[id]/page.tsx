@@ -166,7 +166,7 @@ const Page = () => {
       </div>
       <div className=" px-2 py-4">
         <div className={`mt-4 w-1/2 flex justify-center`}>
-          <h1 className=" font-bold text-xl xl:text-2xl   ">Schutzpakete</h1>
+          <h1 className=" font-bold text-xl xl:text-2xl">Schutzpakete</h1>
         </div>
 
         <div className=" w-full flex flex-col lg:flex-row ">

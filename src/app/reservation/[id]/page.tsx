@@ -19,6 +19,7 @@ import { MdOutlineSevereCold } from "react-icons/md";
 import { SiTransmission } from "react-icons/si";
 import FormReservation from "@/components/formReservation/FormReservation";
 import { getAllSchutzPacket } from "../../../../feature/reducers/schutzPacketSlice";
+import { setGesamtSchutzInfo } from "../../../../feature/reducers/appSlice";
 
 const page = () => {
   const { id: carRentId } = useParams();
@@ -43,6 +44,11 @@ const allSchutzPaket = useSelector(getAllSchutzPacket)
   useEffect(() => {}, [storedTotalPrice]);
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+    const storedGesamtSchutzInfo = JSON.parse(
+      localStorage.getItem("GesamtSchutzInfo") || "{}"
+    );
+
     const rentalDetails = {
       pickupDate: localStorage.getItem("pickupDate"),
       returnDate: localStorage.getItem("returnDate"),
@@ -52,7 +58,12 @@ const allSchutzPaket = useSelector(getAllSchutzPacket)
       age: localStorage.getItem("age"),
     };
 
+   
+    if (storedGesamtSchutzInfo) {
+      dispatch(setGesamtSchutzInfo(storedGesamtSchutzInfo));
+    }
     dispatch(setRentalDetails(rentalDetails));
+  }
   }, [dispatch]);
 
   const formattedPickupDate = pickupDate
@@ -71,20 +82,9 @@ const allSchutzPaket = useSelector(getAllSchutzPacket)
     const schutzPacket = allSchutzPaket.find(
       (packet) => packet._id === schutzPacketId
     );
-
     if (!schutzPacket) return "0.00";
-
-    let localPriceArray = [];
     const dailyRate = schutzPacket.dailyRate;
     const gesamtPrice = (dailyRate * rentalDays).toFixed(2);
-
-    // Speichern des Schutzpakets-IDs und des Preises als Array im localStorage
-    const priceArray = { id: schutzPacketId, price: gesamtPrice };
-    localPriceArray.push(priceArray);
-    localStorage.setItem("PriceSchutz", JSON.stringify(localPriceArray));
-
-
-
     return gesamtPrice;
   };
    
@@ -92,14 +92,9 @@ const allSchutzPaket = useSelector(getAllSchutzPacket)
     (state: RootState) => state.app
   );
 
-  interface FormReservationProps {
-    rentalDays: number;
-    returnDate: string | null;
-    pickupDate: string | null;
-    returnTime: string | null;
-    pickupTime: string | null;
-  }
-  
+
+ 
+
 
 
   return (
@@ -120,7 +115,7 @@ const allSchutzPaket = useSelector(getAllSchutzPacket)
             <p className=" flex flex-col ">
               <span>Gesamt</span>
               <span className="  font-bold">
-                {localStorage.getItem("gesamtPreice")}€
+              {(Number(getOneCar?.carPrice) * Number(rentalDays) + Number(gesamteSchutzInfo.gesamtPrice)).toFixed(2)}€
               </span>
             </p>
           </div>
@@ -130,7 +125,6 @@ const allSchutzPaket = useSelector(getAllSchutzPacket)
        <div className=" lg:w-3/6 xl:w-4/6">
         <FormReservation
         rentalDays={rentalDays}
-    
         />
        </div>
         <div className=" mb-4 px-2 lg:w-3/6 xl:w-2/6">
@@ -164,11 +158,11 @@ const allSchutzPaket = useSelector(getAllSchutzPacket)
             </div>
             <div className=" mt-2 flex items-center justify-between">
               <span>
-                {localStorage.getItem("packet")} für ({rentalDays}{" "}
+                {gesamteSchutzInfo?.name} für ({rentalDays}{" "}
                 Tage)
               </span>
               <span className=" font-bold">
-              {localStorage.getItem("gesamtPreice")} €
+              {gesamteSchutzInfo?.gesamtPrice} €
               </span>
             </div>
             <div className=" mt-3">
@@ -188,11 +182,8 @@ const allSchutzPaket = useSelector(getAllSchutzPacket)
                 <p>Schutzpakete & Extras</p>
                 <p>
                  
-                   {selectedSchutzPacket === "Medium"
-                    ? `${gesamteSchutzInfo?.gesamtPrice} €`
-                    : selectedSchutzPacket === "Premium"
-                    ? `${gesamteSchutzInfo?.gesamtPrice} €`
-                    : "Inklusive"}
+                  
+                    {gesamteSchutzInfo?.gesamtPrice}
                  €
                 </p>
               </div>
@@ -212,7 +203,7 @@ const allSchutzPaket = useSelector(getAllSchutzPacket)
             <div className=" w-full border-2 border-black h-[0.1px] mt-2" />
             <div className=" mt-3 flex items-center justify-around">
               <p>Gesamt</p>
-              <p className=" font-bold">{localStorage.getItem("gesamtPreice")} €</p>
+              <p className=" font-bold">{(Number(getOneCar?.carPrice) * Number(rentalDays) + Number(gesamteSchutzInfo.gesamtPrice)).toFixed(2)} €</p>
             </div>
           </div>
         </div>
