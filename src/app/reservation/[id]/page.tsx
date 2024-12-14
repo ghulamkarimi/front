@@ -130,10 +130,7 @@ const allSchutzPaket = useSelector(getAllSchutzPacket)
        <div className=" lg:w-3/6 xl:w-4/6">
         <FormReservation
         rentalDays={rentalDays}
-       returnDate={returnDate }
-       pickupDate={pickupDate}
-       returnTime={returnTime}
-       pickupTime={pickupTime}
+    
         />
        </div>
         <div className=" mb-4 px-2 lg:w-3/6 xl:w-2/6">
