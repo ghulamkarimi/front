@@ -7,8 +7,8 @@ import {
 } from "../interface";
 import axiosJWT from "./axiosJwt";
 import { io, Socket } from "socket.io-client";
-//  const SERVER_URL = "https://car-db.ghulam-dev.me";
- const SERVER_URL = "http://localhost:7001";
+  const SERVER_URL = "https://car-db.ghulam-dev.me";
+// const SERVER_URL = "http://localhost:7001";
 
 export const socket: Socket = io(SERVER_URL, {
   autoConnect: false, // Automatisches Verbinden vermeiden, bis es explizit verlangt wird
