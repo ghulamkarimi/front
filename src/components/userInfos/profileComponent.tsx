@@ -75,7 +75,7 @@ const ProfileComponent = () => {
           <Image
             width={160}
             height={160}
-            src={croppedImage || "https://www.example.com/default-avatar.png"}
+            src={croppedImage || "https://www.pngplay.com/wp-content/uploads/12/User-Avatar-Profile-PNG-Free-File-Download.png"}
             alt="Profilbild"
             className="w-40 h-40 rounded-full border-4 border-orange-500 shadow-lg object-cover"
           />
