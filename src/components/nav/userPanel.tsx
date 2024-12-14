@@ -19,6 +19,7 @@ import { IoIosLogIn } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { socket } from "../../../service/index"; // Stelle sicher, dass der Socket-Client korrekt importiert wird
 import { IUser } from "../../../interface";
+import Image from "next/image";
 
 const DropdownMenuDemo = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -60,7 +61,9 @@ const DropdownMenuDemo = () => {
   const handleLogout = async () => {
     try {
       const response = await dispatch(userLogoutApi()).unwrap();
+      
       NotificationService.success(response.message);
+      localStorage.clear();
       // Informiere andere Clients über das Logout
       socket.emit("userLoggedOut", userId);
       router.push("/login");
@@ -94,7 +97,10 @@ const DropdownMenuDemo = () => {
             >
               <span>
                 {user?.profile_photo ? (
-                  <img className="w-8 h-8 rounded-full" src={user.profile_photo} alt="Benutzerbild" />
+                  <Image
+                    width={32}
+                    height={32}
+                    className="w-8 h-8 rounded-full" src={user.profile_photo} alt="Benutzerbild" />
                 ) : (
                   <FaRegCircleUser className="lg:text-2xl" />
                 )}
