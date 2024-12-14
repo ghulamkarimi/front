@@ -39,21 +39,25 @@ const Page = () => {
   const storedTotalPrice = parseFloat(
     localStorage.getItem("totalPrice") || "0"
   );
-
+  const { gesamteSchutzInfo } = useSelector(
+    (state: RootState) => state.app
+  );
 
   useEffect(() => {}, [storedTotalPrice]);
 
   useEffect(() => {
-    const rentalDetails = {
-      pickupDate: localStorage.getItem("pickupDate"),
-      returnDate: localStorage.getItem("returnDate"),
-      pickupTime: localStorage.getItem("pickupTime"),
-      returnTime: localStorage.getItem("returnTime"),
-      pickupLocation: localStorage.getItem("pickupLocation"),
-      age: localStorage.getItem("age"),
-    };
+   if (typeof window !== "undefined") {
+      const rentalDetails = {
+        pickupDate: localStorage.getItem("pickupDate"),
+        returnDate: localStorage.getItem("returnDate"),
+        pickupTime: localStorage.getItem("pickupTime"),
+        returnTime: localStorage.getItem("returnTime"),
+        pickupLocation: localStorage.getItem("pickupLocation"),
+        age: localStorage.getItem("age"),
+      };
 
-    dispatch(setRentalDetails(rentalDetails));
+      dispatch(setRentalDetails(rentalDetails));
+    }
   }, [dispatch]);
 
   const formattedPickupDate = pickupDate
@@ -90,21 +94,16 @@ const Page = () => {
     returnTime!
   );
 
-  const calculateGesamtePriceSchutzPacket = (schutzPacketId: string) => {
+   const calculateGesamtePriceSchutzPacket = (schutzPacketId: string) => {
     const schutzPacket = allSchutzPaket.find(
       (packet) => packet._id === schutzPacketId
     );
 
     if (!schutzPacket) return "0.00";
 
-    let localPriceArray = [];
+
     const dailyRate = schutzPacket.dailyRate;
     const gesamtPrice = (dailyRate * rentalDays).toFixed(2);
-
-    // Speichern des Schutzpakets-IDs und des Preises als Array im localStorage
-    const priceArray = { id: schutzPacketId, price: gesamtPrice };
-    localPriceArray.push(priceArray);
-    localStorage.setItem("PriceSchutz", JSON.stringify(localPriceArray));
 
 
 
@@ -150,24 +149,8 @@ const Page = () => {
           <p className=" xl:col-span-3 flex flex-col">
             <span>Gesamt</span>
             <span className=" font-bold text-xl">
-              {(() => {
-                const basePrice = Number(getOneCar?.carPrice) * rentalDays;
-
-                // Aktuelles Schutzpaket aus dem lokalen Speicher
-                const selectedPacketName = localStorage.getItem("packet");
-                const selectedPacket = allSchutzPaket.find(
-                  (packet) => packet.name === selectedPacketName
-                );
-
-                const protectionPrice = selectedPacket
-                  ? parseFloat(
-                      calculateGesamtePriceSchutzPacket(selectedPacket._id)
-                    )
-                  : 0;
-
-                const totalPrice = basePrice + protectionPrice;
-                return `${totalPrice.toFixed(2)} €`;
-              })()}
+      
+              {(Number(getOneCar?.carPrice) * Number(rentalDays) + Number(gesamteSchutzInfo.gesamtPrice)).toFixed(2)} € 
             </span>
           </p>
           <button

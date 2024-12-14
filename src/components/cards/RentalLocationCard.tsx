@@ -17,7 +17,6 @@ interface RentalLocationCardProps {
   calculateGesamtePriceSchutzPacket: (schutzPacketId: string) => string;
 }
 
-
 const RentalLocationCard = ({
   formattedPickupDate,
   formattedPickupTime,
@@ -30,29 +29,29 @@ const RentalLocationCard = ({
   const { selectedSchutzPacket, age, pickupLocation, totalPrice } = useSelector(
     (state: RootState) => state.carRent
   );
-  const { gesamteSchutzInfo } = useSelector(
-    (state: RootState) => state.app
-  );
+  const { gesamteSchutzInfo } = useSelector((state: RootState) => state.app);
 
   const schutzPacketId = localStorage.getItem("SchutzPacketId");
 
   const getOneSchutzPacket = useSelector((state: RootState) =>
     getSchutzPacketById(state, schutzPacketId || "")
   );
-  
+
   const dispatch = useDispatch();
   const getOneCar = useSelector((state: RootState) =>
     getRentCarById(state, carRentId)
   );
 
   useEffect(() => {
-    const gesamtPrice = (
-      Number(getOneCar?.carPrice || 0) * Number(rentalDays || 0) +
-      Number(gesamteSchutzInfo?.gesamtPrice || 0)
-    ).toFixed(2);
-  
-    // Gesamtpreis in localStorage speichern
-    localStorage.setItem("gesamtPrice", gesamtPrice);
+    if (typeof window !== "undefined") {
+      const gesamtPrice = (
+        Number(getOneCar?.carPrice || 0) * Number(rentalDays || 0) +
+        Number(gesamteSchutzInfo?.gesamtPrice || 0)
+      ).toFixed(2);
+
+      // Gesamtpreis in localStorage speichern
+      localStorage.setItem("gesamtPrice", gesamtPrice);
+    }
   }, [getOneCar?.carPrice, rentalDays, gesamteSchutzInfo?.gesamtPrice]);
 
   return (
@@ -108,7 +107,10 @@ const RentalLocationCard = ({
           </div>
           <div className="grid grid-cols-2 items-center gap-2 mt-2">
             <div className="col-span-1">
-              <p className="font-bold text-xl"> {gesamteSchutzInfo?.name || "Inklusive"}</p>
+              <p className="font-bold text-xl">
+                {" "}
+                {gesamteSchutzInfo?.name || "Inklusive"}
+              </p>
               <span>Inklusive</span>
             </div>
             <div className="col-span-1 flex items-center gap-2">
@@ -116,9 +118,7 @@ const RentalLocationCard = ({
               <div>
                 <p className="font-bold text-sm"> Extra</p>
                 <span>
-                  <span>
-                 {gesamteSchutzInfo.gesamtPrice}
-                  </span>
+                  <span>{gesamteSchutzInfo.gesamtPrice}</span>
                 </span>
               </div>
             </div>
@@ -133,8 +133,14 @@ const RentalLocationCard = ({
           </div>
           <div className="flex flex-col gap-4 mt-2 font-bold text-xl">
             <p>Gesamtpreis</p>
-            <p className="text-xl font-extrabold"> {(Number(getOneCar?.carPrice) * Number(rentalDays) + Number(gesamteSchutzInfo.gesamtPrice)).toFixed(2)} € 
-             </p>
+            <p className="text-xl font-extrabold">
+              {" "}
+              {(
+                Number(getOneCar?.carPrice) * Number(rentalDays) +
+                Number(gesamteSchutzInfo.gesamtPrice)
+              ).toFixed(2)}{" "}
+              €
+            </p>
           </div>
         </div>
       </div>

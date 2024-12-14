@@ -1,13 +1,12 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import {  useState } from "react";
+import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../feature/store/store";
 
 import {
   createReservationApi,
-  getOneReservation,
   setReservationId,
 } from "../../../feature/reducers/reservationSlice";
 import { NotificationService } from "../../../service/NotificationService";
@@ -16,35 +15,30 @@ import FahrerDetails from "./FahrerDetails";
 import PayPalSection from "./PayPalSection";
 import { getRentCarById } from "../../../feature/reducers/carRentSlice";
 
+interface FormReservationProps {
+  rentalDays: number;
+  
 
-
-interface FormReservationProps{
-  rentalDays:number
 }
 
 function ensureString(param: string | string[] | undefined): string {
   return typeof param === "string" ? param : param?.[0] || "";
 }
-const FormReservation = ({rentalDays}:FormReservationProps) => {
+const FormReservation = ({ rentalDays}: FormReservationProps) => {
   const { id: carRentIdRaw } = useParams();
   const carRentId = ensureString(carRentIdRaw);
-  
-  
+
   const userId = localStorage.getItem("userId") || "";
   const dispatch = useDispatch<AppDispatch>();
   const { reservationId } = useSelector(
     (state: RootState) => state.reservation
   );
-const getOneCar = useSelector((state:RootState)=>getRentCarById(state,carRentId || ""))
-const {gesamteSchutzInfo} = useSelector((state:RootState)=>state.app)
+  const getOneCar = useSelector((state: RootState) =>
+    getRentCarById(state, carRentId || "")
+  );
+  const { gesamteSchutzInfo } = useSelector((state: RootState) => state.app);
 
-
-  // const getReservation = useSelector((state: RootState) =>
-  //   getOneReservation(state, reservationId || "")
  
-  // );
-  // console.log("getReservation",getReservation)
-
 
 
   const [step, setStep] = useState(1);
@@ -55,10 +49,15 @@ const {gesamteSchutzInfo} = useSelector((state:RootState)=>state.app)
   const pickupTime = localStorage.getItem("pickupTime") || "";
   const returnTime = localStorage.getItem("returnTime") || "";
 
+
+ 
+
+
+
   const [loading, setLoading] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
 
-  const gesamtPrice = localStorage.getItem("gesamtPrice")
+  const gesamtPrice = localStorage.getItem("gesamtPrice");
 
   const formSchema = Yup.object({
     vorname: Yup.string().required("Vorname ist erforderlich"),
@@ -93,7 +92,7 @@ const {gesamteSchutzInfo} = useSelector((state:RootState)=>state.app)
       adresse: "",
       postalCode: "",
       stadt: "",
-      gesamtPrice:gesamtPrice || "",
+      gesamtPrice: gesamtPrice || "",
       carRentId: carRentId || "",
       userId: userId || "",
       pickupDate: pickupDate || "",
@@ -106,11 +105,10 @@ const {gesamteSchutzInfo} = useSelector((state:RootState)=>state.app)
       try {
         console.log("value", values);
         const response = await dispatch(createReservationApi(values)).unwrap();
-        localStorage.setItem("email", values.email || "");      
+        localStorage.setItem("email", values.email || "");
         console.log("responsevalue", response);
         NotificationService.success(response.message);
-       dispatch(setReservationId(localStorage.getItem("storedReservationId")
-       ))
+        dispatch(setReservationId(localStorage.getItem("storedReservationId")));
         setStep(2);
       } catch (error: any) {
         NotificationService.error(error.message);
@@ -131,9 +129,9 @@ const {gesamteSchutzInfo} = useSelector((state:RootState)=>state.app)
       console.log("gesamtPreis", gesamtPreis);
       console.log("carRentId", carRentId);
       console.log("userId", userId);
-      console.log("customerEmail", email); 
+      console.log("customerEmail", email);
 
-      if (!gesamtPreis || !carRentId || !userId) {
+      if (!gesamtPreis || !carRentId) {
         throw new Error("Fehlende Daten für die Bestellung");
       }
 
@@ -146,7 +144,7 @@ const {gesamteSchutzInfo} = useSelector((state:RootState)=>state.app)
             amount: gesamtPreis,
             customerEmail: email,
             carId: carRentId,
-            userId: userId,
+            userId: userId || null,
             reservationId: reservationId,
           }),
         }
@@ -214,13 +212,12 @@ const {gesamteSchutzInfo} = useSelector((state:RootState)=>state.app)
     try {
       const values = formik.values;
       const response = await dispatch(createReservationApi(values)).unwrap();
-     
-      
+
       NotificationService.success(response.message);
       dispatch(setReservationId(localStorage.getItem("storedReservationId")));
-      setTimeout(()=>{
-        router.push("/fahrzeugvermietung")
-       },2000) ;
+      setTimeout(() => {
+        router.push("/fahrzeugvermietung");
+      }, 2000);
     } catch (error: any) {
       NotificationService.error(error.message);
     } finally {
@@ -241,16 +238,18 @@ const {gesamteSchutzInfo} = useSelector((state:RootState)=>state.app)
         />
       )}
       <button
-           type="submit"
-          className={step === 2 ?  "hidden" : "w-full text-white font-medium py-3 mt-3 px-2 rounded-md bg-green-600 hover:bg-green-700"}
-        onClick={()=>{
+        type="submit"
+        className={
+          step === 2
+            ? "hidden"
+            : "w-full text-white font-medium py-3 mt-3 px-2 rounded-md bg-green-600 hover:bg-green-700"
+        }
+        onClick={() => {
           handleVorOrtZahlenClick();
-       
-         
         }}
-        >
-          Vor Ort zahlen
-        </button>
+      >
+        Vor Ort zahlen
+      </button>
     </div>
   );
 };
