@@ -82,7 +82,10 @@ const DropdownMenuDemo = () => {
             {user && userId ? (
               <div className="flex items-center gap-4 lg:gap-6 lg:px-8 lg:py-1">
                 <span className="flex items-center gap-2">
-                  <img className="w-8 h-8 rounded-full" src={user?.profile_photo} alt="Profilbild" />
+                  <Image 
+                  width={32}
+                  height={32}
+                  className="w-8 h-8 rounded-full" src={user?.profile_photo} alt="Profilbild" />
                   {user?.firstName}
                 </span>
               </div>
