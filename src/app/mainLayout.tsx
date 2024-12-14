@@ -48,6 +48,19 @@ export default function MainLayout({ children }: LayoutProps) {
     getSchutzPacketById(state, schutzPacketId!)
   );
 
+  const handleContinueWithCar = () => {
+    if (storedCarId) {
+      // Speichert den Preis im localStorage und navigiert zur Detailseite
+      localStorage.setItem('totalPrice', totalPrice.toString());
+      dispatch(setIsCarVerfügbar(false));
+      router.push(`/fahrzeugvermietung/${storedCarId}`);
+    } else {
+      console.error('storedCarId ist nicht vorhanden!');
+    }
+  };
+  const handleSelectDifferentCar = () => {
+    dispatch(setIsCarVerfügbar(false));
+  };
   return (
     <main className="relative z-10">
       <div className={isCarVerfügbar ? 'blur-sm' : ''}>{children}</div>
@@ -67,22 +80,14 @@ export default function MainLayout({ children }: LayoutProps) {
               tätigen.
             </p>
             <div className="flex py-4 justify-center gap-4 mt-4">
-              <button
-                onClick={() => {
-                  if (storedCarId) {
-                    localStorage.setItem('totalPrice', totalPrice.toString());
-
-                    router.push(`/fahrzeugvermietung/${storedCarId}`);
-                    dispatch(setIsCarVerfügbar(false));
-
-                  }
-                }}
+            <button
+                onClick={handleContinueWithCar}
                 className="bg-yellow-400 font-bold md:text-lg px-6 py-2 rounded-md"
               >
                 Weiter mit diesem Fahrzeug
               </button>
               <button
-                onClick={() => dispatch(setIsCarVerfügbar(false))}
+                onClick={handleSelectDifferentCar}
                 className="border-2 border-orange-400 text-orange-400 font-bold px-6 py-2 rounded-md"
               >
                 Ein anderes Fahrzeug auswählen
