@@ -77,6 +77,7 @@ const ProfileComponent = () => {
             height={160}
             src={
               croppedImage ||
+              user.profile_photo ||
               "https://www.pngplay.com/wp-content/uploads/12/User-Avatar-Profile-PNG-Free-File-Download.png"
             }
             alt="Profilbild"

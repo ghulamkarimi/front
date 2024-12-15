@@ -69,6 +69,7 @@ export const userLogoutApi = createAsyncThunk("users/userLogoutApi", async (_, {
         const response = await userLogout();
         localStorage.removeItem("exp");
         localStorage.removeItem("userId");
+        
         return response.data;
     } catch (error) {
 
