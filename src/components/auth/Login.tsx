@@ -1,6 +1,6 @@
 "use client";
+
 import React, { useState } from "react";
-import Link from "next/link";
 import { IoEyeSharp, IoReturnDownBack, IoEyeOffSharp } from "react-icons/io5";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../feature/store/store";
@@ -39,11 +39,14 @@ const Login = () => {
       try {
         setIsLoading(true);
         const response = await dispatch(userLoginApi(values)).unwrap();
-        NotificationService.success(response.message || "Login erfolgreich!");
-        setTimeout(() => {
-          router.push("/");
-        }, 4000);
+
+        // Redux-Store aktualisieren
         dispatch(setUserInfo(response.userInfo));
+
+        NotificationService.success(response.message || "Login erfolgreich!");
+
+        // Benutzer-Panel anzeigen (ohne Verzögerung)
+        router.push("/"); // Zur Startseite oder Benutzerseite navigieren
       } catch (error: any) {
         NotificationService.error(error.message || "Login fehlgeschlagen.");
       } finally {
@@ -142,15 +145,6 @@ const Login = () => {
               </button>
             </div>
           </form>
-          <div className="flex flex-col">
-            <span className="text-xl my-4">Oder</span>
-            <button
-              onClick={() => router.push("/forgetPassword")}
-              className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all"
-            >
-              Passwort vergessen
-            </button>
-          </div>
         </div>
       </div>
 
@@ -158,10 +152,6 @@ const Login = () => {
       <div className="flex-1 flex items-center justify-center p-6 bg-opacity-50 bg-black">
         <div className="flex flex-col text-center">
           <h3 className="text-3xl font-bold text-white mb-4">Kein Konto?</h3>
-          <p className="text-sm text-gray-300 mb-6">
-            Registrieren Sie sich jetzt und genießen Sie den vollen Zugriff auf
-            alle Funktionen.
-          </p>
           <button
             onClick={() => router.push("/register")}
             className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all"
