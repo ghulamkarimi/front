@@ -49,7 +49,6 @@ axiosJWT.interceptors.request.use(
       try {
         const response = await axios.post("/user/refreshToken", {}, { withCredentials: true });
         console.log("Token refreshed successfully:", response.data.accessToken);
-
         config.headers.Authorization = `Bearer ${response.data.accessToken}`;
         const decodedToken = jwtDecode<DecodedToken>(response.data.accessToken);
         localStorage.setItem("exp", decodedToken.exp.toString());
