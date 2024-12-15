@@ -61,7 +61,7 @@ const DropdownMenuDemo = () => {
   const handleLogout = async () => {
     try {
       const response = await dispatch(userLogoutApi()).unwrap();
-      
+
       NotificationService.success(response.message);
       localStorage.clear();
       // Informiere andere Clients über das Logout
@@ -82,10 +82,10 @@ const DropdownMenuDemo = () => {
             {user && userId ? (
               <div className="flex items-center gap-4 lg:gap-6 lg:px-8 lg:py-1">
                 <span className="flex items-center gap-2">
-                  <Image 
-                  width={32}
-                  height={32}
-                  className="w-8 h-8 rounded-full" src={user?.profile_photo} alt="Profilbild" />
+                  <Image
+                    width={32}
+                    height={32}
+                    className="w-8 h-8 rounded-full" src={user?.profile_photo} alt="Profilbild" />
                   {user?.firstName}
                 </span>
               </div>
@@ -103,13 +103,18 @@ const DropdownMenuDemo = () => {
                   <Image
                     width={32}
                     height={32}
-                    className="w-8 h-8 rounded-full" src={user.profile_photo} alt="Benutzerbild" />
+                    className="w-8 h-8 rounded-full"
+                    src={user.profile_photo}
+                    alt="Benutzerbild"
+                  />
                 ) : (
                   <FaRegCircleUser className="lg:text-2xl" />
                 )}
               </span>
               <span>{user && userId ? "Profil" : "Registrieren"}</span>
             </NavigationMenuLink>
+
+
             {!user && (
               <NavigationMenuLink
                 className="flex items-center gap-4 lg:gap-10 px-6 lg:px-8 bg-white py-2 hover:bg-gray-200"

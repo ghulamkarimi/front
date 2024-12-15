@@ -10,12 +10,10 @@ import carRentReducer, { getRentCarApi } from "../reducers/carRentSlice"
 import axiosJWT from "../../service/axiosJwt";
 import jwtDecode from "jwt-decode";
 import { refreshToken } from '../../service/index';
+import axios from "axios";
 
 
-interface DecodedToken {
-  exp: number;
-  [key: string]: any;
-}
+
 
 
 export const store = configureStore({
@@ -37,25 +35,43 @@ export const store = configureStore({
 })
 
 
+interface DecodedToken {
+  exp: number; // Ablaufzeit des Tokens
+  [key: string]: any; // Beliebige zusätzliche Felder
+}
+
 axiosJWT.interceptors.request.use(
   async (config) => {
     const currentDate = new Date().getTime();
     const exp = localStorage.getItem("exp");
 
     if (exp && Number(exp) * 1000 < currentDate) {
-      const response = await refreshToken();
-      console.log("Token refreshed", response.data.accessToken);
+      try {
+        const response = await axios.post("/user/refreshToken", {}, { withCredentials: true });
+        console.log("Token refreshed successfully:", response.data.accessToken);
 
-      config.headers.Authorization = `Bearer ${response.data.accessToken}`;
-      console.log("Token refreshed header", response.data.accessToken);
-      const decodedToken = jwtDecode<DecodedToken>(response.data.accessToken);
-      localStorage.setItem("exp", decodedToken.exp.toString());
+        config.headers.Authorization = `Bearer ${response.data.accessToken}`;
+        const decodedToken = jwtDecode<DecodedToken>(response.data.accessToken);
+        localStorage.setItem("exp", decodedToken.exp.toString());
+      } catch (error) {
+        console.error("Error refreshing token:", error);
+
+        if ((error as any).response?.status === 403) {
+          console.log("Refresh token invalid or expired. Logging out...");
+          localStorage.removeItem("exp");
+          localStorage.removeItem("userId");
+          window.location.href = "/login"; // Redirect to login page
+        }
+
+        throw error;
+      }
     }
 
     return config;
   },
   (error) => Promise.reject(error)
 );
+
 
 store.dispatch(fetchUsers());
 store.dispatch(getRentCarApi())

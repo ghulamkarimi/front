@@ -66,7 +66,7 @@ const ProfileComponent = () => {
   return (
     <div className="profile-container mx-auto max-w-3xl p-6">
       <h1 className="text-3xl font-bold text-center text-orange-600 pb-4">
-        {`${user.firstName || "Benutzer"}'s Profil`}
+        {`${user.firstName || "Benutzer"}s Profil`}
       </h1>
       <p className="text-center my-2 font-bold">Ihre Kundennummer:{" "}{user?.customerNumber}</p>
 
@@ -75,7 +75,10 @@ const ProfileComponent = () => {
           <Image
             width={160}
             height={160}
-            src={croppedImage || "https://www.pngplay.com/wp-content/uploads/12/User-Avatar-Profile-PNG-Free-File-Download.png"}
+            src={
+              croppedImage ||
+              "https://www.pngplay.com/wp-content/uploads/12/User-Avatar-Profile-PNG-Free-File-Download.png"
+            }
             alt="Profilbild"
             className="w-40 h-40 rounded-full border-4 border-orange-500 shadow-lg object-cover"
           />
@@ -84,6 +87,8 @@ const ProfileComponent = () => {
             onClick={() => setShowModal(true)}
           />
         </div>
+
+
       </div>
 
       <div className="bg-white shadow-md rounded-lg p-6 max-w-md mx-auto">
