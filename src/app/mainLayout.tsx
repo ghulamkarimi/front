@@ -12,7 +12,6 @@ import {
 } from '../../feature/reducers/carRentSlice';
 import { FaCheck } from 'react-icons/fa6';
 import { getSchutzPacketById } from '../../feature/reducers/schutzPacketSlice';
-import { getOneCarById } from '../../service';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -26,45 +25,52 @@ export default function MainLayout({ children }: LayoutProps) {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  // Lokale State-Variablen für localStorage-Daten
   const [storedCarId, setStoredCarId] = useState<string | null>(null);
   const [schutzPacketId, setSchutzPacketId] = useState<string | null>(null);
 
   // Zugriff auf localStorage nur im Browser
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      setStoredCarId(localStorage.getItem('carRentId'));
-      setSchutzPacketId(localStorage.getItem('SchutzPacketId'));
+      const carId = localStorage.getItem('carRentId');
+      const packetId = localStorage.getItem('SchutzPacketId');
+
+      console.log('Geladene carRentId:', carId);
+      console.log('Geladene SchutzPacketId:', packetId);
+
+      setStoredCarId(carId);
+      setSchutzPacketId(packetId);
     }
   }, []);
 
+  // Speichert die CarId in Redux, wenn vorhanden
   useEffect(() => {
     if (storedCarId) {
       dispatch(setCarId(storedCarId));
     }
   }, [storedCarId, dispatch]);
 
-  const getOneSchutzPacket = useSelector((state: RootState) =>
-    getSchutzPacketById(state, schutzPacketId!)
-  );
-
   const handleContinueWithCar = () => {
     if (storedCarId) {
-      // Speichert den Preis im localStorage und navigiert zur Detailseite
+      console.log('Navigiere mit carRentId:', storedCarId);
       localStorage.setItem('totalPrice', totalPrice.toString());
       dispatch(setIsCarVerfügbar(false));
       router.push(`/fahrzeugvermietung/${storedCarId}`);
     } else {
-      console.error('storedCarId ist nicht vorhanden!');
+      console.error('Keine carRentId gefunden. Navigation nicht möglich!');
     }
   };
+
   const handleSelectDifferentCar = () => {
+    console.log('Ein anderes Fahrzeug auswählen wurde gedrückt.');
     dispatch(setIsCarVerfügbar(false));
   };
+
   return (
     <main className="relative z-10">
+      {/* Blureffekt für Modal */}
       <div className={isCarVerfügbar ? 'blur-sm' : ''}>{children}</div>
 
+      {/* Modal für geringe Fahrzeugverfügbarkeit */}
       {isCarVerfügbar && (
         <div className="fixed inset-0 flex items-center justify-center z-50 md:w-full">
           <div className="px-4 py-6 flex flex-col w-full md:w-2/3 bg-white rounded-md max-w-lg mx-auto shadow-lg">
@@ -72,15 +78,13 @@ export default function MainLayout({ children }: LayoutProps) {
               Sie haben ein Fahrzeug mit geringer Verfügbarkeit ausgewählt
             </h1>
             <p className="text-center mt-4">
-              Sie haben eine Fahrzeugkategorie mit geringer Verfügbarkeit
-              ausgewählt. Sobald Ihre Buchung abgeschlossen ist, wird sich die
-              Station nach Prüfung der Verfügbarkeit innerhalb von 8 Stunden bei
-              Ihnen melden, um die Buchung zu bestätigen. Falls die Buchung
-              nicht bestätigt wird, bitten wir Sie, eine neue Buchung zu
-              tätigen.
+              Sie haben eine Fahrzeugkategorie mit geringer Verfügbarkeit ausgewählt. Sobald Ihre
+              Buchung abgeschlossen ist, wird sich die Station nach Prüfung der Verfügbarkeit
+              innerhalb von 8 Stunden bei Ihnen melden, um die Buchung zu bestätigen. Falls die
+              Buchung nicht bestätigt wird, bitten wir Sie, eine neue Buchung zu tätigen.
             </p>
             <div className="flex py-4 justify-center gap-4 mt-4">
-            <button
+              <button
                 onClick={handleContinueWithCar}
                 className="bg-yellow-400 font-bold md:text-lg px-6 py-2 rounded-md"
               >
@@ -97,6 +101,7 @@ export default function MainLayout({ children }: LayoutProps) {
         </div>
       )}
 
+      {/* Modal für Details Schutz-Paket */}
       {isDetailsSchutzPacketActive && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="mt-3 md:w-5/6 xl:w-1/2 w-full h-5/6 xl:h-full border border-gray-300 bg-white shadow-lg rounded-md py-5 px-3 mx-2 md:mx-0">
@@ -129,17 +134,13 @@ export default function MainLayout({ children }: LayoutProps) {
               </div>
               <div className="flex items-center w-full justify-around mt-6">
                 <button
-                  onClick={() =>
-                    dispatch(setIsDetailsSchutzPacketActive(false))
-                  }
+                  onClick={() => dispatch(setIsDetailsSchutzPacketActive(false))}
                   className="px-8 py-2 border-2 border-orange-400 rounded-md"
                 >
                   Zurück zu Ihrer Buchung
                 </button>
                 <button
-                  onClick={() =>
-                    dispatch(setIsDetailsSchutzPacketActive(false))
-                  }
+                  onClick={() => dispatch(setIsDetailsSchutzPacketActive(false))}
                   className="bg-yellow-400 font-bold md:text-lg px-6 py-2 rounded-md"
                 >
                   Auswählen
