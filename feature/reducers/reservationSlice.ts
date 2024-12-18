@@ -26,7 +26,6 @@ const initialState:IReservationState & EntityState<IReservation,string>=reservat
 export const getReservationApi = createAsyncThunk("/reservation/getReservationApi",async()=>{
 try {
     const response = await getReservation()
-    console.log("responseReservation",response.data)
     return response.data
 
 } catch (error:any) {

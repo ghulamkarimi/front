@@ -25,7 +25,6 @@ const initialState: ISchutzPacketSate & EntityState<ISchutzPacket, string> =
 
 export const fetchAllSchutzPacketApi = createAsyncThunk("/schutzPacket/fetchAllSchutzPacketApi",async()=>{
     const response = await allSchutzPacket()
-    console.log("responseAdel",response)
     return response.data
 })
 

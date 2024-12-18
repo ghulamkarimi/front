@@ -44,8 +44,7 @@ export const userLoginApi = createAsyncThunk(
     "users/userLoginApi",
     async (initialUser: TUser, { rejectWithValue }) => {
         try {
-            const response = await userLogin(initialUser);
-            console.log("login UserSlice:", response.data);
+            const response = await userLogin(initialUser)
             localStorage.setItem("userId", response.data.userInfo.userId)
             localStorage.setItem("exp", response.data.userInfo.exp)
             return response.data;

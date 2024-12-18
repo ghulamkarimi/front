@@ -68,6 +68,7 @@ const DropdownMenuDemo = () => {
                     height={32}
                     className="w-8 h-8 rounded-full"
                     src={currentUser?.profile_photo}
+                    priority
                     alt="Profilbild"
                   />
                   {currentUser?.firstName}
@@ -88,7 +89,7 @@ const DropdownMenuDemo = () => {
                     width={32}
                     height={32}
                     className="w-8 h-8 rounded-full"
-                    src={currentUser.profile_photo}
+                    src={currentUser?.profile_photo || "/useerBild.png"}
                     alt="Benutzerbild"
                   />
                 ) : (

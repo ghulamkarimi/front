@@ -5,7 +5,7 @@ import { AppDispatch } from "../../../feature/store/store";
 import { userLogoutApi} from "../../../feature/reducers/userSlice";
 import { NotificationService } from "../../../service/NotificationService";
 import { MdLogout } from "react-icons/md";
-import { AiOutlineDelete } from "react-icons/ai";
+ 
 
 const LogoutComponent = () => {
   const router = useRouter();
@@ -16,7 +16,7 @@ const LogoutComponent = () => {
       await dispatch(userLogoutApi()).unwrap();
       
       NotificationService.success("Erfolgreich abgemeldet!");
-      router.push("/home");
+      router.push("/");
     } catch (error) {
       NotificationService.error("Abmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.");
     }

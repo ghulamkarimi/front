@@ -4,6 +4,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 interface CalendarCProps {
   onDateSelect: (date: Date | null) => void;
+
 }
 
 const CalenderC: React.FC<CalendarCProps> = ({ onDateSelect }) => {
@@ -17,6 +18,7 @@ const CalenderC: React.FC<CalendarCProps> = ({ onDateSelect }) => {
           setStartDate(date);
           onDateSelect(date); 
         }}
+        minDate={new Date(new Date().setHours(0, 0, 0, 0))}
         monthsShown={2}
         inline
         dateFormat="dd/MM/yyyy"

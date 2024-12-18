@@ -25,7 +25,6 @@ const ProfileComponent = () => {
 
   // Benutzer aus Redux-State abrufen
   const user = useSelector((state: RootState) => {
-    console.log("Aktueller Redux-State:", state.users);
     return userId ? displayUserById(state, userId) : null;
   });
 
@@ -73,16 +72,15 @@ const ProfileComponent = () => {
       <div className="profile-photo-container mb-6 flex justify-center relative">
         <div className="relative">
           <Image
+            src={user.profile_photo || "/useerBild.png"}
+            alt="Profilbild"
             width={160}
             height={160}
-            src={
-              croppedImage ||
-              user.profile_photo ||
-              "https://www.pngplay.com/wp-content/uploads/12/User-Avatar-Profile-PNG-Free-File-Download.png"
-            }
-            alt="Profilbild"
+            priority
+            sizes="(max-width: 768px) 100px, 160px"
             className="w-40 h-40 rounded-full border-4 border-orange-500 shadow-lg object-cover"
           />
+
           <HiCamera
             className="absolute bottom-2 right-2 text-3xl text-orange-500 bg-white rounded-full p-1 shadow-lg cursor-pointer hover:text-cyan-700"
             onClick={() => setShowModal(true)}

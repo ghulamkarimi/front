@@ -10,13 +10,13 @@ import Link from "next/link";
 
 const cards = [
     {
-        title: "Fahrzeug An & Verkaufen",
+        title: "Fahrzeuge An- & Verkaufen",
         imageUrl: "/deal.webp",
         url: "/fahrzeugkaufen",
         description: "Erleben Sie eine stressfreie Möglichkeit, Ihr Fahrzeug zu verkaufen oder zu kaufen. Unsere Plattform verbindet Käufer und Verkäufer einfach und effizient."
     },
     {
-        title: "Fahrzeug vermieten",
+        title: "Fahrzeuge mieten",
         imageUrl: "/rent.webp",
         url: "/fahrzeugvermietung",
         description: "Nutzen Sie unsere flexible Autovermietung, um das perfekte Fahrzeug für Ihre Bedürfnisse zu finden. Ideal für Reisen, Events oder alltägliche Fahrten."

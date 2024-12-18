@@ -7,10 +7,10 @@ import reservationSlice, { getReservationApi } from "../reducers/reservationSlic
 import carBuyReducer, { fetchCarBuys } from "../reducers/carBuySlice";
 import schutzPacket, { fetchAllSchutzPacketApi } from "../reducers/schutzPacketSlice"
 import carRentReducer, { getRentCarApi } from "../reducers/carRentSlice"
-import axiosJWT from "../../service/axiosJwt";
 import jwtDecode from "jwt-decode";
 import { refreshToken } from '../../service/index';
-import axios from "axios";
+import axiosJWT from "../../service/axiosJwt";
+ 
 
 
 
@@ -35,50 +35,101 @@ export const store = configureStore({
 })
 
 
+
 interface DecodedToken {
   exp: number; // Ablaufzeit des Tokens
   [key: string]: any; // Beliebige zusätzliche Felder
 }
 
+
+// const axiosJWT = axios.create();
+
+let isRefreshing = false; // Verhindert parallele Token-Refreshes
+let failedQueue: any[] = []; // Warteschlange für fehlgeschlagene Anfragen während Token-Refresh
+
+// Funktion zur Bearbeitung der Warteschlange
+const processQueue = (error: any, token: string | null = null) => {
+  failedQueue.forEach((prom) => {
+    if (token) prom.resolve(token);
+    else prom.reject(error);
+  });
+  failedQueue = [];
+};
+
+
 axiosJWT.interceptors.request.use(
   async (config) => {
-    const currentDate = new Date().getTime();
     const exp = localStorage.getItem("exp");
 
-    if (exp && Number(exp) * 1000 < currentDate) {
-      try {
-        const response = await axios.post("/user/refreshToken", {}, { withCredentials: true });
-        console.log("Token refreshed successfully:", response.data.accessToken);
-        config.headers.Authorization = `Bearer ${response.data.accessToken}`;
-        const decodedToken = jwtDecode<DecodedToken>(response.data.accessToken);
-        localStorage.setItem("exp", decodedToken.exp.toString());
-      } catch (error) {
-        console.error("Error refreshing token:", error);
+    if (exp && Number(exp) * 1000 < Date.now()) {
+      // Token ist abgelaufen
+      if (!isRefreshing) {
+        isRefreshing = true;
 
-        if ((error as any).response?.status === 403) {
-          console.log("Refresh token invalid or expired. Logging out...");
+        try {
+          const response = await refreshToken();
+          const newAccessToken = response.data.accessToken;
+
+          console.log("Token successfully refreshed:", newAccessToken);
+
+          // Token speichern
+          const decodedToken = jwtDecode<DecodedToken>(newAccessToken);
+          localStorage.setItem("exp", decodedToken.exp.toString());
+
+          // Setze neuen Token für ausstehende Anfragen
+          processQueue(null, newAccessToken);
+
+          // Aktualisiere Header
+          config.headers.Authorization = `Bearer ${newAccessToken}`;
+        } catch (error) {
+          console.error("Error refreshing token:", error);
+
+          // Logout bei fehlgeschlagenem Refresh
           localStorage.removeItem("exp");
           localStorage.removeItem("userId");
-          window.location.href = "/login"; // Redirect to login page
-        }
+          window.location.href = "/login";
 
-        throw error;
+          processQueue(error, null);
+          throw error;
+        } finally {
+          isRefreshing = false;
+        }
+      } else {
+        // Wenn bereits ein Refresh läuft, warte bis er abgeschlossen ist
+        return new Promise((resolve, reject) => {
+          failedQueue.push({
+            resolve: (token: string) => {
+              config.headers.Authorization = `Bearer ${token}`;
+              resolve(config);
+            },
+            reject: (err: any) => reject(err),
+          });
+        });
       }
     }
 
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => {
+    return Promise.reject(error);
+  }
 );
 
 
-store.dispatch(fetchUsers());
-store.dispatch(getRentCarApi())
-store.dispatch(fetchCarBuys());
-store.dispatch(fetchOffers());
-store.dispatch(fetchAllSchutzPacketApi())
-store.dispatch(fetchAppointments())
-store.dispatch(getReservationApi())
+
+
+Promise.all([
+  store.dispatch(fetchUsers()),
+  store.dispatch(getRentCarApi()),
+  store.dispatch(fetchCarBuys()),
+  store.dispatch(fetchOffers()),
+  store.dispatch(fetchAllSchutzPacketApi()),
+  store.dispatch(fetchAppointments()),
+  store.dispatch(getReservationApi()),
+]).then(() => {
+  console.log("Alle Daten erfolgreich geladen");
+});
+
 
 
 export type RootState = ReturnType<typeof store.getState>;

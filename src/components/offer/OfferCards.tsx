@@ -1,54 +1,16 @@
 "use client"; // Ganz oben hinzufügen, um clientseitige Hooks zu unterstützen
 
-import { useEffect } from "react";
+
 import { useSelector, useDispatch } from "react-redux";
-import { displayOffers, offerCreated, offerUpdated, offerDeleted } from "../../../feature/reducers/offerSlice";
-import { socket } from "../../../service"; // Importiere die WebSocket-Instanz
+import { displayOffers } from "../../../feature/reducers/offerSlice";
+
 import { useRouter } from "next/navigation";
 
 const OfferCards = () => {
     const dispatch = useDispatch();
     const offers = useSelector(displayOffers) || [];
     const router = useRouter();
-    useEffect(() => {
-        // WebSocket-Verbindung herstellen
-        socket.connect();
 
-        // Logge Verbindung
-        socket.on("connect", () => {
-            console.log("✅ WebSocket verbunden mit ID:", socket.id);
-        });
-
-        // WebSocket-Ereignisse abonnieren
-        socket.on("offerCreated", (newOffer) => {
-            console.log("📩 Neues Angebot erstellt:", newOffer);
-            dispatch(offerCreated(newOffer));
-        });
-
-        socket.on("offerUpdated", (updatedOffer) => {
-            console.log("✏️ Angebot aktualisiert:", updatedOffer);
-            dispatch(offerUpdated({ id: updatedOffer._id, changes: updatedOffer }));
-        });
-
-        socket.on("offerDeleted", (deletedOfferId) => {
-            console.log("🗑️ Angebot gelöscht mit ID:", deletedOfferId);
-            dispatch(offerDeleted(deletedOfferId));
-        });
-
-        socket.on("disconnect", () => {
-            console.log("❌ WebSocket-Verbindung getrennt.");
-        });
-
-        // Cleanup-Funktion, um die WebSocket-Ereignisse zu bereinigen, wenn die Komponente unmountet wird
-        return () => {
-            socket.off("offerCreated");
-            socket.off("offerUpdated");
-            socket.off("offerDeleted");
-            socket.off("connect");
-            socket.off("disconnect");
-            socket.disconnect();
-        };
-    }, [dispatch]); // Verwende `dispatch` als einzige Abhängigkeit, um sicherzustellen, dass der Effekt nur einmal ausgeführt wird
 
     return (
         <div className="py-8 px-4 my-4">

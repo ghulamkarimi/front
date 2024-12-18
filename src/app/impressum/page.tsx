@@ -8,7 +8,7 @@ const Impressum = () => {
       <section className="mb-8">
         <h2 className="text-2xl font-semibold text-orange-500">1. Anbieter</h2>
         <div className="text-gray-700 mt-2 space-y-1">
-          <p>AutoService A&U</p>
+          <p>AutoService A&O</p>
           <p>Badenheimer Str. 6</p>
           <p>55576 Sprendlingen</p>
           <p>Telefon: +49 151 58124394</p>
@@ -19,7 +19,7 @@ const Impressum = () => {
       <section className="mb-8">
         <h2 className="text-2xl font-semibold text-orange-500">2. Verantwortliche Person</h2>
         <p className="text-gray-700 mt-2">
-          Omran Ahmadi, vertreten durch AutoService A&U.
+          Omran Ahmadi, vertreten durch AutoService A&O.
         </p>
       </section>
 

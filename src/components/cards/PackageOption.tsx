@@ -1,11 +1,8 @@
 import { AiOutlineClose } from "react-icons/ai";
 import { FaCheck } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
-import {  setGesamtSchutzInfo } from "../../../feature/reducers/appSlice";
-import { RootState } from "../../../feature/store/store";
+import { setGesamtSchutzInfo } from "../../../feature/reducers/appSlice";
 import { useEffect } from "react";
-
-
 
 interface PackageOptionProps {
   name: string;
@@ -16,8 +13,7 @@ interface PackageOptionProps {
   onSelect: () => void;
   onToggleDetails: () => void;
   isDetailsActive: boolean;
-  gesamteSchutzPrice: string; // Wird aus den Props dynamisch übergeben
-
+  gesamteSchutzPrice: string;
 }
 
 const PackageOption = ({
@@ -30,16 +26,10 @@ const PackageOption = ({
   onToggleDetails,
   isDetailsActive,
   gesamteSchutzPrice,
- 
 }: PackageOptionProps) => {
   const dispatch = useDispatch();
-  const { gesamteSchutzInfo } = useSelector(
-    (state: RootState) => state.app
-  );
-
 
   useEffect(() => {
-  
     const storedGesamtSchutzInfo = localStorage.getItem("GesamtSchutzInfo");
     if (storedGesamtSchutzInfo) {
       dispatch(setGesamtSchutzInfo(JSON.parse(storedGesamtSchutzInfo)));
@@ -47,97 +37,98 @@ const PackageOption = ({
   }, [dispatch]);
 
   return (
-    <div 
-    onClick={()=>{
-      dispatch(setGesamtSchutzInfo({
-        name:name,
-        deductible:deductible,
-        dailyRate:dailyRate,
-        features:features,
-        gesamtPrice:gesamteSchutzPrice
-      }))
-      
-    }}
-    className="w-full flex xl:flex-row flex-col items-center justify-center">
-      <div className="w-full px-2 mt-2">
-        <fieldset
-          className={`border-2 ${
-            isSelected ? "border-green-400" : "border-orange-300"
-          } p-4 rounded-lg shadow-lg`}
-        >
-          <legend
-            className={`font-bold text-xs p-1 rounded-md ${
-              isSelected ? "bg-green-400" : "hidden"
+    <div className="w-full flex items-center justify-center p-5">
+      <fieldset
+        className={`w-full xl:w-[32rem] rounded-lg shadow-lg p-6 border-2 transition-all duration-300 ${
+          isSelected ? "border-green-500 bg-green-50" : "border-gray-200 bg-white"
+        } hover:shadow-xl`}
+      >
+        {/* Header */}
+        <div className="flex justify-between items-center">
+          <h1 className="text-xl font-semibold text-gray-800">{name}</h1>
+          <div
+            className={`text-sm px-3 py-1 rounded-md font-semibold ${
+              isSelected ? "bg-green-500 text-white" : "bg-gray-200 text-gray-700"
             }`}
           >
-            Ausgewählt
-          </legend>
-          <div className="font-bold">
-            <h1>{name}</h1>
-            <p>Selbstbeteiligung: {deductible} €</p>
-            <p className="mt-4">Preis: {dailyRate} € / Tag</p>
-            {/* Zeige gesamteSchutzPrice dynamisch für jedes Paket */}
-            <p className="text-lg mt-2">
-              Gesamtpreis: <span className="font-bold">{gesamteSchutzPrice} €</span>
-            </p>
+            {isSelected ? "Ausgewählt" : "Optional"}
           </div>
-          <div className="bg-gray-300 w-13 h-[2px] px-2 mt-7" />
-          <div className="mt-4 flex flex-col gap-3">
-            {features.map((feature, index) => (
-              <div key={index} className="flex gap-3 items-center">
-                {index < 3 ? (
-                  <FaCheck className="text-green-400 text-sm" />
-                ) : (
-                  <AiOutlineClose className="text-gray-400 text-sm" />
-                )}
-                <p className={index < 3 ? "text-black" : "text-gray-400"}>
-                  {feature}
-                </p>
-              </div>
-            ))}
-          </div>
-          <div className="mt-5 flex items-center justify-around">
-            {/* Toggle Details Button */}
-            <button
-              onClick={onToggleDetails}
-              className="cursor-pointer text-blue-600 underline"
-            >
-              {isDetailsActive ? "Weniger Details" : "Weitere Details"} &#8594;
-            </button>
-            {/* Select Button */}
-            <button
-              onClick={()=>{
-                onSelect()
-           
-                dispatch(setGesamtSchutzInfo({
-                  name:name,
-                  deductible:deductible,
-                  dailyRate:dailyRate,
-                  features:features,
-                  gesamtPrice:gesamteSchutzPrice
-                }))
-                localStorage.setItem("GesamtSchutzInfo", JSON.stringify({
+        </div>
+
+        {/* Details */}
+        <div className="mt-4 space-y-2">
+          <p className="text-sm text-gray-600">
+            <strong>Selbstbeteiligung:</strong> <span className="font-medium">{deductible} €</span>
+          </p>
+          <p className="text-sm text-gray-600">
+            <strong>Preis:</strong> {dailyRate} € / Tag
+          </p>
+          <p className="text-lg font-bold text-gray-800 mt-2">
+            Gesamtpreis: <span className="text-green-500">{gesamteSchutzPrice} €</span>
+          </p>
+        </div>
+
+        {/* Features */}
+        <div className="mt-5 border-t pt-4">
+          {features.map((feature, index) => (
+            <div key={index} className="flex items-center gap-3 mb-2">
+              {index < 3 ? (
+                <FaCheck className="text-green-500 text-base" />
+              ) : (
+                <AiOutlineClose className="text-gray-400 text-base" />
+              )}
+              <p
+                className={`text-sm ${
+                  index < 3 ? "text-gray-800 font-medium" : "text-gray-400"
+                }`}
+              >
+                {feature}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* Actions */}
+        <div className="mt-6 flex items-center justify-between">
+          <button
+            onClick={onToggleDetails}
+            className="text-blue-500 text-sm hover:underline"
+          >
+            {isDetailsActive ? "Weniger Details anzeigen" : "Weitere Details anzeigen"} →
+          </button>
+          <button
+            onClick={() => {
+              onSelect();
+              dispatch(
+                setGesamtSchutzInfo({
                   name,
                   deductible,
                   dailyRate,
                   features,
-                  gesamtPrice: gesamteSchutzPrice
-                }));
-
-                  console.log("GesamtSchutzInfo packageOption",gesamteSchutzInfo)
-               
-              }
-              
-              }
-              className={`px-6 py-2 rounded-md ${
-                isSelected ? "bg-gray-300" : "bg-orange-400 text-black"
-              } `}
-            >
-              {isSelected ? "Ausgewählt" : "Wählen"}
-            </button>
-          </div>
-        </fieldset>
-      </div>
+                  gesamtPrice: gesamteSchutzPrice,
+                })
+              );
+              localStorage.setItem(
+                "GesamtSchutzInfo",
+                JSON.stringify({
+                  name,
+                  deductible,
+                  dailyRate,
+                  features,
+                  gesamtPrice: gesamteSchutzPrice,
+                })
+              );
+            }}
+            className={`px-6 py-2 rounded-lg font-semibold text-sm transition-all duration-300 ${
+              isSelected
+                ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                : "bg-orange-500 text-white hover:bg-orange-600"
+            }`}
+          >
+            {isSelected ? "Ausgewählt" : "Wählen"}
+          </button>
+        </div>
+      </fieldset>
     </div>
   );
 };

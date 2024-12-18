@@ -2,7 +2,7 @@ import { createAsyncThunk, createEntityAdapter, createSlice, EntityState } from 
 import { IOffer } from "../../interface";
 import { RootState, AppDispatch } from "../store/store"; // AppDispatch importieren
 import { getOffers } from "../../service";
-import { socket } from "../../service"; // Verwende die korrekte Instanz von socket
+
 
 interface OfferState {
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
@@ -31,9 +31,7 @@ const offerSlice = createSlice({
     name: "offer",
     initialState,
     reducers: {
-        offerCreated: offerAdapter.addOne,
-        offerUpdated: offerAdapter.updateOne,
-        offerDeleted: offerAdapter.removeOne,
+     
     },
     extraReducers: (builder) => {
         builder
@@ -51,22 +49,7 @@ const offerSlice = createSlice({
     }
 });
 
-export const { offerCreated, offerUpdated, offerDeleted } = offerSlice.actions;
-
 export const { selectAll: displayOffers, selectById: displayOfferById } = offerAdapter.getSelectors<RootState>((state) => state.offer);
 export default offerSlice.reducer;
 
-// WebSocket-Ereignisse abonnieren und Aktionen dispatchen
-export const subscribeToSocketEvents = (dispatch: AppDispatch) => {
-    socket.on('offerCreated', (newOffer: IOffer) => {
-        dispatch(offerCreated(newOffer));
-    });
-
-    socket.on('offerUpdated', (updatedOffer: IOffer) => {
-        dispatch(offerUpdated({ id: updatedOffer._id, changes: updatedOffer }));
-    });
-
-    socket.on('offerDeleted', (deletedOfferId: string) => {
-        dispatch(offerDeleted(deletedOfferId));
-    });
-};
+ 

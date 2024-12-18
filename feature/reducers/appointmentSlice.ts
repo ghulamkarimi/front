@@ -1,9 +1,12 @@
 import { createAsyncThunk, createEntityAdapter, createSlice, EntityState } from "@reduxjs/toolkit";
 import { IAppointment } from "../../interface";
-import {  createAppointment, getAllsAppointment } from "../../service";
+import {  createAppointment, getAllsAppointment, SERVER_URL } from "../../service";
 import { AppDispatch, RootState } from "../store/store";
-import { socket } from "../../service";
 
+import { io, Socket } from "socket.io-client";
+export const socket: Socket = io(SERVER_URL, {
+    autoConnect: false,
+  });
 
 interface AppointmentState {
     status: 'idle' | 'loading' | 'succeeded' | 'failed';

@@ -17,7 +17,10 @@ import { getRentCarById } from "../../../feature/reducers/carRentSlice";
 
 interface FormReservationProps {
   rentalDays: number;
-  
+  pickupDate:string | null ;
+    pickupTime:string | null ;
+    returnDate:string | null ;
+    returnTime:string | null ;
 
 }
 
@@ -50,7 +53,6 @@ const FormReservation = ({ rentalDays}: FormReservationProps) => {
   const returnTime = localStorage.getItem("returnTime") || "";
 
 
- 
 
 
 
@@ -124,12 +126,7 @@ const FormReservation = ({ rentalDays}: FormReservationProps) => {
       const userId = localStorage.getItem("userId");
       const email = localStorage.getItem("email");
       const reservationId = localStorage.getItem("storedReservationId");
-      console.log("reservationId", reservationId);
-      console.log("Form values:", formik.values);
-      console.log("gesamtPreis", gesamtPreis);
-      console.log("carRentId", carRentId);
-      console.log("userId", userId);
-      console.log("customerEmail", email);
+     
 
       if (!gesamtPreis || !carRentId) {
         throw new Error("Fehlende Daten für die Bestellung");
@@ -226,31 +223,34 @@ const FormReservation = ({ rentalDays}: FormReservationProps) => {
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">Reservierungsformular</h1>
-      {step === 1 && <FahrerDetails formik={formik} />}
-      {step === 2 && (
-        <PayPalSection
-          createOrderHandler={createOrderHandler}
-          onApproveHandler={onApproveHandler}
-          paymentError={paymentError}
-          setPaymentError={setPaymentError}
-        />
-      )}
+    <div className="container mx-auto p-8 max-w-3xl bg-white rounded-lg shadow-lg border border-gray-200">
+    <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+      Reservierungsformular
+    </h1>
+
+    {step === 1 && <FahrerDetails formik={formik} />}
+    {step === 2 && (
+      <PayPalSection
+      createOrderHandler={createOrderHandler}
+      onApproveHandler={onApproveHandler}
+      paymentError={paymentError}
+      setPaymentError={setPaymentError}
+      />
+    )}
+
+    {/* Button: Vor Ort Zahlen */}
+    {step === 1 && (
       <button
-        type="submit"
-        className={
-          step === 2
-            ? "hidden"
-            : "w-full text-white font-medium py-3 mt-3 px-2 rounded-md bg-green-600 hover:bg-green-700"
-        }
-        onClick={() => {
-          handleVorOrtZahlenClick();
-        }}
+        onClick={handleVorOrtZahlenClick}
+        className={`w-full mt-5 py-3 rounded-lg font-medium text-white transition-colors duration-200 ${
+          loading ? "bg-gray-400" : "bg-green-600 hover:bg-green-700"
+        }`}
+        disabled={loading}
       >
-        Vor Ort zahlen
+        {loading ? "Lädt..." : "Vor Ort zahlen"}
       </button>
-    </div>
+    )}
+  </div>
   );
 };
 
