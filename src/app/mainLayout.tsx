@@ -18,23 +18,31 @@ export default function MainLayout({ children }: LayoutProps) {
   const { gesamteSchutzInfo } = useSelector((state: RootState) => state.app);
   const dispatch = useDispatch();
   const router = useRouter();
-  const [storedCarId, setStoredCarId] = useState<string | null>(null);
 
+
+  const carId = localStorage.getItem("carRentId");
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const carId = localStorage.getItem("carRentId");
-      setStoredCarId(carId);
+      
+      dispatch(setCarId(carId || undefined));
     }
-  }, []);
+  }, [dispatch,carId]);
   
 
 
-  useEffect(() => {
-    if (storedCarId) {
-      dispatch(setCarId(storedCarId));
+ 
+
+
+
+  const handleProceed = () => {
+    if (carId) {
+      localStorage.setItem('totalPrice', totalPrice.toString());
+      setTimeout(() => {
+        router.push(`/fahrzeugvermietung/${carId}`);
+        dispatch(setIsCarVerfügbar(false));
+      }, 1000);
     }
-  }, [storedCarId]);
-  
+  };
 
 
   return (
@@ -58,13 +66,7 @@ export default function MainLayout({ children }: LayoutProps) {
             <div className="flex py-4 justify-center gap-4 mt-4">
               <button
                 onClick={() => {
-                  if (storedCarId) {
-                    localStorage.setItem("totalPrice", totalPrice.toString());
-                    setTimeout(() => {
-                      router.push(`/fahrzeugvermietung/${storedCarId}`);
-                      dispatch(setIsCarVerfügbar(false));
-                    }, 1000);
-                  }
+                  handleProceed()
                 }}
                 className="bg-yellow-400 font-bold md:text-lg px-6 py-2 rounded-md"
               >
