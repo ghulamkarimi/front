@@ -1,25 +1,34 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { displayAppointments } from "../../../feature/reducers/appointmentSlice";
+import { AllReservation } from "../../../feature/reducers/reservationSlice";
+
 
 const BookingsComponent = () => {
-  // Aktuelle Benutzer-ID aus localStorage
   const userId = localStorage.getItem("userId");
   console.log("User ID von localstorage in booking component:", userId);
 
-  // Alle Termine aus Redux abrufen
   const appointments = useSelector(displayAppointments);
-  console.log("Alle Appointments:", appointments);
 
-  // Filtere Werkstatt-Buchungen
+  console.log("Alle Appointments:", appointments);
   const workshopAppointments = appointments.filter(
     (appointment) => appointment.userId?.toString() === userId?.toString()
   );
 
-  // Platzhalter für zukünftige Autovermietungs-Buchungen
-  const carRentalAppointments = []; // Noch keine Buchungen vorhanden
 
-  // Zustand, um zwischen den Abschnitten zu wechseln
+
+  const userReservitaions = useSelector(AllReservation)
+  console.log("Alle Reservierungen:", userReservitaions);
+  
+  const rentalAppointments = userReservitaions.filter(
+    (reservation) => reservation.userId?.toString() === userId?.toString()
+  );
+console.log("Rental Appointments:", rentalAppointments);
+
+
+
+
+
   const [activeSection, setActiveSection] = useState("workshop");
 
   return (
@@ -32,21 +41,19 @@ const BookingsComponent = () => {
       <div className="flex justify-center gap-4 mb-8">
         <button
           onClick={() => setActiveSection("workshop")}
-          className={`px-6 py-2 font-bold rounded-lg ${
-            activeSection === "workshop"
+          className={`px-6 py-2 font-bold rounded-lg ${activeSection === "workshop"
               ? "bg-orange-600 text-white"
               : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-          }`}
+            }`}
         >
           Werkstatt
         </button>
         <button
           onClick={() => setActiveSection("rental")}
-          className={`px-6 py-2 font-bold rounded-lg ${
-            activeSection === "rental"
+          className={`px-6 py-2 font-bold rounded-lg ${activeSection === "rental"
               ? "bg-orange-600 text-white"
               : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-          }`}
+            }`}
         >
           Rent
         </button>
@@ -70,11 +77,10 @@ const BookingsComponent = () => {
                       {appointment.service}
                     </h3>
                     <span
-                      className={`px-4 py-1 rounded-full text-sm font-semibold ${
-                        appointment.isBookedOrBlocked
+                      className={`px-4 py-1 rounded-full text-sm font-semibold ${appointment.isBookedOrBlocked
                           ? "bg-green-100 text-green-700"
                           : "bg-yellow-100 text-yellow-700"
-                      }`}
+                        }`}
                     >
                       {appointment.isBookedOrBlocked ? "Gebucht" : "Verfügbar"}
                     </span>
@@ -118,9 +124,19 @@ const BookingsComponent = () => {
           <h2 className="text-3xl font-bold mb-6 text-orange-600 text-center">
             Autovermietung
           </h2>
-         <p>
-            Keine Autovermietungs-B
-         </p>
+          {rentalAppointments.map((reservation) => {
+            console.log("Reservation:", reservation);
+            return (
+              <li
+                key={reservation._id}
+                className="p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow border-l-4 border-orange-500"
+              >
+                <span>{reservation.pickupDate || "Kein Abholdatum"}</span>
+                <span>{reservation.returnDate || "Kein Rückgabedatum"}</span>
+              </li>
+            );
+          })}
+
         </section>
       )}
     </div>
