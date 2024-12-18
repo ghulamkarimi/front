@@ -51,11 +51,11 @@ export default function Contact() {
 
                 <div className="text-center mt-8 text-gray-500">
                     <p className="pb-2">Oder rufen Sie uns direkt an:</p>
-                    <p className="font-semibold text-gray-700">
+                    {/* <p className="font-semibold text-gray-700">
                         <a href="tel:+493012345678" className="text-gray-700 hover:underline">
                             +49 30 12345678
                         </a>
-                    </p>
+                    </p> */}
                     <p className="font-semibold text-gray-700 mt-1">
                         <a href="tel:+4915158124394" className="text-gray-700 hover:underline">
                             +49 151 58124394

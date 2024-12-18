@@ -12,7 +12,7 @@ const ProfileComponent = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [croppedImage, setCroppedImage] = useState("");
-  const [file, setFile] = useState<File | null>(null); // Datei für den Upload speichern
+
 
   // Benutzer-ID aus localStorage abrufen
   useEffect(() => {
@@ -30,9 +30,11 @@ const ProfileComponent = () => {
 
   // Profilbild initial setzen
   useEffect(() => {
-    if (user?.profile_photo) {
-      setCroppedImage(user.profile_photo);
+  if (typeof window !== "undefined") {
+    if (user) {
+      setCroppedImage(user.profile_photo || "");
     }
+  }
   }, [user]);
 
   const handleSaveImage = async (file: File) => {
@@ -40,6 +42,7 @@ const ProfileComponent = () => {
       const response = await dispatch(profilePhotoUploadApi(file)).unwrap();
       console.log("Profile Photo UserSlice:", response);
       NotificationService.success(response.message || "Profilbild erfolgreich hochgeladen!");
+    
       setShowModal(false);
     } catch (error) {
       console.error("Fehler beim Hochladen des Profilbilds:", error);
@@ -67,7 +70,7 @@ const ProfileComponent = () => {
       <h1 className="text-3xl font-bold text-center text-orange-600 pb-4">
         {`${user.firstName || "Benutzer"}s Profil`}
       </h1>
-      <p className="text-center my-2 font-bold">Ihre Kundennummer:{" "}{user?.customerNumber}</p>
+     
 
       <div className="profile-photo-container mb-6 flex justify-center relative">
         <div className="relative">
@@ -98,7 +101,7 @@ const ProfileComponent = () => {
             <div className="mt-1">
               <input
                 type="text"
-                value={user.firstName}
+                value={user.firstName || ""}
                 readOnly
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-gray-900 focus:outline-none focus:ring-orange-500 focus:border-orange-500"
               />
@@ -109,7 +112,7 @@ const ProfileComponent = () => {
             <div className="mt-1">
               <input
                 type="text"
-                value={user.lastName}
+                value={user.lastName || ""}
                 readOnly
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-gray-900 focus:outline-none focus:ring-orange-500 focus:border-orange-500"
               />
@@ -120,7 +123,18 @@ const ProfileComponent = () => {
             <div className="mt-1">
               <input
                 type="email"
-                value={user.email}
+                value={user.email || ""}
+                readOnly
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-gray-900 focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+              />
+            </div>
+          </div> 
+            <div>
+            <label className="block text-sm font-medium text-gray-700">Kundenummer</label>
+            <div className="mt-1">
+              <input
+                type="text"
+                value={user.customerNumber || ""}
                 readOnly
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-gray-900 focus:outline-none focus:ring-orange-500 focus:border-orange-500"
               />

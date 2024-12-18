@@ -1,20 +1,19 @@
 export interface IUser {
-
   _id: string;
   firstName: string;
   lastName: string;
   email: string;
-  password: string;
-  confirmPassword: string;
+  password?: string;
+  confirmPassword?: string;
   isAdmin: boolean;
-  phone: string;
+  phone?: string;
   profile_photo: string;
-  token: string | null;
-  accessToken: string | null;
-  refreshToken: string | null;
-  verificationCode: string;
+  token?: string | null;
+  accessToken?: string | null;
+  refreshToken?: string | null;
+  verificationCode?: string;
   isAccountVerified: boolean;
-  customerNumber: string;
+  customerNumber?: string;
 }
 
 
@@ -26,8 +25,8 @@ export interface IUserInfo {
     profile_photo: string;
     email: string;
     isAdmin: boolean;
-    customerNumber : string;
     isAccountVerified?: boolean;
+    customerNumber?: string;
     exp: number;
     iat: number;
 

@@ -5,7 +5,6 @@ import { SiTransmission } from "react-icons/si";
 import { TbManualGearboxFilled } from "react-icons/tb";
 import { MdOutlineSevereCold } from "react-icons/md";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { useRouter } from "next/navigation";
 import { ICarRent } from "../../../interface";
 import { useSelector } from "react-redux";
 import { getAllRentCars, setIsCarVerfügbar, setIsLoading } from "../../../feature/reducers/carRentSlice";
@@ -25,9 +24,9 @@ const CarCard = ({ availableCars, isSearchComplete, showPrice }: ICarCardProps) 
   const [loading, setLoading] = useState(false);
   const [detailsVisibility, setDetailsVisibility] = useState<{ [key: string]: boolean }>({});
   const rentCars = useSelector(getAllRentCars);
-  const router = useRouter();
+  
   const dispatch = useDispatch();
-  const totalPrice = parseFloat(localStorage.getItem("carRentId") || "0");
+ 
 
   const toggleDetails = (carId: string) => {
     setDetailsVisibility((prevState) => ({

@@ -179,7 +179,7 @@ if (typeof window !== "undefined") {
               <p className="ml-3 text-gray-600">
                 {pickupDate
                   ? new Date(pickupDate).toLocaleDateString()
-                  : "Datum auswählen"}
+                  : "Datum"}
               </p>
             </span>
             <div className="mx-4 border-l border-gray-300 h-6"></div>
@@ -187,7 +187,7 @@ if (typeof window !== "undefined") {
               className="cursor-pointer text-gray-600"
               onClick={() => setIsShowTime(!showTime)}
             >
-              {pickupTime ? pickupTime : "Uhrzeit wählen"}
+              {pickupTime ? pickupTime : "Uhrzeit"}
             </p>
           </div>
         </div>
@@ -203,7 +203,7 @@ if (typeof window !== "undefined") {
               <p className="ml-3 text-gray-600">
                 {returnDate
                   ? new Date(returnDate).toLocaleDateString()
-                  : "Datum auswählen"}
+                  : "Datum"}
               </p>
             </span>
             <div className="mx-4 border-l border-gray-300 h-6"></div>
@@ -211,7 +211,7 @@ if (typeof window !== "undefined") {
               className="cursor-pointer text-gray-600"
               onClick={() => setIsShowTimeReturn(!showTimeReturn)}
             >
-              {returnTime ? returnTime : "Uhrzeit wählen"}
+              {returnTime ? returnTime : "Uhrzeit"}
             </p>
           </div>
         </div>

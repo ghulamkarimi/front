@@ -5,9 +5,9 @@ import "./globals.css";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../feature/store/store";
 import { setCarId, setIsDetailsSchutzPacketActive, setIsCarVerfügbar } from "../../feature/reducers/carRentSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
-import { getSchutzPacketById } from "../../feature/reducers/schutzPacketSlice";
+
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -18,16 +18,24 @@ export default function MainLayout({ children }: LayoutProps) {
   const { gesamteSchutzInfo } = useSelector((state: RootState) => state.app);
   const dispatch = useDispatch();
   const router = useRouter();
-  const storedCarId = localStorage.getItem("carRentId");
-  const schutzPacketId = localStorage.getItem("SchutzPacketId");
+  const [storedCarId, setStoredCarId] = useState<string | null>(null);
 
   useEffect(() => {
-   if (typeof window !== "undefined") {
-     dispatch(setCarId(storedCarId || ""));
-   }
-  }, [storedCarId]);
+    if (typeof window !== "undefined") {
+      const carId = localStorage.getItem("carRentId");
+      setStoredCarId(carId);
+    }
+  }, []);
+  
 
-  const getOneSchutzPacket = useSelector((state: RootState) => getSchutzPacketById(state, schutzPacketId!));
+
+  useEffect(() => {
+    if (storedCarId) {
+      dispatch(setCarId(storedCarId));
+    }
+  }, [storedCarId]);
+  
+
 
   return (
     <main className="relative z-10">
