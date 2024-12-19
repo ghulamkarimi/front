@@ -10,6 +10,7 @@ import { IAppointment } from "../../../interface";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { NotificationService } from "../../../service/NotificationService";
+import Image from "next/image";
 
 type CalendarValue = Date | Date[] | null;
 
@@ -22,6 +23,8 @@ const UserCalendar: React.FC = () => {
     const [formattedSelectedDate, setFormattedSelectedDate] = useState<string | null>(null);
     const [selectedTime, setSelectedTime] = useState<string | null>(null);
     const [isClient, setIsClient] = useState(false);
+    const [selectedService, setSelectedService] = useState<string | null>(null);
+    const [showForm, setShowForm] = useState(false);
 
     useEffect(() => {
         if (typeof window !== "undefined") {
@@ -95,8 +98,8 @@ const UserCalendar: React.FC = () => {
                 <button
                     key={time}
                     className={`px-4 py-2 m-2 rounded-lg text-white ${isBookedOrBlocked || isPastTime
-                            ? "bg-red-500 cursor-not-allowed"
-                            : "bg-green-500 hover:bg-green-600"
+                        ? "bg-red-500 cursor-not-allowed"
+                        : "bg-green-500 hover:bg-green-600"
                         }`}
                     disabled={isBookedOrBlocked || isPastTime}
                     onClick={() => {
@@ -158,200 +161,306 @@ const UserCalendar: React.FC = () => {
         }
     };
 
+    const [services, setServices] = useState([
+        {
+            title: "Inspektion",
+            description: "Eine gründliche Überprüfung aller sicherheitsrelevanten Komponenten Ihres Fahrzeugs, einschließlich Bremsen, Reifen, Lenkung und Beleuchtung. Unsere Inspektion sorgt dafür, dass Ihr Fahrzeug in bestem Zustand bleibt und die gesetzlichen Anforderungen erfüllt, damit Sie sorgenfrei unterwegs sind.",
+            image: "/inspektion.jpg",
+            expanded: false,
+        },
+        {
+            title: "Ölservice",
+            description: "Ein regelmäßiger Ölwechsel schützt Ihren Motor vor Verschleiß und erhöht die Lebensdauer Ihres Fahrzeugs. Unser Ölservice verwendet hochwertiges Motoröl, das speziell auf die Anforderungen Ihres Fahrzeugs abgestimmt ist, und sorgt für eine optimale Leistung Ihres Motors.",
+            image: "/ölwechsel.jpeg",
+            expanded: false,
+        },
+        {
+            title: "Reifenwechsel",
+            description: "Wir bieten einen schnellen und professionellen Reifenwechsel, um Ihre Sicherheit auf der Straße zu gewährleisten. Egal, ob Sie Sommer- oder Winterreifen benötigen, wir prüfen Ihre Reifen auf Verschleiß und sorgen für die korrekte Montage. So fahren Sie immer sicher und effizient.",
+            image: "/reifen.jpg",
+            expanded: false,
+        },
+        {
+            title: "Radwechsel",
+            description: "Ein professioneller und sicherer Wechsel Ihrer Räder, um optimalen Grip und Sicherheit auf der Straße zu gewährleisten. Unser Team sorgt für eine gründliche Prüfung und korrekte Montage, um Ihre Fahrt angenehm und sicher zu machen. Ideal vor und nach der Saison oder bei Wechsel auf Winter- oder Sommerreifen.",
+            image: "/reifenCarousel.png",
+            expanded: false,
+        },
+        {
+            title: "Sonstiges",
+            description: "Wir bieten maßgeschneiderte Werkstatt-Dienstleistungen für Ihre individuellen Bedürfnisse. Ob spezielle Reparaturen, Fahrzeugaufbereitungen oder andere Anforderungen – unser Team steht Ihnen mit Rat und Tat zur Seite, um Ihr Fahrzeug optimal zu betreuen.",
+            image: "/werk.jpg",
+            expanded: false,
+        },
+    ]);
+
+    const handleServiceSelect = () => {
+
+        setShowForm(true);
+    };
+    const toggleDescription = (index: number) => {
+        setServices((prevServices) =>
+            prevServices.map((service, i) =>
+                i === index ? { ...service, expanded: !service.expanded } : service
+            )
+        );
+    };
+
+
     return (
         <div
             style={{ backgroundImage: `url(/background.jpg)` }}
             className="home-background">
             <div className="">
                 <div className="p-6  min-h-screen py-20">
-                    <h1 className="text-2xl font-bold mb-4 text-center text-gray-200">Willkommen zu Ihrem persönlichen Werkstatt-Terminplaner – Einfach. Schnell. Bequem.</h1>
+                    <h1 className="text-2xl font-bold mb-4 text-center text-gray-200">Willkommen zu Ihrem persönlichen Werkstatt-Terminplaner {"-"} Einfach. Schnell. Bequem.</h1>
                     <div className="text-center text-gray-200 text-2xl font-bold py-6">
-                        <p>Usere Öffnungszeit</p>
+                        <p>Usere Öffnungszeiten</p>
                         <p>Montag - Samstag: 07:30 - 18:00 Uhr</p>
                     </div>
 
-                    <p className="text-center mb-4 text-xl font-bold text-gray-200">Bitte wählen Sie das Datum und die Uhrzeit für Ihren Termin im Kalender aus.</p>
-                    <div className="calendar-container flex justify-center mb-6">
-                        {isClient && (
-                            <Calendar
-                                onChange={(value) => handleDateChange(value as CalendarValue)}
-                                value={selectedDate}
-                                className="shadow-lg rounded-lg p-4 bg-gray-300 w-full max-w-3xl text-black"
-                                tileDisabled={({ date }) => {
-                                    const today = new Date();
-                                    return (
-                                        date.getDay() === 0 ||
-                                        date < new Date(today.getFullYear(), today.getMonth(), today.getDate())
-                                    );
-                                }}
-                            />
-                        )}
+
+
+                    <div>
+                        {!showForm ? (
+                        <div className="flex flex-wrap justify-center gap-8">
+                        {services.map((service, index) => (
+                          <div
+                          key={index}
+                          className="max-w-sm rounded-lg shadow-lg bg-white overflow-hidden cursor-pointer hover:shadow-xl transition-shadow duration-300"
+                      >
+                          <Image
+                              width={300}
+                              height={200}
+                              src={service.image}
+                              alt={service.title}
+                              className="w-full h-60 object-cover"
+                          />
+                          <div className="p-6">
+                              <h3 className="text-xl font-semibold text-gray-800 mb-4">{service.title}</h3>
+                              <div
+                                  className={`text-gray-600 text-sm mb-4 overflow-hidden transition-max-height duration-500 ease-in-out`}
+                                  style={{
+                                      maxHeight: service.expanded ? "500px" : "60px", // Übergangshöhe
+                                  }}
+                              >
+                                  {service.description}
+                              </div>
+                              <button
+                                  onClick={(e) => {
+                                      e.stopPropagation();
+                                      toggleDescription(index);
+                                  }}
+                                  className="text-blue-600 text-sm font-medium underline hover:text-blue-800 transition-colors"
+                              >
+                                  {service.expanded ? "Weniger lesen..." : "Mehr lesen..."}
+                              </button>
+                          </div>
+                          <div className="p-6 border-t border-gray-200">
+                              <button
+                                  onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleServiceSelect();
+                                  }}
+                                  className="w-full bg-green-500 hover:bg-green-600 text-white font-medium py-2 rounded-lg transition-colors"
+                              >
+                                  Termin vereinbaren
+                              </button>
+                          </div>
+                      </div>
+                      
+                        
+                        ))}
                     </div>
-                    <div className="time-buttons mt-6 text-center">
-                        <h3 className="text-xl font-semibold mb-4 text-gray-200">
-                            Verfügbare Uhrzeiten für den {formattedSelectedDate}:
-                        </h3>
-                        <div className="flex flex-wrap justify-center">{renderTimeButtons()}</div>
-                    </div>
-                    <div className="form-container max-w-2xl mx-auto bg-slate-200 p-6 rounded-lg shadow-lg mt-8">
-                        <h2 className="text-xl font-bold mb-4 text-center">Terminbuchungsformular</h2>
-                        <Formik
-                            initialValues={initialValues}
-                            validationSchema={validationSchema}
-                            onSubmit={handleSubmit}
-                            enableReinitialize
-                        >
-                            {({ values }) => (
-                                <Form>
-                                    <div className="grid grid-cols-1 gap-4">
-                                        <div>
-                                            <label htmlFor="service" className="block text-sm font-medium">
-                                                Service
-                                            </label>
-                                            <Field
-                                                as="select"
-                                                name="service"
-                                                className="mt-1 p-2 border rounded-md w-full"
-                                            >
-                                                <option value="">Wählen Sie einen Service</option>
-                                                <option value="Ölservice">Ölservice</option>
-                                                <option value="Inspektion">Inspektion</option>
-                                                <option value="Reifenwechsel">Reifenwechsel</option>
-                                                <option value="Rad wechsel">Rad wechsel</option>
-                                                <option value="sonstiges">sonstiges</option>
-                                            </Field>
-                                            <ErrorMessage name="service" component="div" className="text-red-500 text-sm" />
-                                        </div>
-                                        <div>
-                                            <label htmlFor="date" className="block text-sm font-medium">
-                                                Datum
-                                            </label>
-                                            <Field
-                                                type="text"
-                                                name="date"
-                                                className="mt-1 p-2 border rounded-md w-full"
-                                                value={formattedSelectedDate || ""}
-                                                readOnly
-                                            />
-                                            <ErrorMessage name="date" component="div" className="text-red-500 text-sm" />
-                                        </div>
-                                        <div>
-                                            <label htmlFor="time" className="block text-sm font-medium">
-                                                Uhrzeit
-                                            </label>
-                                            <Field
-                                                type="text"
-                                                name="time"
-                                                className="mt-1 p-2 border rounded-md w-full"
-                                                value={selectedTime || ""}
-                                                readOnly
-                                            />
-                                            <ErrorMessage name="time" component="div" className="text-red-500 text-sm" />
-                                        </div>
-                                        <div>
-                                            <label htmlFor="firstName" className="block text-sm font-medium">
-                                                Vorname
-                                            </label>
-                                            <Field
-                                                type="text"
-                                                name="firstName"
-                                                className="mt-1 p-2 border rounded-md w-full"
-                                            />
-                                            <ErrorMessage name="firstName" component="div" className="text-red-500 text-sm" />
-                                        </div>
-                                        <div>
-                                            <label htmlFor="lastName" className="block text-sm font-medium">
-                                                Nachname
-                                            </label>
-                                            <Field
-                                                type="text"
-                                                name="lastName"
-                                                className="mt-1 p-2 border rounded-md w-full"
-                                            />
-                                            <ErrorMessage name="lastName" component="div" className="text-red-500 text-sm" />
-                                        </div>
-                                        <div>
-                                            <label htmlFor="email" className="block text-sm font-medium">
-                                                E-Mail
-                                            </label>
-                                            <Field
-                                                type="email"
-                                                name="email"
-                                                className="mt-1 p-2 border rounded-md w-full"
-                                            />
-                                            <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
-                                        </div>
-                                        <div>
-                                            <label htmlFor="phone" className="block text-sm font-medium">
-                                                Telefonnummer
-                                            </label>
-                                            <Field
-                                                type="text"
-                                                name="phone"
-                                                className="mt-1 p-2 border rounded-md w-full"
-                                            />
-                                            <ErrorMessage name="phone" component="div" className="text-red-500 text-sm" />
-                                        </div>
-                                        <div>
-                                            <label htmlFor="licensePlate" className="block text-sm font-medium">
-                                                Kennzeichen
-                                            </label>
-                                            <Field
-                                                type="text"
-                                                name="licensePlate"
-                                                className="mt-1 p-2 border rounded-md w-full"
-                                            />
-                                            <ErrorMessage name="licensePlate" component="div" className="text-red-500 text-sm" />
-                                        </div>
-                                        {["Ölservice", "Inspektion"].includes(values.service) && (
-                                            <>
-                                                <div>
-                                                    <label htmlFor="hsn" className="block text-sm font-medium">
-                                                        HSN
-                                                    </label>
-                                                    <Field
-                                                        type="text"
-                                                        name="hsn"
-                                                        className="mt-1 p-2 border rounded-md w-full"
-                                                    />
-                                                    <ErrorMessage name="hsn" component="div" className="text-red-500 text-sm" />
+                    
+
+                        ) : (
+                            <div>
+                                <p className="text-center mb-4 text-xl font-bold text-gray-200">Bitte wählen Sie das Datum und die Uhrzeit für Ihren Termin im Kalender aus.</p>
+                                <div className="calendar-container flex justify-center mb-6">
+                                    {isClient && (
+                                        <Calendar
+                                            onChange={(value) => handleDateChange(value as CalendarValue)}
+                                            value={selectedDate}
+                                            className="shadow-lg rounded-lg p-4 bg-gray-300 w-full max-w-3xl text-black"
+                                            tileDisabled={({ date }) => {
+                                                const today = new Date();
+                                                return (
+                                                    date.getDay() === 0 ||
+                                                    date < new Date(today.getFullYear(), today.getMonth(), today.getDate())
+                                                );
+                                            }}
+                                        />
+                                    )}
+                                </div>
+                                <div className="time-buttons mt-6 text-center">
+                                    <h3 className="text-xl font-semibold mb-4 text-gray-200">
+                                        Verfügbare Uhrzeiten für den {formattedSelectedDate}:
+                                    </h3>
+                                    <div className="flex flex-wrap justify-center">{renderTimeButtons()}</div>
+                                </div>
+                                <div className="form-container max-w-2xl mx-auto bg-slate-200 p-6 rounded-lg shadow-lg mt-8">
+                                    <h2 className="text-xl font-bold mb-4 text-center">Terminbuchungsformular</h2>
+                                    <Formik
+                                        initialValues={initialValues}
+                                        validationSchema={validationSchema}
+                                        onSubmit={handleSubmit}
+                                        enableReinitialize
+                                    >
+                                        {({ values }) => (
+                                            <Form>
+                                                <div className="grid grid-cols-1 gap-4">
+                                                    <div>
+                                                        <label htmlFor="service" className="block text-sm font-medium">
+                                                            Service
+                                                        </label>
+                                                        <Field
+                                                            as="select"
+                                                            name="service"
+                                                            className="mt-1 p-2 border rounded-md w-full"
+                                                        >
+                                                            <option value="">Wählen Sie einen Service</option>
+                                                            <option value="Ölservice">Ölservice</option>
+                                                            <option value="Inspektion">Inspektion</option>
+                                                            <option value="Reifenwechsel">Reifenwechsel</option>
+                                                            <option value="Rad wechsel">Rad wechsel</option>
+                                                            <option value="sonstiges">sonstiges</option>
+                                                        </Field>
+                                                        <ErrorMessage name="service" component="div" className="text-red-500 text-sm" />
+                                                    </div>
+                                                    <div>
+                                                        <label htmlFor="date" className="block text-sm font-medium">
+                                                            Datum
+                                                        </label>
+                                                        <Field
+                                                            type="text"
+                                                            name="date"
+                                                            className="mt-1 p-2 border rounded-md w-full"
+                                                            value={formattedSelectedDate || ""}
+                                                            readOnly
+                                                        />
+                                                        <ErrorMessage name="date" component="div" className="text-red-500 text-sm" />
+                                                    </div>
+                                                    <div>
+                                                        <label htmlFor="time" className="block text-sm font-medium">
+                                                            Uhrzeit
+                                                        </label>
+                                                        <Field
+                                                            type="text"
+                                                            name="time"
+                                                            className="mt-1 p-2 border rounded-md w-full"
+                                                            value={selectedTime || ""}
+                                                            readOnly
+                                                        />
+                                                        <ErrorMessage name="time" component="div" className="text-red-500 text-sm" />
+                                                    </div>
+                                                    <div>
+                                                        <label htmlFor="firstName" className="block text-sm font-medium">
+                                                            Vorname
+                                                        </label>
+                                                        <Field
+                                                            type="text"
+                                                            name="firstName"
+                                                            className="mt-1 p-2 border rounded-md w-full"
+                                                        />
+                                                        <ErrorMessage name="firstName" component="div" className="text-red-500 text-sm" />
+                                                    </div>
+                                                    <div>
+                                                        <label htmlFor="lastName" className="block text-sm font-medium">
+                                                            Nachname
+                                                        </label>
+                                                        <Field
+                                                            type="text"
+                                                            name="lastName"
+                                                            className="mt-1 p-2 border rounded-md w-full"
+                                                        />
+                                                        <ErrorMessage name="lastName" component="div" className="text-red-500 text-sm" />
+                                                    </div>
+                                                    <div>
+                                                        <label htmlFor="email" className="block text-sm font-medium">
+                                                            E-Mail
+                                                        </label>
+                                                        <Field
+                                                            type="email"
+                                                            name="email"
+                                                            className="mt-1 p-2 border rounded-md w-full"
+                                                        />
+                                                        <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
+                                                    </div>
+                                                    <div>
+                                                        <label htmlFor="phone" className="block text-sm font-medium">
+                                                            Telefonnummer
+                                                        </label>
+                                                        <Field
+                                                            type="text"
+                                                            name="phone"
+                                                            className="mt-1 p-2 border rounded-md w-full"
+                                                        />
+                                                        <ErrorMessage name="phone" component="div" className="text-red-500 text-sm" />
+                                                    </div>
+                                                    <div>
+                                                        <label htmlFor="licensePlate" className="block text-sm font-medium">
+                                                            Kennzeichen
+                                                        </label>
+                                                        <Field
+                                                            type="text"
+                                                            name="licensePlate"
+                                                            className="mt-1 p-2 border rounded-md w-full"
+                                                        />
+                                                        <ErrorMessage name="licensePlate" component="div" className="text-red-500 text-sm" />
+                                                    </div>
+                                                    {["Ölservice", "Inspektion"].includes(values.service) && (
+                                                        <>
+                                                            <div>
+                                                                <label htmlFor="hsn" className="block text-sm font-medium">
+                                                                    HSN
+                                                                </label>
+                                                                <Field
+                                                                    type="text"
+                                                                    name="hsn"
+                                                                    className="mt-1 p-2 border rounded-md w-full"
+                                                                />
+                                                                <ErrorMessage name="hsn" component="div" className="text-red-500 text-sm" />
+                                                            </div>
+                                                            <div>
+                                                                <label htmlFor="tsn" className="block text-sm font-medium">
+                                                                    TSN
+                                                                </label>
+                                                                <Field
+                                                                    type="text"
+                                                                    name="tsn"
+                                                                    className="mt-1 p-2 border rounded-md w-full"
+                                                                />
+                                                                <ErrorMessage name="tsn" component="div" className="text-red-500 text-sm" />
+                                                            </div>
+                                                        </>
+                                                    )}
+                                                    <div>
+                                                        <label htmlFor="comment" className="block text-sm font-medium">
+                                                            Kommentar
+                                                        </label>
+                                                        <Field
+                                                            as="textarea"
+                                                            name="comment"
+                                                            rows={3}
+                                                            className="mt-1 p-2 border rounded-md w-full"
+                                                        />
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <label htmlFor="tsn" className="block text-sm font-medium">
-                                                        TSN
-                                                    </label>
-                                                    <Field
-                                                        type="text"
-                                                        name="tsn"
-                                                        className="mt-1 p-2 border rounded-md w-full"
-                                                    />
-                                                    <ErrorMessage name="tsn" component="div" className="text-red-500 text-sm" />
+                                                <div className="mt-4">
+                                                    <button
+                                                        type="submit"
+                                                        className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md"
+                                                    >
+                                                        Termin Buchen
+                                                    </button>
                                                 </div>
-                                            </>
+                                            </Form>
                                         )}
-                                        <div>
-                                            <label htmlFor="comment" className="block text-sm font-medium">
-                                                Kommentar
-                                            </label>
-                                            <Field
-                                                as="textarea"
-                                                name="comment"
-                                                rows={3}
-                                                className="mt-1 p-2 border rounded-md w-full"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="mt-4">
-                                        <button
-                                            type="submit"
-                                            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md"
-                                        >
-                                            Termin Buchen
-                                        </button>
-                                    </div>
-                                </Form>
-                            )}
-                        </Formik>
+                                    </Formik>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
