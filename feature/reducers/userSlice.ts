@@ -5,11 +5,12 @@ import {
     EntityState,
     PayloadAction,
 } from "@reduxjs/toolkit";
-import { userLogin, userRegister, getAllUsers, userLogout, profilePhotoUpload,requestPasswordReset, confirmEmailVerificationCode } from '../../service/index';
+import { userLogin, userRegister, getAllUsers, userLogout, profilePhotoUpload,requestPasswordReset, confirmEmailVerificationCode, checkRefreshToken } from '../../service/index';
 import { RootState } from "../store/store";
 import { IUser, IUserInfo, TUser } from "../../interface";
 import { IChangePassword } from "../../interface";
 import { changePasswordWithEmail } from "../../service/index";
+import axios from "axios";
 
 
 interface IUserState {
@@ -26,6 +27,9 @@ interface IUserState {
 const userAdapter = createEntityAdapter<IUser, string>({
     selectId: (user) => (user?._id ? user._id : ""),
 });
+
+
+
 
 
 export const userRegisterApi = createAsyncThunk(
@@ -102,6 +106,21 @@ export const changePasswordApi = createAsyncThunk(
 );
  
 
+
+export const checkRefreshTokenApi = createAsyncThunk(
+    "/user/checkRefreshTokenApi",
+    async () => {
+      try {
+        const response = await checkRefreshToken();
+        localStorage.setItem("userId", response.data.user._id);
+        return response.data;
+      } catch (error: any) {
+        // localStorage.clear();
+        throw error.response.data.message;
+      }
+    }
+  );
+
 export const requestPasswordResetApi = createAsyncThunk(
     "user/requestPasswordResetApi",
     async (email: string, { rejectWithValue }) => {
@@ -163,6 +182,9 @@ const userSlice = createSlice({
         },
         setUserInfo: (state, action) => {
             state.userInfo = action.payload;
+        },
+        setUserId: (state, action) => {
+            state.userId = action.payload;
         },
         clearUserInfos: (state) => {
             state.userInfo = initialState.userInfo;
@@ -241,7 +263,7 @@ const userSlice = createSlice({
               });
     }
 });
-export const { userUpdated, clearUserInfos } = userSlice.actions;
+export const { userUpdated, clearUserInfos,setUserId } = userSlice.actions;
 export const { selectAll: displayUsers, selectById: displayUserById } = userAdapter.getSelectors((state: RootState) => state.users);
 export const { setToken, setUserInfo } = userSlice.actions;
 

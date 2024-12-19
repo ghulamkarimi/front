@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -10,8 +10,8 @@ import {
   NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../feature/store/store";
-import { displayUserById, userLogoutApi } from "../../../feature/reducers/userSlice";
+import { AppDispatch,RootState } from "../../../feature/store/store";
+import { displayUserById, setUserId, setUserInfo, userLogoutApi } from "../../../feature/reducers/userSlice";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { NotificationService } from "../../../service/NotificationService";
@@ -19,34 +19,42 @@ import { IoIosLogIn } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
+
 const DropdownMenuDemo = () => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
-  const [userId, setUserId] = useState<string | null>(null);
-  const [currentUser, setCurrentUser] = useState<any | null>(null);
 
-  const user = useSelector((state: RootState) => (userId ? displayUserById(state, userId) : null));
+  const userId = localStorage.getItem("userId");
+  const user = useSelector((state: RootState) => displayUserById(state, userId || ""));
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedUserId = localStorage.getItem("userId");
-      setUserId(storedUserId);
-    }
-  }, []);
+  console.log("user",user)
+  console.log("userId",userId)
 
   useEffect(() => {
-    if (userId) {
-      setCurrentUser(user);
+   dispatch(setUserId(userId))
+  }, [userId, dispatch]);
+
+  useEffect(() => {
+    if (!userId) {
+      // Zustand leeren und aus dem Speicher entfernen, falls der Benutzer sich abmeldet
+      dispatch(setUserInfo(null));
+      dispatch(setUserId(""))
     }
-  }, [user, userId]);
+  }, [userId, dispatch]);
 
   const handleLogout = async () => {
     try {
       const response = await dispatch(userLogoutApi()).unwrap();
 
       NotificationService.success(response.message);
-      setCurrentUser(null); // Benutzerzustand leeren
-      localStorage.clear();
+
+   
+
+      dispatch(setUserId(""));
+      dispatch(setUserInfo(null));
+      localStorage.clear()
+      
+      // Zur Aktualisierung des Benutzerbilds und Benutzerpanels
       router.push("/login");
     } catch (error: any) {
       NotificationService.error(
@@ -60,18 +68,18 @@ const DropdownMenuDemo = () => {
       <NavigationMenuList>
         <NavigationMenuItem>
           <NavigationMenuTrigger className="flex items-center bg-white gap-4 h-10 lg:gap-6 lg:py-2">
-            {currentUser ? (
+            {user ? (
               <div className="flex items-center gap-4 lg:gap-6 lg:px-8 lg:py-1">
                 <span className="flex items-center gap-2">
                   <Image
                     width={32}
                     height={32}
                     className="w-8 h-8 rounded-full"
-                    src={currentUser?.profile_photo}
+                    src={user?.profile_photo}
                     priority
                     alt="Profilbild"
                   />
-                  {currentUser?.firstName}
+                  {user?.firstName}
                 </span>
               </div>
             ) : (
@@ -81,24 +89,24 @@ const DropdownMenuDemo = () => {
           <NavigationMenuContent className="gap-20">
             <NavigationMenuLink
               className="flex items-center gap-4 lg:gap-10 px-4 lg:px-8 bg-white py-2 hover:bg-gray-200"
-              href={currentUser ? "/meinProfile" : "/register"}
+              href={user ? "/meinProfile" : "/register"}
             >
               <span>
-                {currentUser?.profile_photo ? (
+                {user?.profile_photo ? (
                   <Image
                     width={32}
                     height={32}
                     className="w-8 h-8 rounded-full"
-                    src={currentUser?.profile_photo || "/useerBild.png"}
+                    src={user?.profile_photo || "/useerBild.png"}
                     alt="Benutzerbild"
                   />
                 ) : (
                   <FaRegCircleUser className="lg:text-2xl" />
                 )}
               </span>
-              <span>{currentUser ? "Profil" : "Registrieren"}</span>
+              <span>{user ? "Profil" : "Registrieren"}</span>
             </NavigationMenuLink>
-            {!currentUser && (
+            {!user && (
               <NavigationMenuLink
                 className="flex items-center gap-4 lg:gap-10 px-6 lg:px-8 bg-white py-2 hover:bg-gray-200"
                 href="/login"
@@ -109,7 +117,7 @@ const DropdownMenuDemo = () => {
                 <span>Login</span>
               </NavigationMenuLink>
             )}
-            {currentUser && (
+            {user && (
               <NavigationMenuLink
                 className="flex items-center gap-4 lg:gap-10 px-4 lg:px-8 bg-white py-2 hover:bg-gray-200 cursor-pointer"
                 onClick={handleLogout}

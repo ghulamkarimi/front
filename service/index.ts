@@ -53,6 +53,12 @@ export const profilePhotoUpload = (data: File) => {
   });
 };
 
+export const checkRefreshToken = () => {
+  const url = `${SERVER_URL}/user/check-refresh-token`;
+  return axios.get(url);
+};
+
+
 export const changePasswordWithEmail = (passwordData: IChangePassword) => {
   const url = `${SERVER_URL}/user/changePasswordWithEmail`;
   return axios.put(url, passwordData);
