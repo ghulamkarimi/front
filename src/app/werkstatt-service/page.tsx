@@ -175,7 +175,7 @@ const UserCalendar: React.FC = () => {
             expanded: false,
         },
         {
-            title: "Reifenwechsel",
+            title: "Reifenmontage",
             description: "Wir bieten einen schnellen und professionellen Reifenwechsel, um Ihre Sicherheit auf der Straße zu gewährleisten. Egal, ob Sie Sommer- oder Winterreifen benötigen, wir prüfen Ihre Reifen auf Verschleiß und sorgen für die korrekte Montage. So fahren Sie immer sicher und effizient.",
             image: "/reifen.jpg",
             expanded: false,

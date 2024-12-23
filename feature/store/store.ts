@@ -7,17 +7,8 @@ import reservationSlice, { getReservationApi } from "../reducers/reservationSlic
 import carBuyReducer, { fetchCarBuys } from "../reducers/carBuySlice";
 import schutzPacket, { fetchAllSchutzPacketApi } from "../reducers/schutzPacketSlice"
 import carRentReducer, { getRentCarApi } from "../reducers/carRentSlice"
-
-
-
 import { refreshToken } from "../../service";
 import axiosJWT from "../../service/axiosJwt";
-
-
-
-
-
-
 
 export const store = configureStore({
   reducer: {
@@ -37,32 +28,6 @@ export const store = configureStore({
     }),
 })
 
-
-
-
-
-
-
-
-
-// axiosJWT.interceptors.request.use(
-//   async (config) => {
-//     const currentDate = new Date();
-//     const exp = localStorage.getItem("exp");
-//     console.log("exp",exp)
-//     if (Number(exp) * 1000 > currentDate.getDate()) {
-//       const response = await refreshToken();
-//       console.log("responseRefreshStore",response)
-//       config.headers.Authorization = `Bearer ${response.data.refreshToken}`;
-//       store.dispatch(setToken(response.data.refreshToken));
-//       // store.dispatch(setUserInfoRefresh(response.data.userInfo_refresh));
-//     }
-//     return config;
-//   },
-//   (error) => {
-//     return Promise.reject(error);
-//   }
-// );
 axiosJWT.interceptors.request.use(
   async (config) => {
     const currentDate = new Date();
@@ -81,13 +46,6 @@ axiosJWT.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
-
-
-
-
-
-
 
   store.dispatch(fetchUsers());
   store.dispatch(getRentCarApi());

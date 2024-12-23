@@ -8,21 +8,21 @@ import Link from "next/link";
 
 const Footer = () => {
 
-function useMediaQuery(query: string) {
-    const [matches, setMatches] = useState(false);
+    function useMediaQuery(query: string) {
+        const [matches, setMatches] = useState(false);
 
-    useEffect(() => {
-        const media = window.matchMedia(query);
-        if (media.matches !== matches) {
-            setMatches(media.matches);
-        }
-        const listener = () => setMatches(media.matches);
-        media.addEventListener("change", listener);
-        return () => media.removeEventListener("change", listener);
-    }, [matches, query]);
+        useEffect(() => {
+            const media = window.matchMedia(query);
+            if (media.matches !== matches) {
+                setMatches(media.matches);
+            }
+            const listener = () => setMatches(media.matches);
+            media.addEventListener("change", listener);
+            return () => media.removeEventListener("change", listener);
+        }, [matches, query]);
 
-    return matches;
-}
+        return matches;
+    }
     const isMediumScreen = useMediaQuery("(max-width: 640px)");
 
     return (
@@ -53,11 +53,11 @@ function useMediaQuery(query: string) {
 
                         {/* Verlinkung zur Adresse auf Google Maps */}
                         <Link
-                            href="https://www.google.com/maps/search/?api=1&query=Badenheimer+Str.+6,+55576+Sprendlingen,+Deutschland"
+                            href="https://www.google.com/maps/search/?api=1&query=Badenheimer+Str.+4,+55576+Sprendlingen,+Deutschland"
                             target="_blank"
                             className="text-gray-800 cursor-pointer flex flex-col gap-1"
                         >
-                            <span>Badenheimer Str. 6,</span>
+                            <span>Badenheimer Str. 4,</span>
                             <span>55576 Sprendlingen,</span>
                             <span>Deutschland</span>
                         </Link>
@@ -101,13 +101,13 @@ function useMediaQuery(query: string) {
             {/* Hier die Karte einfügen */}
             <div className="mt-4 border-b-2 border-black pb-3">
                 <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2582.394179634875!2d7.874873615705454!3d49.82730307939562!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47b8d9b8e3d8f6e3%3A0x2b9d7b3d8f4a1f3b!2sBadenheimer%20Str.%206%2C%2055576%20Sprendlingen!5e0!3m2!1sde!2sde!4v1632888541996!5m2!1sde!2sde"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2572.194882495442!2d7.982993676366877!3d49.857583771485054!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47bdf3c888fdbb75%3A0x7cfda4a4f6cc0a05!2sBadenheimer%20Str.%204%2C%2055576%20Sprendlingen!5e0!3m2!1sen!2sde!4v1734986086037!5m2!1sen!2sde"
                     width="100%"
                     height="450"
                     style={{ border: 0 }}
                     allowFullScreen={true}
                     loading="lazy"
-                    
+
                 />
 
             </div>
