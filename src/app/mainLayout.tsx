@@ -6,7 +6,7 @@ import { AppDispatch, RootState } from '../../feature/store/store';
 import { setCarId, setIsDetailsSchutzPacketActive, setIsCarVerfügbar } from '../../feature/reducers/carRentSlice';
 import { useEffect } from 'react';
 import { FaCheck } from 'react-icons/fa6';
-import { checkRefreshTokenApi, setUserId } from '../../feature/reducers/userSlice';
+import { checkAccessTokenApi, displayUserById, setUserId, setUserInfo } from '../../feature/reducers/userSlice';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -18,6 +18,9 @@ export default function MainLayout({ children }: LayoutProps) {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
 
+  const userId = localStorage.getItem("userId")|| "";
+  console.log("userId",userId)
+
   useEffect(() => {
     const carId = localStorage.getItem('carRentId');
     if (carId) {
@@ -26,20 +29,33 @@ export default function MainLayout({ children }: LayoutProps) {
   }, [dispatch]);
 
   useEffect(() => {
+  
+    if (userId) {
+      dispatch(setUserId(userId));
+    } else {
+      dispatch(setUserInfo(null)); 
+      dispatch(setUserId(""));     
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
     const checkUserIsLogin = async () => {
       try {
-        await dispatch(checkRefreshTokenApi()).unwrap();
-        const userId = localStorage.getItem('userId');
+        const response = await dispatch(checkAccessTokenApi()).unwrap();
+        console.log("CheckAccessToken Response:", response);
+    
         if (userId) {
-          dispatch(setUserId(userId));
+          dispatch(setUserId(localStorage.getItem("userId")|| ""));
+      
         }
-      } catch (error: any) {
+      } catch (error:any) {
         localStorage.clear();
-        dispatch(setUserId(''));
+        dispatch(setUserId(""));
       }
     };
     checkUserIsLogin();
   }, []);
+  
 
   const handleProceed = () => {
     const carId = localStorage.getItem('carRentId');

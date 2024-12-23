@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer, { checkRefreshTokenApi, fetchUsers, setToken} from "../reducers/userSlice";
+import userReducer, {  checkAccessTokenApi, fetchUsers, setToken} from "../reducers/userSlice";
 import appReducer from "../reducers/appSlice";
 import offerReducer, { fetchOffers } from "../reducers/offerSlice";
 import appointmentReducer, { fetchAppointments } from "../reducers/appointmentSlice";
@@ -9,8 +9,10 @@ import schutzPacket, { fetchAllSchutzPacketApi } from "../reducers/schutzPacketS
 import carRentReducer, { getRentCarApi } from "../reducers/carRentSlice"
 
 
-import axios from "axios";
+
 import { refreshToken } from "../../service";
+import axiosJWT from "../../service/axiosJwt";
+
 
 
 
@@ -41,25 +43,37 @@ export const store = configureStore({
 
 
 
-const axiosJWT = axios.create({
-  baseURL: "http://localhost:7001",
-  withCredentials: true,
-});
 
+
+// axiosJWT.interceptors.request.use(
+//   async (config) => {
+//     const currentDate = new Date();
+//     const exp = localStorage.getItem("exp");
+//     console.log("exp",exp)
+//     if (Number(exp) * 1000 > currentDate.getDate()) {
+//       const response = await refreshToken();
+//       console.log("responseRefreshStore",response)
+//       config.headers.Authorization = `Bearer ${response.data.refreshToken}`;
+//       store.dispatch(setToken(response.data.refreshToken));
+//       // store.dispatch(setUserInfoRefresh(response.data.userInfo_refresh));
+//     }
+//     return config;
+//   },
+//   (error) => {
+//     return Promise.reject(error);
+//   }
+// );
 axiosJWT.interceptors.request.use(
   async (config) => {
     const currentDate = new Date();
     const exp = localStorage.getItem("exp");
-
-    if (Number(exp) * 1000 > currentDate.getTime()) {
-      try {
-        const response = await refreshToken();
-        console.log("response",response)
-        config.headers.Authorization = `Bearer ${response.data.refreshToken}`;
-        store.dispatch(setToken(response.data.refreshToken));
-      } catch (error) {
-        return Promise.reject(error);
-      }
+    console.log("exp",exp)
+    if (Number(exp) * 1000 > currentDate.getDate()) {
+      const response = await refreshToken();
+      console.log("responseStore",response)
+      config.headers.Authorization = `Bearer ${response.data.refreshToken}`;
+      store.dispatch(setToken(response.data.refreshToken));
+      // store.dispatch(setUserInfoRefresh(response.data.userInfo_refresh));
     }
     return config;
   },
@@ -73,14 +87,16 @@ axiosJWT.interceptors.request.use(
 
 
 
-  store.dispatch(fetchUsers()),
-  store.dispatch(getRentCarApi()),
-  store.dispatch(fetchCarBuys()),
-  store.dispatch(fetchOffers()),
-  store.dispatch(fetchAllSchutzPacketApi()),
-  store.dispatch(fetchAppointments()),
-  store.dispatch(getReservationApi()),
-  store.dispatch(checkRefreshTokenApi())
+
+
+  store.dispatch(fetchUsers());
+  store.dispatch(getRentCarApi());
+  store.dispatch(fetchCarBuys());
+  store.dispatch(fetchOffers());
+  store.dispatch(fetchAllSchutzPacketApi());
+  store.dispatch(fetchAppointments());
+  store.dispatch(getReservationApi());
+  store.dispatch(checkAccessTokenApi())
 
 
 

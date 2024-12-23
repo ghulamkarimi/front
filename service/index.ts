@@ -34,7 +34,11 @@ export const userLogout = () => {
 
 export const refreshToken = () => {
   const url = `${SERVER_URL}/user/refreshToken`;
-  return axiosJWT.get(url);
+  return axios.get(url);
+};
+export const checkAccessToken = () => {
+  const url = `${SERVER_URL}/user/check-token`;
+  return axios.get(url);
 };
 
 export const profilePhotoUpload = (data: File) => {
@@ -53,10 +57,7 @@ export const profilePhotoUpload = (data: File) => {
   });
 };
 
-export const checkRefreshToken = () => {
-  const url = `${SERVER_URL}/user/check-refresh-token`;
-  return axios.get(url);
-};
+
 
 
 export const changePasswordWithEmail = (passwordData: IChangePassword) => {

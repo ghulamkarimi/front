@@ -19,9 +19,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps) {
   return (
-  
-      <html lang="de">
-        <body className="bg-gray-200">
+    <html lang="de">
+      <body className="bg-gray-200">
         <ReduxProvider>
           <MainLayout>
             <header>
@@ -32,10 +31,10 @@ export default function RootLayout({ children }: LayoutProps) {
               <Footer />
             </footer>
           </MainLayout>
-          </ReduxProvider>
+
           <ToastContainer />
-        </body>
-      </html>
-   
+        </ReduxProvider>
+      </body>
+    </html>
   );
 }

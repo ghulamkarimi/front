@@ -10,8 +10,13 @@ import {
   NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch,RootState } from "../../../feature/store/store";
-import { displayUserById, setUserId, setUserInfo, userLogoutApi } from "../../../feature/reducers/userSlice";
+import { AppDispatch, RootState } from "../../../feature/store/store";
+import {
+  displayUserById,
+  setUserId,
+  setUserInfo,
+  userLogoutApi,
+} from "../../../feature/reducers/userSlice";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { NotificationService } from "../../../service/NotificationService";
@@ -19,49 +24,61 @@ import { IoIosLogIn } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
-
 const DropdownMenuDemo = () => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
 
-  const userId = localStorage.getItem("userId");
-  const user = useSelector((state: RootState) => displayUserById(state, userId || ""));
-
-  console.log("user",user)
+  const userId = useSelector((state:RootState)=>state.users.userId);
   console.log("userId",userId)
-
+  const user = useSelector((state: RootState) =>
+    displayUserById(state, userId )
+  );
+  console.log("user",user)
   useEffect(() => {
-   dispatch(setUserId(userId))
-  }, [userId, dispatch]);
-
-  useEffect(() => {
-    if (!userId) {
-      // Zustand leeren und aus dem Speicher entfernen, falls der Benutzer sich abmeldet
-      dispatch(setUserInfo(null));
-      dispatch(setUserId(""))
+    const userId = localStorage.getItem("userId") || "";
+    if (userId) {
+      dispatch(setUserId(userId));
+      dispatch(setUserInfo(user));
+    } else {
+      dispatch(setUserId("")); // Benutzer-ID in Redux zurücksetzen
+      dispatch(setUserInfo(null)); // Benutzerinformationen in Redux zurücksetzen
     }
-  }, [userId, dispatch]);
+  }, [dispatch])
+
+
 
   const handleLogout = async () => {
     try {
       const response = await dispatch(userLogoutApi()).unwrap();
-
+  
+     
+      dispatch(setUserId("")); // Benutzer-ID in Redux zurücksetzen
+      dispatch(setUserInfo(null)); // Benutzerinformationen in Redux zurücksetzen
+      localStorage.clear(); // optional: wenn du alles aus localStorage entfernen willst
+  
       NotificationService.success(response.message);
-
-   
-
-      dispatch(setUserId(""));
-      dispatch(setUserInfo(null));
-      localStorage.clear()
-      
-      // Zur Aktualisierung des Benutzerbilds und Benutzerpanels
+  
+      // Debugging Log: Sollte null sein
+      console.log("User after logout:", null); 
+  
+      // Weiterleitung zur Login-Seite
       router.push("/login");
+      
+    
+      
     } catch (error: any) {
       NotificationService.error(
-        "Logout fehlgeschlagen: " + ((error as Error)?.message || "Unbekannter Fehler")
+        "Logout fehlgeschlagen: " +
+          ((error as Error)?.message || "Unbekannter Fehler")
       );
     }
   };
+  
+
+
+  
+  
+
 
   return (
     <NavigationMenu>
@@ -75,7 +92,7 @@ const DropdownMenuDemo = () => {
                     width={32}
                     height={32}
                     className="w-8 h-8 rounded-full"
-                    src={user?.profile_photo}
+                    src={user?.profile_photo || "/userImage.png"}  // Fallback-Bild
                     priority
                     alt="Profilbild"
                   />
