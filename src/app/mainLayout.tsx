@@ -18,8 +18,10 @@ export default function MainLayout({ children }: LayoutProps) {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
 
-  const userId = localStorage.getItem("userId")|| "";
-  console.log("userId",userId)
+
+
+ 
+ 
 
   useEffect(() => {
     const carId = localStorage.getItem('carRentId');
@@ -29,7 +31,7 @@ export default function MainLayout({ children }: LayoutProps) {
   }, [dispatch]);
 
   useEffect(() => {
-  
+    const userId = localStorage.getItem("userId")|| "";
     if (userId) {
       dispatch(setUserId(userId));
     } else {
@@ -43,7 +45,7 @@ export default function MainLayout({ children }: LayoutProps) {
       try {
         const response = await dispatch(checkAccessTokenApi()).unwrap();
         console.log("CheckAccessToken Response:", response);
-    
+        const userId = localStorage.getItem("userId")|| "";
         if (userId) {
           dispatch(setUserId(localStorage.getItem("userId")|| ""));
       
