@@ -1,19 +1,33 @@
-
 "use client";
 
 import { Provider } from "react-redux";
-import { store } from "../store/store"; 
 
-interface IReduxProvider {
-    children: React.ReactNode;
+import { ReactNode } from "react";
+
+import axios from "axios";
+import { store } from "../store/store";
+
+
+interface IReduxProviderProps {
+  children: ReactNode;
 }
 
-const ReduxProvider = ({ children }: IReduxProvider) => {
-    return (
-        <Provider store={store}>
-            {children}
-        </Provider>
-    );
-}
+
+axios.defaults.withCredentials = true;
+
+const ReduxProvider = ({ children }: IReduxProviderProps) => {
+
+
+
+
+  return (
+    <Provider store={store}>
+
+        {children}
+   
+    </Provider>
+  );
+};
 
 export default ReduxProvider;
+

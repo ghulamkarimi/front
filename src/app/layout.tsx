@@ -6,7 +6,6 @@ import "./globals.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Footer from "@/components/Footer";
-
 import MainLayout from "./mainLayout";
 
 interface LayoutProps {
@@ -27,9 +26,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps) {
   return (
-    <ReduxProvider>
-      <html lang="de">
-        <body className="bg-gray-200 ">
+    <html lang="de">
+      <body className="bg-gray-200">
+        <ReduxProvider>
           <MainLayout>
             <header>
               <Navbar />
@@ -38,14 +37,11 @@ export default function RootLayout({ children }: LayoutProps) {
             <footer>
               <Footer />
             </footer>
-            {/* <div className="z-50">
-              <CookieBanner />
-            </div> */}
-
           </MainLayout>
+
           <ToastContainer />
-        </body>
-      </html>
-    </ReduxProvider>
+        </ReduxProvider>
+      </body>
+    </html>
   );
 }

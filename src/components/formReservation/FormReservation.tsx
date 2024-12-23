@@ -14,6 +14,7 @@ import { TReservation } from "../../../interface";
 import FahrerDetails from "./FahrerDetails";
 import PayPalSection from "./PayPalSection";
 import { getRentCarById } from "../../../feature/reducers/carRentSlice";
+import { displayUserById } from "../../../feature/reducers/userSlice";
 
 interface FormReservationProps {
   rentalDays: number;
@@ -41,6 +42,9 @@ const FormReservation = ({ rentalDays}: FormReservationProps) => {
   );
   const { gesamteSchutzInfo } = useSelector((state: RootState) => state.app);
 
+
+
+const user = useSelector((state:RootState)=>displayUserById(state,userId))
  
 
 
@@ -86,11 +90,11 @@ const FormReservation = ({ rentalDays}: FormReservationProps) => {
 
   const formik = useFormik({
     initialValues: {
-      vorname: "",
-      nachname: "",
+      vorname: user.firstName || "",
+      nachname: user.lastName|| "",
       geburtsdatum: "",
-      email: "",
-      telefonnummer: "",
+      email: user.email|| "",
+      telefonnummer: user.phone || "",
       adresse: "",
       postalCode: "",
       stadt: "",

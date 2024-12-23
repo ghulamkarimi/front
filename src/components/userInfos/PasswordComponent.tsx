@@ -45,7 +45,7 @@ const PasswordComponent = () => {
           password: values.newPassword
         })).unwrap();
         NotificationService.success("Passwort erfolgreich geändert!");
-        router.push("/login");
+        router.push("/");
         resetForm();
       } catch (error: any) {
         NotificationService.error(
