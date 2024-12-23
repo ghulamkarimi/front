@@ -6,8 +6,10 @@ import {
   TUser,
 } from "../interface";
 import axiosJWT from "./axiosJwt";
+import io from "socket.io-client";
 
-//const SERVER_URL = "https://car-db.ghulam-dev.me";
+export const socket = io("http://localhost:7001"); // Passe die URL entsprechend an
+
 export const SERVER_URL = "http://localhost:7001";
 
 
