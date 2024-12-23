@@ -7,6 +7,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Footer from "@/components/Footer";
 import MainLayout from "./mainLayout";
+import CookieBanner from "@/components/cookie/CookieBanner";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -34,6 +35,8 @@ export default function RootLayout({ children }: LayoutProps) {
               <Navbar />
             </header>
             <main>{children}</main>
+            <CookieBanner />
+            <ToastContainer />
             <footer>
               <Footer />
             </footer>
