@@ -31,21 +31,19 @@ const BookingsComponent = () => {
       <div className="flex justify-center gap-6 md:gap-12 mb-10">
         <button
           onClick={() => setActiveSection("workshop")}
-          className={`px-8 md:px-12 py-3 md:py-4 font-semibold rounded-full transition-all duration-300 ${
-            activeSection === "workshop"
+          className={`px-8 md:px-12 py-3 md:py-4 font-semibold rounded-full transition-all duration-300 ${activeSection === "workshop"
               ? "bg-orange-500 text-white shadow-lg"
               : "bg-gray-200 text-gray-800 hover:bg-orange-200"
-          }`}
+            }`}
         >
           Werkstatt
         </button>
         <button
           onClick={() => setActiveSection("rental")}
-          className={`px-8 md:px-12 py-3 md:py-4 font-semibold rounded-full transition-all duration-300 ${
-            activeSection === "rental"
+          className={`px-8 md:px-12 py-3 md:py-4 font-semibold rounded-full transition-all duration-300 ${activeSection === "rental"
               ? "bg-orange-500 text-white shadow-lg"
               : "bg-gray-200 text-gray-800 hover:bg-orange-200"
-          }`}
+            }`}
         >
           Autovermietung
         </button>
@@ -69,11 +67,10 @@ const BookingsComponent = () => {
                       {appointment.service}
                     </h3>
                     <span
-                      className={`px-4 py-2 mt-4 md:mt-0 rounded-full text-sm font-medium ${
-                        appointment.isBookedOrBlocked
+                      className={`px-4 py-2 mt-4 md:mt-0 rounded-full text-sm font-medium ${appointment.isBookedOrBlocked
                           ? "bg-green-100 text-green-700"
                           : "bg-yellow-100 text-yellow-700"
-                      }`}
+                        }`}
                     >
                       {appointment.isBookedOrBlocked
                         ? "Gebucht"
@@ -133,7 +130,7 @@ const BookingsComponent = () => {
                         {reservation.carRent.carName}
                       </h3>
                       <p className="text-gray-600">
-                        
+
                         Abholung:{" "}
                         {reservation.pickupDate && (
                           <FormattedDate date={reservation.pickupDate} />
@@ -147,11 +144,16 @@ const BookingsComponent = () => {
                       </p>
                     </div>
                   </div>
-                  <div className="flex justify-between items-center mt-6">
-                    <FaEuroSign className="text-2xl text-green-500" />
-                    <span className="text-2xl font-semibold text-gray-900">
+                  <div className="flex flex-col py-4">
+                  <span className="text-2xl font-semibold text-gray-900 pb-4">
+                      Gesamtpreis:{" "}
                       {reservation.gesamtPrice} €
                     </span>
+                    <span>
+                      <p>„Sie können Ihre Buchungen bis zu 24 Stunden vor dem Abholdatum stornieren!“</p>
+                      <p>„Abholort: Badenheimer Straße 4, 55576 Sprendlingen“</p>
+                    </span>
+                  
                   </div>
                 </li>
               ))}
