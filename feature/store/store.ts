@@ -47,14 +47,24 @@ axiosJWT.interceptors.request.use(
   }
 );
 
-  store.dispatch(fetchUsers());
-  store.dispatch(getRentCarApi());
-  store.dispatch(fetchCarBuys());
-  store.dispatch(fetchOffers());
-  store.dispatch(fetchAllSchutzPacketApi());
-  store.dispatch(fetchAppointments());
-  store.dispatch(getReservationApi());
+Promise.all([
+  store.dispatch(fetchUsers()),
+  store.dispatch(getRentCarApi()),
+  store.dispatch(fetchCarBuys()),
+  store.dispatch(fetchOffers()),
+  store.dispatch(fetchAllSchutzPacketApi()),
+  store.dispatch(fetchAppointments()),
+  store.dispatch(getReservationApi()),
   store.dispatch(checkAccessTokenApi())
+])
+  .then(() => {
+    console.log("Alle API-Aufrufe erfolgreich abgeschlossen.");
+    // Weiterer Code hier
+  })
+  .catch((error) => {
+    console.error("Fehler bei einem der API-Aufrufe:", error);
+  });
+
 
 
 

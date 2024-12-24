@@ -56,10 +56,18 @@ extraReducers:(builder)=>{
     builder.addCase(getReservationApi.pending,(state)=>{
         state.status= "loading";
     })
-    builder.addCase(getReservationApi.fulfilled,(state,action)=>{
-        state.status="succeeded",
-        reservationAdapter.setOne(state,action.payload.reservation)
-    })
+    builder.addCase(getReservationApi.fulfilled, (state, action) => {
+        console.log("API Response Payload:", action.payload);  // Überprüfe die Antwort
+        state.status = "succeeded";
+    
+        if (action.payload?.reservation) {
+            reservationAdapter.setAll(state, action.payload.reservation);
+        } else {
+            console.error("Keine Reservierungen gefunden!");
+          
+        }
+    });
+    
     builder.addCase(getReservationApi.rejected,(state,action)=>{
         state.status="failed",
         state.error = action.error.message || "reservation loading failed"

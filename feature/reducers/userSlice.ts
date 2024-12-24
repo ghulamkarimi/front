@@ -10,7 +10,7 @@ import { RootState } from "../store/store";
 import { IUser, IUserInfo, TUser } from "../../interface";
 import { IChangePassword } from "../../interface";
 import { changePasswordWithEmail } from "../../service/index";
-import axios from "axios";
+
 
 
 interface IUserState {

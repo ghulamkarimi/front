@@ -139,6 +139,7 @@ export interface IReservation {
   nachname: string;
   geburtsdatum: string;
   email: string;
+  carName?: string;
   telefonnummer: string;
   adresse: string;
   postalCode: string;
@@ -150,5 +151,7 @@ export interface IReservation {
   gesamtPrice: string;
   carRentId?: string | undefined;
   userId?: string;
+  user: IUser; 
+  carRent: ICarRent;
 }
 export type TReservation = Partial<IReservation>;
