@@ -54,7 +54,7 @@ const DropdownMenuDemo = () => {
      
       dispatch(setUserId("")); // Benutzer-ID in Redux zurücksetzen
       dispatch(setUserInfo(null)); // Benutzerinformationen in Redux zurücksetzen
-      localStorage.clear(); // optional: wenn du alles aus localStorage entfernen willst
+      // optional: wenn du alles aus localStorage entfernen willst
   
       NotificationService.success(response.message);
   

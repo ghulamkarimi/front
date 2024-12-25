@@ -74,7 +74,7 @@ export const fetchUsers = createAsyncThunk("users/fetchUsers", async (_, { rejec
 export const userLogoutApi = createAsyncThunk("users/userLogoutApi", async (_, { rejectWithValue }) => {
     try {
         const response = await userLogout();
-        
+        localStorage.clear();
         return response.data;
     } catch (error) {
 

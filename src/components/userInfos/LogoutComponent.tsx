@@ -14,7 +14,7 @@ const LogoutComponent = () => {
   const handleLogout = async () => {
     try {
       await dispatch(userLogoutApi()).unwrap();
-      
+      localStorage.removeItem("userId");
       NotificationService.success("Erfolgreich abgemeldet!");
       router.push("/");
     } catch (error) {
