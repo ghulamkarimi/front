@@ -60,7 +60,8 @@ const Register = () => {
           router.push("/login");
         }, 4000);
       } catch (error: any) {
-        NotificationService.error(error.message || "Registrierung fehlgeschlagen.");
+        const errorMessage = error.message|| "Registrierung fehlgeschlagen."
+        NotificationService.error(errorMessage);
       }
     },
   });

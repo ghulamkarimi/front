@@ -4,11 +4,16 @@
     "cSpell.checkComments": false, // Kommentare ignorieren
     "cSpell.checkStrings": false,
     "cSpell.words": [
+        "adresse",
         "daygrid",
         "embla",
         "fullcalendar",
+        "gesamt",
         "lightbox",
         "mainsite",
+        "persistor",
+        "stadt",
+        "telefonnummer",
         "timegrid"
     ] // Strings ignorieren
 }

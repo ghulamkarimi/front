@@ -7,9 +7,9 @@ import { AppDispatch } from "../../../feature/store/store";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { NotificationService } from "../../../service/NotificationService";
-import { setUserInfo, userLoginApi } from "../../../feature/reducers/userSlice";
+import {  setUserId, setUserInfo, userLoginApi } from "../../../feature/reducers/userSlice";
 import { useRouter } from "next/navigation";
-import { userInfo } from "os";
+
 
 const Login = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -40,13 +40,9 @@ const Login = () => {
       try {
         setIsLoading(true);
         const response = await dispatch(userLoginApi(values)).unwrap();
-
-        // Redux-Store aktualisieren
         dispatch(setUserInfo(response.userInfo));
-
+        dispatch(setUserId(response.userInfo.userId))
         NotificationService.success(response.message || "Login erfolgreich!");
-        localStorage.setItem("userInfo", JSON.stringify(response.userInfo));
-        // Benutzer-Panel anzeigen (ohne Verzögerung)
         router.push("/"); // Zur Startseite oder Benutzerseite navigieren
       } catch (error: any) {
         NotificationService.error(error.message || "Login fehlgeschlagen.");

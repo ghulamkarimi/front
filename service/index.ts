@@ -36,8 +36,20 @@ export const userLogout = () => {
 
 export const refreshToken = () => {
   const url = `${SERVER_URL}/user/refreshToken`;
-  return axiosJWT.get(url);
+  return axios.get(url);
 };
+
+export const checkAccessToken = () => {
+  const url = `${SERVER_URL}/user/check-token`;
+  const token = localStorage.getItem("accessToken");  // Token aus Local Storage holen
+
+  return axios.get(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,  // Token im Header mitsenden
+    }
+  });
+};
+
 
 export const profilePhotoUpload = (data: File) => {
   const url = `${SERVER_URL}/user/profile/photo`;
@@ -54,6 +66,9 @@ export const profilePhotoUpload = (data: File) => {
     },
   });
 };
+
+
+
 
 export const changePasswordWithEmail = (passwordData: IChangePassword) => {
   const url = `${SERVER_URL}/user/changePasswordWithEmail`;

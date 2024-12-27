@@ -1,7 +1,6 @@
 import { FaCheckCircle, FaUserTie } from "react-icons/fa";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { GiCarDoor } from "react-icons/gi";
-import { SiTransmission } from "react-icons/si";
 import { TbManualGearboxFilled } from "react-icons/tb";
 import { MdOutlineSevereCold } from "react-icons/md";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
@@ -24,9 +23,9 @@ const CarCard = ({ availableCars, isSearchComplete, showPrice }: ICarCardProps) 
   const [loading, setLoading] = useState(false);
   const [detailsVisibility, setDetailsVisibility] = useState<{ [key: string]: boolean }>({});
   const rentCars = useSelector(getAllRentCars);
-  
+
   const dispatch = useDispatch();
- 
+
 
   const toggleDetails = (carId: string) => {
     setDetailsVisibility((prevState) => ({
@@ -63,15 +62,15 @@ const CarCard = ({ availableCars, isSearchComplete, showPrice }: ICarCardProps) 
 
                 <div className="flex flex-col gap-3">
                   <div className="flex gap-4 pt-4">
-                    <span className="cardInfo">
+                    <span className="cardInfo flex items-center gap-2">
                       <FaUserTie className="icon" />
                       {car.carPeople}
                     </span>
-                    <span className="cardInfo">
-                      <SiTransmission className="icon" />
+                    <span className="cardInfo flex items-center gap-2">
+                      <TbManualGearboxFilled className="icon" />
                       {car.carGear}
                     </span>
-                    <span className="cardInfo">
+                    <span className="cardInfo flex items-center gap-2">
                       <GiCarDoor className="icon" />
                       {car.carDoors}
                     </span>
@@ -119,7 +118,7 @@ const CarCard = ({ availableCars, isSearchComplete, showPrice }: ICarCardProps) 
                         : "Datum Wählen bitte"}
                     </span>
                     <span className="cardInfo">
-                      <TbManualGearboxFilled className="icon" />
+
                       {car.carPrice} $ / Tag
                     </span>
                   </p>
@@ -145,15 +144,15 @@ const CarCard = ({ availableCars, isSearchComplete, showPrice }: ICarCardProps) 
                   Vollständige Fahrzeugdaten (beziehen sich auf das oben gezeigte Fahrzeug)
                 </h2>
                 <div className="w-full flex flex-wrap gap-6">
-                  <span className="cardInfo">
+                <span className="flex items-center gap-2 cardInfo">
                     <FaUserTie className="icon" />
                     {car.carPeople}
                   </span>
-                  <span className="cardInfo">
-                    <SiTransmission className="icon" />
+                  <span className="flex items-center gap-2 cardInfo">
+                  <TbManualGearboxFilled className="icon" />
                     {car.carGear}
                   </span>
-                  <span className="cardInfo">
+                  <span className="flex items-center gap-2 cardInfo">
                     <GiCarDoor className="icon" />
                     {car.carDoors}
                   </span>
