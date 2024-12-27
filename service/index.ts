@@ -8,9 +8,9 @@ import {
 import axiosJWT from "./axiosJwt";
 import io from "socket.io-client";
 
-export const socket = io("http://localhost:7001"); // Passe die URL entsprechend an
+export const socket = io("https://car-db.aundoautoservice.de"); // Passe die URL entsprechend an
 
-export const SERVER_URL = "http://localhost:7001";
+export const SERVER_URL = "https://car-db.aundoautoservice.de";
 
 
 

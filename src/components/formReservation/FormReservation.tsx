@@ -42,27 +42,16 @@ const FormReservation = ({ rentalDays}: FormReservationProps) => {
   );
   const { gesamteSchutzInfo } = useSelector((state: RootState) => state.app);
 
-
-
 const user = useSelector((state:RootState)=>displayUserById(state,userId))
- 
-
 
   const [step, setStep] = useState(1);
   const router = useRouter();
-
   const pickupDate = localStorage.getItem("pickupDate") || "";
   const returnDate = localStorage.getItem("returnDate") || "";
   const pickupTime = localStorage.getItem("pickupTime") || "";
   const returnTime = localStorage.getItem("returnTime") || "";
-
-
-
-
-
   const [loading, setLoading] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
-
   const gesamtPrice = localStorage.getItem("gesamtPrice");
 
   const formSchema = Yup.object({
