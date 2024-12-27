@@ -5,7 +5,7 @@ import {
     EntityState,
     PayloadAction,
 } from "@reduxjs/toolkit";
-import { userLogin, userRegister, getAllUsers, userLogout, profilePhotoUpload,requestPasswordReset, confirmEmailVerificationCode, checkAccessToken } from '../../service/index';
+import { userLogin, userRegister, getAllUsers, userLogout, profilePhotoUpload, requestPasswordReset, confirmEmailVerificationCode, checkAccessToken } from '../../service/index';
 import { RootState } from "../store/store";
 import { IUser, IUserInfo, TUser } from "../../interface";
 import { IChangePassword } from "../../interface";
@@ -21,7 +21,7 @@ interface IUserState {
     file: File | null;
     userInfo: IUserInfo;
     message?: string;
-   
+
 }
 
 const userAdapter = createEntityAdapter<IUser, string>({
@@ -37,23 +37,26 @@ export const userRegisterApi = createAsyncThunk(
     async (initialUser: TUser, { rejectWithValue }) => {
         try {
             const response = await userRegister(initialUser);
-            return response.data;
+            if (response.status === 201) {
+                return response.data;
+            }
         } catch (error: any) {
-            return rejectWithValue(error?.response?.data?.message || "Error in user registration");
+            const errorMessage = error?.response?.data?.message || "Error in user registration";
+            return rejectWithValue(errorMessage);
         }
     }
 );
 
 export const userLoginApi = createAsyncThunk(
     "users/userLoginApi",
-    async (initialUser: TUser, ) => {
+    async (initialUser: TUser,) => {
         try {
             const response = await userLogin(initialUser)
-            console.log("users/userLoginApi",response.data)
+            console.log("users/userLoginApi", response.data)
             localStorage.setItem("userId", response.data.userInfo.userId);
             localStorage.setItem("exp", response.data.userInfo.exp.toString());
-         
-       
+
+
 
             return response.data;
         } catch (error: any) {
@@ -106,24 +109,24 @@ export const changePasswordApi = createAsyncThunk(
         }
     }
 );
- 
+
 
 
 export const checkAccessTokenApi = createAsyncThunk(
     "/user/checkRefreshTokenApi",
     async () => {
-      try {
-        const response = await checkAccessToken();
-        localStorage.setItem("userId", response.data.user._id); // Benutzer-ID speichern
-        return response.data;
-      } catch (error: any) {
-        // if (error.response.status === 401 || error.response.status === 404) {
-        //   localStorage.clear(); // Lokalen Speicher löschen bei ungültigem Token
-        // }
-        throw error.response.data.message;
-      }
+        try {
+            const response = await checkAccessToken();
+            localStorage.setItem("userId", response.data.user._id); // Benutzer-ID speichern
+            return response.data;
+        } catch (error: any) {
+            // if (error.response.status === 401 || error.response.status === 404) {
+            //   localStorage.clear(); // Lokalen Speicher löschen bei ungültigem Token
+            // }
+            throw error.response.data.message;
+        }
     }
-  );
+);
 
 export const requestPasswordResetApi = createAsyncThunk(
     "user/requestPasswordResetApi",
@@ -141,19 +144,19 @@ export const requestPasswordResetApi = createAsyncThunk(
 export const confirmEmailVerificationCodeApi = createAsyncThunk(
     "user/confirmEmailVerificationCode",
     async (
-      { email, verificationCode }: { email: string; verificationCode: string },
-      { rejectWithValue }
+        { email, verificationCode }: { email: string; verificationCode: string },
+        { rejectWithValue }
     ) => {
-      try {
-        const response = await confirmEmailVerificationCode(email, verificationCode);
-        return response.data;
-      } catch (error: any) {
-        return rejectWithValue(
-          error.response?.data?.message || "Fehler beim Bestätigen des Verifizierungscodes."
-        );
-      }
+        try {
+            const response = await confirmEmailVerificationCode(email, verificationCode);
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(
+                error.response?.data?.message || "Fehler beim Bestätigen des Verifizierungscodes."
+            );
+        }
     }
-  );
+);
 
 const initialState: IUserState & EntityState<IUser, string> =
     userAdapter.getInitialState({
@@ -203,7 +206,7 @@ const userSlice = createSlice({
                 changes: updatedUser,
             });
         },
-          
+
     },
     extraReducers: (builder) => {
         builder
@@ -220,7 +223,7 @@ const userSlice = createSlice({
             })
             .addCase(userLogoutApi.fulfilled, () => {
                 return initialState;
-              })
+            })
             .addCase(fetchUsers.fulfilled, (state, action) => {
                 userAdapter.setAll(state, action.payload);
                 state.status = "succeeded";
@@ -229,7 +232,7 @@ const userSlice = createSlice({
                 state.status = "failed";
                 state.error = action.error.message || "Failed to fetch users";
             })
-        
+
             .addCase(profilePhotoUploadApi.fulfilled, (state, action) => {
                 if (action.payload?.userInfo) {
                     userAdapter.setOne(state, action.payload.userInfo);
@@ -244,33 +247,33 @@ const userSlice = createSlice({
                 state.status = "succeeded";
                 state.error = null;
             })
-         
+
             .addCase(requestPasswordResetApi.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.message = action.payload.message; 
-              })
-              .addCase(checkAccessTokenApi.fulfilled, (state, action) => {
+                state.message = action.payload.message;
+            })
+            .addCase(checkAccessTokenApi.fulfilled, (state, action) => {
                 userAdapter.setOne(state, action.payload.userInfo);
 
-              })
-              .addCase(checkAccessTokenApi.rejected, (state, action) => {
+            })
+            .addCase(checkAccessTokenApi.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.error.message || "Token check failed";
             })
-              .addCase(confirmEmailVerificationCodeApi.fulfilled, (state, action) => {
+            .addCase(confirmEmailVerificationCodeApi.fulfilled, (state, action) => {
                 state.status = "succeeded";
                 state.message = action.payload.message;
                 if (action.payload.user) {
-                  state.userInfo = {
-                    ...state.userInfo,
-                    email: action.payload.user.email,
-                    isAccountVerified: action.payload.user.isAccountVerified,
-                  };
+                    state.userInfo = {
+                        ...state.userInfo,
+                        email: action.payload.user.email,
+                        isAccountVerified: action.payload.user.isAccountVerified,
+                    };
                 }
-              });
+            });
     }
 });
-export const { userUpdated, clearUserInfos,setUserId } = userSlice.actions;
+export const { userUpdated, clearUserInfos, setUserId } = userSlice.actions;
 export const { selectAll: displayUsers, selectById: displayUserById } = userAdapter.getSelectors((state: RootState) => state.users);
 export const { setToken, setUserInfo } = userSlice.actions;
 

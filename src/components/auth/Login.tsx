@@ -40,17 +40,9 @@ const Login = () => {
       try {
         setIsLoading(true);
         const response = await dispatch(userLoginApi(values)).unwrap();
-       
-        
-        console.log("loginResponse:", response.userInfo);
-
-        // Redux-Store aktualisieren
         dispatch(setUserInfo(response.userInfo));
         dispatch(setUserId(response.userInfo.userId))
-      
-
         NotificationService.success(response.message || "Login erfolgreich!");
-      
         router.push("/"); // Zur Startseite oder Benutzerseite navigieren
       } catch (error: any) {
         NotificationService.error(error.message || "Login fehlgeschlagen.");
