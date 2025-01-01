@@ -58,8 +58,7 @@ const ImageCropper = ({
           }
         },
         
-        "image/jpeg",
-        1 
+        'image/jpeg' 
       );
     } else {
       setError("Kein gültiger Canvas für das Bild gefunden.");

@@ -75,43 +75,42 @@ const UserCalendar: React.FC = () => {
 
     const renderTimeButtons = () => {
         const now = new Date();
-        const isToday = selectedDate
-            ? now.toDateString() === selectedDate.toDateString()
-            : false;
-
+        const isToday = selectedDate ? now.toDateString() === selectedDate.toDateString() : false;
+        const isSunday = selectedDate ? selectedDate.getDay() === 0 : false; // Prüfen, ob der ausgewählte Tag ein Sonntag ist
+      
         return availableTimes.map((time) => {
-            const [hours, minutes] = time.split(":").map(Number);
-
-            const timeDate = new Date(selectedDate || now);
-            timeDate.setHours(hours, minutes, 0, 0);
-
-            const isBookedOrBlocked = items.some((appointment: IAppointment) => {
-                const appointmentDate = appointment.date ? formatDate(new Date(appointment.date)) : "";
-                const isSameDate = appointmentDate === formattedSelectedDate;
-                const isSameTime = (appointment.time || "").padStart(5, "0") === time;
-                return isSameDate && isSameTime && appointment.isBookedOrBlocked;
-            });
-
-            const isPastTime = isToday && timeDate < now;
-
-            return (
-                <button
-                    key={time}
-                    className={`px-4 py-2 m-2 rounded-lg text-white ${isBookedOrBlocked || isPastTime
-                        ? "bg-red-500 cursor-not-allowed"
-                        : "bg-green-500 hover:bg-green-600"
-                        }`}
-                    disabled={isBookedOrBlocked || isPastTime}
-                    onClick={() => {
-                        setSelectedTime(time || "");
-                    }}
-                >
-                    {time}
-                </button>
-            );
+          const [hours, minutes] = time.split(":").map(Number);
+      
+          const timeDate = new Date(selectedDate || now);
+          timeDate.setHours(hours, minutes, 0, 0);
+      
+          const isBookedOrBlocked = items.some((appointment: IAppointment) => {
+            const appointmentDate = appointment.date ? formatDate(new Date(appointment.date)) : "";
+            const isSameDate = appointmentDate === formattedSelectedDate;
+            const isSameTime = (appointment.time || "").padStart(5, "0") === time;
+            return isSameDate && isSameTime && appointment.isBookedOrBlocked;
+          });
+      
+          const isPastTime = isToday && timeDate < now;
+      
+          return (
+            <button
+              key={time}
+              className={`px-4 py-2 m-2 rounded-lg text-white ${isBookedOrBlocked || isPastTime || isSunday
+                ? "bg-red-500 cursor-not-allowed" // Wenn es Sonntag oder gebucht/blockiert ist
+                : "bg-green-500 hover:bg-green-600"
+              }`}
+              disabled={isBookedOrBlocked || isPastTime || isSunday} // Verhindert Auswahl an Sonntagen
+              onClick={() => {
+                setSelectedTime(time || "");
+              }}
+            >
+              {time}
+            </button>
+          );
         });
-    };
-
+      };
+      
     const initialValues: Omit<IAppointment, "_id" | "isBookedOrBlocked"> = {
         service: "",
         date: formattedSelectedDate || "",
