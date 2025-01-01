@@ -1,7 +1,7 @@
 "use client";
 
-import { FaPhoneFlip } from "react-icons/fa6";
-import { FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
+import { FaPhoneFlip, FaTiktok } from "react-icons/fa6";
+import { FaFacebookF, FaInstagram } from "react-icons/fa";
 import { IoLogoYoutube } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -92,7 +92,8 @@ const Footer = () => {
                             <FaFacebookF className="hover:text-blue-500 cursor-pointer" />
                             <FaInstagram className="hover:text-blue-500 cursor-pointer" />
                             <IoLogoYoutube className="hover:text-blue-500 cursor-pointer" />
-                            <FaTwitter className="hover:text-blue-500 cursor-pointer" />
+                            <FaTiktok className="hover:text-blue-500 cursor-pointer" />
+                            
                         </div>
                     </div>
                 </div>

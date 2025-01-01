@@ -45,7 +45,7 @@ export default function Contact() {
 
                     <div className="mt-6">
                         <a
-                            className="w-full bg-orange-500 mt-3 text-white py-2 px-4 rounded-md font-semibold hover:bg-orange-600 transition-colors"
+                            className="w-full cursor-pointer bg-orange-500 mt-3 text-white py-2 px-4 rounded-md font-semibold hover:bg-orange-600 transition-colors"
                         >
                             Nachricht senden
                         </a>
