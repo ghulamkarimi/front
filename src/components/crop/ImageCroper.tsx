@@ -49,9 +49,7 @@ const ImageCropper = ({
       previewCanvasRef.current.toBlob(
         (blob) => {
           if (blob) {
-            const fileType = blob.type || 'image/jpeg';
-            const fileExtension = fileType === 'image/png' ? 'png' : 'jpg';
-            const file = new File([blob], `cropped-image.${fileExtension}`, { type: fileType });
+            const file = new File([blob], "cropped-image.jpg", { type: blob.type });
             console.log("Zugeschnittene Datei:", file); // Debugging
             onSave(file); // Übergibt das File-Objekt an die Parent-Komponente
           } else {
@@ -64,7 +62,7 @@ const ImageCropper = ({
     } else {
       setError("Kein gültiger Canvas für das Bild gefunden.");
     }
-  };
+  }; 
 
   return (
     <div>
