@@ -49,20 +49,29 @@ const ImageCropper = ({
       previewCanvasRef.current.toBlob(
         (blob) => {
           if (blob) {
-            const file = new File([blob], "cropped-image.jpg", { type: blob.type });
+            // Dynamische Bestimmung des MIME-Typs, der durch den Blob bereitgestellt wird
+            const fileType = blob.type || 'image/jpeg'; // Standard auf JPEG, falls kein Typ erkannt wird
+            
+            // Bestimmen der richtigen Dateierweiterung basierend auf dem MIME-Typ
+            const fileExtension = fileType === 'image/png' ? 'png' : fileType === 'image/webp' ? 'webp' : 'jpg';
+            
+            // Erstelle das File-Objekt mit dem richtigen MIME-Typ und der richtigen Erweiterung
+            const file = new File([blob], `cropped-image.${fileExtension}`, { type: fileType });
             console.log("Zugeschnittene Datei:", file); // Debugging
             onSave(file); // Übergibt das File-Objekt an die Parent-Komponente
           } else {
             setError("Fehler beim Speichern des Bildes.");
           }
         },
-        "image/jpeg",
-        1 // Maximale Qualität
+       
+        "image/jpeg", 
+        1 
       );
     } else {
       setError("Kein gültiger Canvas für das Bild gefunden.");
     }
-  }; 
+  };
+  
 
   return (
     <div>
