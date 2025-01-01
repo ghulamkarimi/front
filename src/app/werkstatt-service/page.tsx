@@ -138,11 +138,14 @@ const UserCalendar: React.FC = () => {
             .matches(/^\d{10,15}$/, "Telefonnummer muss zwischen 10 und 15 Ziffern haben")
             .required("Telefonnummer ist erforderlich"),
         licensePlate: Yup.string().required("Kennzeichen ist erforderlich"),
-        hsn: Yup.string().when("service", {
-            is: (service: string) => ["Ölservice", "Inspektion"].includes(service),
+        hsn: Yup.string()
+        .min(3, "HSN muss mindestens 3 Zeichen lang sein")
+        .when("service", {
+            is: (service: string) => ["Ölservice", "Inspektion"]
+            .includes(service),
             then: (schema) => schema.required("HSN ist erforderlich für Ölservice oder Inspektion"),
         }),
-        tsn: Yup.string().when("service", {
+        tsn: Yup.string().min(3, "TSN muss mindestens 3 Zeichen lang sein").when("service", {
             is: (service: string) => ["Ölservice", "Inspektion"].includes(service),
             then: (schema) => schema.required("TSN ist erforderlich für Ölservice oder Inspektion"),
         }),
