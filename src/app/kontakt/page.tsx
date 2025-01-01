@@ -44,7 +44,7 @@ export default function Contact() {
                     </div>
 
                     <a
-                        className="w-full bg-orange-500 text-white py-2 px-4 rounded-md font-semibold hover:bg-orange-600 transition-colors"
+                        className="w-full bg-orange-500 mt-3 text-white py-2 px-4 rounded-md font-semibold hover:bg-orange-600 transition-colors"
                         href="autoservice.aundo@gmail.com">
                         Nachricht senden
                     </a>
