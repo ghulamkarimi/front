@@ -10,17 +10,17 @@ const nextConfig: NextConfig = {
         pathname: "/images/carBuyImages/**",
       },
       {
-        protocol: "http",
+        protocol: "https",
         hostname: "car-db.aundoautoservice.de", 
         pathname: "/images/offerImages/**",
       },
       {
-        protocol: "http",
+        protocol: "https",
         hostname: "car-db.aundoautoservice.de", 
         pathname: "/images/userImages/**",
       },
       {
-        protocol: "http",
+        protocol: "https",
         hostname: "car-db.aundoautoservice.de", 
         pathname: "/images/carRentImages/**",
       },
