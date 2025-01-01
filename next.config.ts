@@ -5,27 +5,23 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: "http",
-        hostname: "localhost",
-        port: "7001",
+        protocol: "https",
+        hostname: "car-db.aundoautoservice.de", 
         pathname: "/images/carBuyImages/**",
       },
       {
         protocol: "http",
-        hostname: "localhost",
-        port: "7001",
+        hostname: "car-db.aundoautoservice.de", 
         pathname: "/images/offerImages/**",
       },
       {
         protocol: "http",
-        hostname: "localhost",
-        port: "7001",
+        hostname: "car-db.aundoautoservice.de", 
         pathname: "/images/userImages/**",
       },
       {
         protocol: "http",
-        hostname: "localhost",
-        port: "7001",
+        hostname: "car-db.aundoautoservice.de", 
         pathname: "/images/carRentImages/**",
       },
       {
