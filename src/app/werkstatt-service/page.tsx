@@ -178,15 +178,15 @@ const UserCalendar: React.FC = () => {
             expanded: false,
         },
         {
-            title: "Reifenmontage",
+            title: "Radwechsel",
             description: "Wir bieten einen schnellen und professionellen Reifenwechsel, um Ihre Sicherheit auf der Straße zu gewährleisten. Egal, ob Sie Sommer- oder Winterreifen benötigen, wir prüfen Ihre Reifen auf Verschleiß und sorgen für die korrekte Montage. So fahren Sie immer sicher und effizient.",
             image: "/reifen.jpg",
             expanded: false,
         },
         {
-            title: "Radwechsel",
+            title: "Reifenmontage",
             description: "Ein professioneller und sicherer Wechsel Ihrer Räder, um optimalen Grip und Sicherheit auf der Straße zu gewährleisten. Unser Team sorgt für eine gründliche Prüfung und korrekte Montage, um Ihre Fahrt angenehm und sicher zu machen. Ideal vor und nach der Saison oder bei Wechsel auf Winter- oder Sommerreifen.",
-            image: "/reifenCarousel.png",
+            image: "/mont.jpg",
             expanded: false,
         },
         {
