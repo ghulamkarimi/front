@@ -42,20 +42,22 @@ export default function Contact() {
                             required
                         ></textarea>
                     </div>
-                    <button
+
+                    <a href="mailto:example@example.com">
                         className="w-full bg-orange-500 text-white py-2 px-4 rounded-md font-semibold hover:bg-orange-600 transition-colors"
-                    >
+
                         Nachricht senden
-                    </button>
+                    </a>
+
                 </form>
 
                 <div className="text-center mt-8 text-gray-500">
                     <p className="pb-2">Oder rufen Sie uns direkt an:</p>
-                    {/* <p className="font-semibold text-gray-700">
+                    <p className="font-semibold text-gray-700">
                         <a href="tel:+493012345678" className="text-gray-700 hover:underline">
-                            +49 30 12345678
+                            06701 4499932
                         </a>
-                    </p> */}
+                    </p>
                     <p className="font-semibold text-gray-700 mt-1">
                         <a href="tel:+4915158124394" className="text-gray-700 hover:underline">
                             +49 151 58124394
