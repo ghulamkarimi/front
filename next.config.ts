@@ -29,6 +29,7 @@ const nextConfig: NextConfig = {
         hostname: "www.pngplay.com",
         pathname: "/**",
       },
+      
     ],
   },
 };
