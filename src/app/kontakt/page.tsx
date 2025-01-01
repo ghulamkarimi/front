@@ -45,7 +45,7 @@ export default function Contact() {
 
                     <a
                         className="w-full bg-orange-500 text-white py-2 px-4 rounded-md font-semibold hover:bg-orange-600 transition-colors"
-                        href="mailto:example@example.com">
+                        href="autoservice.aundo@gmail.com">
                         Nachricht senden
                     </a>
 
