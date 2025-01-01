@@ -43,13 +43,13 @@ export default function Contact() {
                         ></textarea>
                     </div>
 
-                 <div className="mt-6">
-                 <a
-                        className="w-full bg-orange-500 mt-3 text-white py-2 px-4 rounded-md font-semibold hover:bg-orange-600 transition-colors"
-                        href="mailto:autoservice.aundo@gmail.com">
-                        Nachricht senden
-                    </a>
-                 </div>
+                    <div className="mt-6">
+                        <a
+                            className="w-full bg-orange-500 mt-3 text-white py-2 px-4 rounded-md font-semibold hover:bg-orange-600 transition-colors"
+                        >
+                            Nachricht senden
+                        </a>
+                    </div>
 
                 </form>
 
