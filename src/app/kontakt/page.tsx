@@ -45,10 +45,12 @@ export default function Contact() {
 
                     <div className="mt-6">
                         <a
+                            href="mailto:autoservice.aundo@gmail.com?subject=Kontaktanfrage&body=Name: [NAME]%0D%0AEmail: [EMAIL]%0D%0ANachricht: [MESSAGE]"
                             className="w-full cursor-pointer bg-orange-500 mt-3 text-white py-2 px-4 rounded-md font-semibold hover:bg-orange-600 transition-colors"
                         >
                             Nachricht senden
                         </a>
+
                     </div>
 
                 </form>
