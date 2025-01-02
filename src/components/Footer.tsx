@@ -90,9 +90,16 @@ const Footer = () => {
                         {/* Social Media Icons */}
                         <div className="flex gap-8 text-2xl mt-6">
                             <FaFacebookF className="hover:text-blue-500 cursor-pointer" />
-                            <FaInstagram className="hover:text-blue-500 cursor-pointer" />
+                            <a href="https://www.instagram.com/aundoauto?igsh=MWxrM2Q1NWM2NXJ1MA== "
+                                target="_blank" rel="noopener noreferrer">
+                                <FaInstagram className="hover:text-blue-500 cursor-pointer" />
+                            </a>
+
                             <IoLogoYoutube className="hover:text-blue-500 cursor-pointer" />
-                            <a href="https://www.tiktok.com/@hazaraausdaykundi?_t=ZN-8siCi87IPSA&_r=1" target="_blank" rel="noopener noreferrer">
+
+                            
+                            <a href="https://www.tiktok.com/@hazaraausdaykundi?_t=ZN-8siCi87IPSA&_r=1"
+                                target="_blank" rel="noopener noreferrer">
                                 <FaTiktok className="hover:text-blue-500 cursor-pointer" />
                             </a>
 
