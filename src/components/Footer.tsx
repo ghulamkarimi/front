@@ -92,8 +92,10 @@ const Footer = () => {
                             <FaFacebookF className="hover:text-blue-500 cursor-pointer" />
                             <FaInstagram className="hover:text-blue-500 cursor-pointer" />
                             <IoLogoYoutube className="hover:text-blue-500 cursor-pointer" />
-                            <FaTiktok className="hover:text-blue-500 cursor-pointer" />
-                            
+                            <a href="https://www.tiktok.com/@hazaraausdaykundi?_t=ZN-8siCi87IPSA&_r=1" target="_blank" rel="noopener noreferrer">
+                                <FaTiktok className="hover:text-blue-500 cursor-pointer" />
+                            </a>
+
                         </div>
                     </div>
                 </div>
