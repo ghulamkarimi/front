@@ -46,6 +46,9 @@ const Footer = () => {
                             <a href="tel:+4915158124394" className="my-2 text-gray-800 cursor-pointer">
                                 +49 151 58124394
                             </a>
+                            <a href="tel:06701 4499932" className="my-2 text-gray-800 cursor-pointer">
+                                06701 4499932
+                            </a>
                             <a href="mailto:autoservice.aundo@gmail.com" className="mb-2 text-gray-800 cursor-pointer ">
                                 autoservice.aundo@gmail.com
                             </a>
@@ -97,7 +100,7 @@ const Footer = () => {
 
                             <IoLogoYoutube className="hover:text-blue-500 cursor-pointer" />
 
-                            
+
                             <a href="https://www.tiktok.com/@hazaraausdaykundi?_t=ZN-8siCi87IPSA&_r=1"
                                 target="_blank" rel="noopener noreferrer">
                                 <FaTiktok className="hover:text-blue-500 cursor-pointer" />
