@@ -14,59 +14,28 @@ export default function Contact() {
                     Zögern Sie nicht, uns zu kontaktieren – unser Team freut sich, Ihnen weiterzuhelfen.
                 </p>
 
-                <form>
-                    <div>
-                        <label className="block text-gray-700">Name</label>
-                        <input
-                            type="text"
-                            name="name"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700">E-Mail-Adresse</label>
-                        <input
-                            type="email"
-                            name="email"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700">Nachricht</label>
-                        <textarea
-                            name="message"
-                            rows={4}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md"
-                            required
-                        ></textarea>
-                    </div>
-
-                    <div className="mt-6">
-                        <a
-                            href="mailto:autoservice.aundo@gmail.com?subject=Kontaktanfrage&body=Name: [NAME]%0D%0AEmail: [EMAIL]%0D%0ANachricht: [MESSAGE]"
-                            className="w-full cursor-pointer bg-orange-500 mt-3 text-white py-2 px-4 rounded-md font-semibold hover:bg-orange-600 transition-colors"
-                        >
-                            Nachricht senden
-                        </a>
-
-                    </div>
-
-                </form>
-
                 <div className="text-center mt-8 text-gray-500">
-                    <p className="pb-2">Oder rufen Sie uns direkt an:</p>
+                    <p className="pb-2">Senden Sie uns eine E-Mail:</p>
                     <p className="font-semibold text-gray-700">
-                        <a href="tel:+493012345678" className="text-gray-700 hover:underline">
-                            06701 4499932
+                        <a href="mailto:autoservice.aundo@gmail.com" className="text-gray-700 hover:underline">
+                            autoservice.aundo@gmail.com
                         </a>
                     </p>
-                    <p className="font-semibold text-gray-700 mt-1">
-                        <a href="tel:+4915158124394" className="text-gray-700 hover:underline">
-                            +49 151 58124394
-                        </a>
-                    </p>
+
+
+                    <div className="text-center mt-8 text-gray-500">
+                        <p className="pb-2">Oder rufen Sie uns direkt an:</p>
+                        <p className="font-semibold text-gray-700">
+                            <a href="tel:+493012345678" className="text-gray-700 hover:underline">
+                                06701 4499932
+                            </a>
+                        </p>
+                        <p className="font-semibold text-gray-700 mt-1">
+                            <a href="tel:+4915158124394" className="text-gray-700 hover:underline">
+                                +49 151 58124394
+                            </a>
+                        </p>
+                    </div>
                 </div>
 
                 <div className="text-center mt-6">

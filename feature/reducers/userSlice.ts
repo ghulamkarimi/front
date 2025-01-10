@@ -29,9 +29,6 @@ const userAdapter = createEntityAdapter<IUser, string>({
 });
 
 
-
-
-
 export const userRegisterApi = createAsyncThunk(
     "users/userRegisterApi",
     async (initialUser: TUser, { rejectWithValue }) => {
@@ -55,9 +52,6 @@ export const userLoginApi = createAsyncThunk(
             console.log("users/userLoginApi", response.data)
             localStorage.setItem("userId", response.data.userInfo.userId);
             localStorage.setItem("exp", response.data.userInfo.exp.toString());
-
-
-
             return response.data;
         } catch (error: any) {
             return (error?.response?.data?.message || "Error in user login");
