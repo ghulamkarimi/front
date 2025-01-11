@@ -181,7 +181,9 @@ export const createReservation = (reservation: TReservation) => {
   formData.append("postalCode", reservation.postalCode || "");
 
   return axios.post(url, formData, {
-    withCredentials: true
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
   });
 };
 
