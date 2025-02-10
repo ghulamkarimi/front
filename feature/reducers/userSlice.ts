@@ -49,7 +49,6 @@ export const userLoginApi = createAsyncThunk(
     async (initialUser: TUser,) => {
         try {
             const response = await userLogin(initialUser)
-            console.log("users/userLoginApi", response.data)
             localStorage.setItem("userId", response.data.userInfo.userId);
             localStorage.setItem("exp", response.data.userInfo.exp.toString());
             return response.data;
@@ -85,7 +84,6 @@ export const profilePhotoUploadApi = createAsyncThunk(
     async (data: File, { rejectWithValue }) => {
         try {
             const response = await profilePhotoUpload(data);
-            console.log("Profile Photo UserSlice:", response.data);
             return response.data;
         } catch (error: any) {
             return rejectWithValue(error?.response?.data?.message || "Fehler beim Hochladen des Profilbilds");

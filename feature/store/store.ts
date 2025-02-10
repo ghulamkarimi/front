@@ -32,10 +32,8 @@ axiosJWT.interceptors.request.use(
   async (config) => {
     const currentDate = new Date();
     const exp = localStorage.getItem("exp");
-    console.log("exp",exp)
     if (Number(exp) * 1000 > currentDate.getDate()) {
       const response = await refreshToken();
-      console.log("responseStore",response)
       config.headers.Authorization = `Bearer ${response.data.refreshToken}`;
       store.dispatch(setToken(response.data.refreshToken));
       // store.dispatch(setUserInfoRefresh(response.data.userInfo_refresh));
