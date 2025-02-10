@@ -325,7 +325,7 @@ const UserCalendar: React.FC = () => {
                                                             <option value="Ölservice">Ölservice</option>
                                                             <option value="Inspektion">Inspektion</option>
                                                             <option value="Reifenwechsel">Reifenwechsel</option>
-                                                            <option value="Rad wechsel">Rad wechsel</option>
+                                                            <option value="Radwechsel">Rad wechsel</option>
                                                             <option value="sonstiges">sonstiges</option>
                                                         </Field>
                                                         <ErrorMessage name="service" component="div" className="text-red-500 text-sm" />

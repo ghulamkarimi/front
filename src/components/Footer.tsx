@@ -46,8 +46,8 @@ const Footer = () => {
                             <a href="tel:+4915158124394" className="my-2 text-gray-800 cursor-pointer">
                                 +49 151 58124394
                             </a>
-                            <a href="tel:06701 4499932" className="my-2 text-gray-800 cursor-pointer">
-                                06701 4499932
+                            <a href="tel:+49 6701 4499835" className="my-2 text-gray-800 cursor-pointer">
+                                +49 6701 4499835
                             </a>
                             <a href="mailto:autoservice.aundo@gmail.com" className="mb-2 text-gray-800 cursor-pointer ">
                                 autoservice.aundo@gmail.com

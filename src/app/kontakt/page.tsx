@@ -26,8 +26,8 @@ export default function Contact() {
                     <div className="text-center mt-8 text-gray-500">
                         <p className="pb-2">Oder rufen Sie uns direkt an:</p>
                         <p className="font-semibold text-gray-700">
-                            <a href="tel:+493012345678" className="text-gray-700 hover:underline">
-                                06701 4499932
+                            <a href="tel:+49 6701 4499835" className="text-gray-700 hover:underline">
+                            +49 6701 4499835
                             </a>
                         </p>
                         <p className="font-semibold text-gray-700 mt-1">

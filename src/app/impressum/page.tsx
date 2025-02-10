@@ -12,7 +12,7 @@ const Impressum = () => {
           <p>Badenheimer Str. 6</p>
           <p>55576 Sprendlingen</p>
           <p>Telefon: +49 151 58124394</p>
-          <p>Telefon:  06701 4499932</p>
+          <p>Telefon:  +49 6701 4499835</p>
           <p>E-Mail: autoservice.aundo@gmail.com</p>
         </div>
       </section>
