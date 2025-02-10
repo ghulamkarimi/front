@@ -75,7 +75,8 @@ const Footer = () => {
                     <div>
                         <p className="text-2xl">Schreiben Sie uns</p>
                         <div className="py-4">
-                            <p className="text-gray-800">Haben Sie Fragen? Kontaktieren Sie uns telefonisch oder per E-Mail.</p>
+                            <p className="text-gray-800">Haben Sie Fragen?</p>
+                            <p> Kontaktieren Sie uns telefonisch oder per E-Mail.</p>
                             <p className="text-gray-800">Wir stehen Ihnen gerne zur Verfügung!</p>
                         </div>
 
@@ -83,6 +84,9 @@ const Footer = () => {
 
                         {/* Social Media Icons */}
                         <div className="flex gap-8 text-2xl mt-6">
+                            <p className="text-gray-800">
+                                Folgen Sie uns auf Social Media
+                            </p>
                             <FaFacebookF className="hover:text-blue-500 cursor-pointer" />
                             <a href="https://www.instagram.com/aundoauto?igsh=MWxrM2Q1NWM2NXJ1MA== "
                                 target="_blank" rel="noopener noreferrer">
