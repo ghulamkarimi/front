@@ -87,7 +87,7 @@ const Footer = () => {
                             <p className="text-gray-800">
                                 Folgen Sie uns auf Social Media
                             </p>
-                            <div className="flex gap-8 text-2xl">
+                            <div className="flex gap-8 text-2xl mt-2">
 
                                 <FaFacebookF className="hover:text-blue-500 cursor-pointer" />
                                 <a href="https://www.instagram.com/aundoauto?igsh=MWxrM2Q1NWM2NXJ1MA== "
