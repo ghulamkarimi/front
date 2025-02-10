@@ -73,22 +73,13 @@ const Footer = () => {
                 {/* Newsletter-Anmeldung */}
                 <div>
                     <div>
-                        <p className="text-2xl">Newsletter</p>
+                        <p className="text-2xl">Schreiben Sie uns</p>
                         <div className="py-4">
-                            <p className="text-gray-800">Abonnieren Sie unseren Newsletter</p>
-                            <p className="text-gray-800">Erhalten Sie Infos und Ressourcen kostenlos!</p>
+                            <p className="text-gray-800">Haben Sie Fragen? Kontaktieren Sie uns telefonisch oder per E-Mail.</p>
+                            <p className="text-gray-800">Wir stehen Ihnen gerne zur Verfügung!</p>
                         </div>
 
-                        <div className="flex justify-between rounded-full w-full py-3 px-4 bg-white my-2">
-                            <input
-                                placeholder="Ihre E-Mail eingeben"
-                                className="rounded-full outline-none w-full md:w-[300px]"
-                                type="email"
-                            />
-                            <button className="bg-blue-500 text-white py-1 px-3 rounded-full">
-                                Senden
-                            </button>
-                        </div>
+                        
 
                         {/* Social Media Icons */}
                         <div className="flex gap-8 text-2xl mt-6">
