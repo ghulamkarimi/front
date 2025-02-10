@@ -80,27 +80,30 @@ const Footer = () => {
                             <p className="text-gray-800">Wir stehen Ihnen gerne zur Verfügung!</p>
                         </div>
 
-                        
+
 
                         {/* Social Media Icons */}
-                        <div className="flex gap-8 text-2xl mt-6">
+                        <div className="flex flex-col mt-6">
                             <p className="text-gray-800">
                                 Folgen Sie uns auf Social Media
                             </p>
-                            <FaFacebookF className="hover:text-blue-500 cursor-pointer" />
-                            <a href="https://www.instagram.com/aundoauto?igsh=MWxrM2Q1NWM2NXJ1MA== "
-                                target="_blank" rel="noopener noreferrer">
-                                <FaInstagram className="hover:text-blue-500 cursor-pointer" />
-                            </a>
+                            <div className="flex gap-8 text-2xl">
 
-                            <IoLogoYoutube className="hover:text-blue-500 cursor-pointer" />
+                                <FaFacebookF className="hover:text-blue-500 cursor-pointer" />
+                                <a href="https://www.instagram.com/aundoauto?igsh=MWxrM2Q1NWM2NXJ1MA== "
+                                    target="_blank" rel="noopener noreferrer">
+                                    <FaInstagram className="hover:text-blue-500 cursor-pointer" />
+                                </a>
+
+                                <IoLogoYoutube className="hover:text-blue-500 cursor-pointer" />
 
 
-                            <a href="https://www.tiktok.com/@hazaraausdaykundi?_t=ZN-8siCi87IPSA&_r=1"
-                                target="_blank" rel="noopener noreferrer">
-                                <FaTiktok className="hover:text-blue-500 cursor-pointer" />
-                            </a>
+                                <a href="https://www.tiktok.com/@hazaraausdaykundi?_t=ZN-8siCi87IPSA&_r=1"
+                                    target="_blank" rel="noopener noreferrer">
+                                    <FaTiktok className="hover:text-blue-500 cursor-pointer" />
+                                </a>
 
+                            </div>
                         </div>
                     </div>
                 </div>
