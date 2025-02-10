@@ -9,14 +9,10 @@ interface LayoutProps {
 }
 export default function SpecificPageLayout({ children }: LayoutProps) {
   return (
-    <ReduxProvider >
-      
+    <ReduxProvider > 
       <main className="">
-        
         {children}
-      
       </main>
-
     </ReduxProvider>
   );
 }
