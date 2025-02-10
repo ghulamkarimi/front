@@ -15,8 +15,8 @@ const Datenschutz = () => {
       <section className="mb-8">
         <h2 className="text-2xl font-semibold text-orange-500">2. Verantwortliche Stelle</h2>
         <div className="text-gray-700 mt-2 space-y-1">
-          <p>AutoService A&O</p>
-          <p>Badenheimer Str. 6</p>
+          <p>AutoService A&O{'(Omran Ahmadi)'}</p>
+          <p>Badenheimer Str. 4</p>
           <p>55576 Sprendlingen</p>
           <p>Telefon: +49 151 58124394</p>
           <p>Telefon:  +49 6701 4499835</p>
