@@ -140,13 +140,13 @@ const UserCalendar: React.FC = () => {
         hsn: Yup.string()
         .min(3, "HSN muss mindestens 3 Zeichen lang sein")
         .when("service", {
-            is: (service: string) => ["Ölservice", "Inspektion"]
+            is: (service: string) => ["Ölservice", "Aufbreitung"]
             .includes(service),
-            then: (schema) => schema.required("HSN ist erforderlich für Ölservice oder Inspektion"),
+            then: (schema) => schema.required("HSN ist erforderlich für Ölservice oder Aufbreitung"),
         }),
         tsn: Yup.string().min(3, "TSN muss mindestens 3 Zeichen lang sein").when("service", {
-            is: (service: string) => ["Ölservice", "Inspektion"].includes(service),
-            then: (schema) => schema.required("TSN ist erforderlich für Ölservice oder Inspektion"),
+            is: (service: string) => ["Ölservice", "Aufbreitung"].includes(service),
+            then: (schema) => schema.required("TSN ist erforderlich für Ölservice oder Aufbreitung"),
         }),
         comment: Yup.string(),
     });
@@ -165,9 +165,9 @@ const UserCalendar: React.FC = () => {
 
     const [services, setServices] = useState([
         {
-            title: "Inspektion",
-            description: "Eine gründliche Überprüfung aller sicherheitsrelevanten Komponenten Ihres Fahrzeugs, einschließlich Bremsen, Reifen, Lenkung und Beleuchtung. Unsere Inspektion sorgt dafür, dass Ihr Fahrzeug in bestem Zustand bleibt und die gesetzlichen Anforderungen erfüllt, damit Sie sorgenfrei unterwegs sind.",
-            image: "/inspektion.jpg",
+            title: "Aufbreitung",
+            description: "Eine gründliche Überprüfung aller sicherheitsrelevanten Komponenten Ihres Fahrzeugs, einschließlich Bremsen, Reifen, Lenkung und Beleuchtung. Unsere Aufbreitung sorgt dafür, dass Ihr Fahrzeug in bestem Zustand bleibt und die gesetzlichen Anforderungen erfüllt, damit Sie sorgenfrei unterwegs sind.",
+            image: "/Aufbreitung.jpg",
             expanded: false,
         },
         {
@@ -188,12 +188,7 @@ const UserCalendar: React.FC = () => {
             image: "/mont.jpg",
             expanded: false,
         },
-        {
-            title: "Sonstiges",
-            description: "Wir bieten maßgeschneiderte Werkstatt-Dienstleistungen für Ihre individuellen Bedürfnisse. Ob spezielle Reparaturen, Fahrzeugaufbereitungen oder andere Anforderungen – unser Team steht Ihnen mit Rat und Tat zur Seite, um Ihr Fahrzeug optimal zu betreuen.",
-            image: "/werk.jpg",
-            expanded: false,
-        },
+       
     ]);
 
     const handleServiceSelect = () => {
@@ -323,10 +318,10 @@ const UserCalendar: React.FC = () => {
                                                         >
                                                             <option value="">Wählen Sie einen Service</option>
                                                             <option value="Ölservice">Ölservice</option>
-                                                            <option value="Inspektion">Inspektion</option>
+                                                            <option value="Aufbreitung">Aufbreitung</option>
                                                             <option value="Reifenmontage">Reifenmontage</option>
                                                             <option value="Radwechsel">Radwechsel</option>
-                                                            <option value="sonstiges">sonstiges</option>
+                                                         
                                                         </Field>
                                                         <ErrorMessage name="service" component="div" className="text-red-500 text-sm" />
                                                     </div>
@@ -411,7 +406,7 @@ const UserCalendar: React.FC = () => {
                                                         />
                                                         <ErrorMessage name="licensePlate" component="div" className="text-red-500 text-sm" />
                                                     </div>
-                                                    {["Ölservice", "Inspektion"].includes(values.service) && (
+                                                    {["Ölservice", "Aufbreitung"].includes(values.service) && (
                                                         <>
                                                             <div>
                                                                 <label htmlFor="hsn" className="block text-sm font-medium">
