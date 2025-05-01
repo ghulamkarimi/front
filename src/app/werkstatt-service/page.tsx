@@ -167,7 +167,7 @@ const UserCalendar: React.FC = () => {
         {
             title: "Aufbreitung",
             description: "Eine gründliche Überprüfung aller sicherheitsrelevanten Komponenten Ihres Fahrzeugs, einschließlich Bremsen, Reifen, Lenkung und Beleuchtung. Unsere Aufbreitung sorgt dafür, dass Ihr Fahrzeug in bestem Zustand bleibt und die gesetzlichen Anforderungen erfüllt, damit Sie sorgenfrei unterwegs sind.",
-            image: "/Aufbreitung.jpg",
+            image: "/aufbreitung.jpg",
             expanded: false,
         },
         {
