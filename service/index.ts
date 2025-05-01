@@ -7,11 +7,8 @@ import {
 } from "../interface";
 import axiosJWT from "./axiosJwt";
 import io from "socket.io-client";
-
 export const socket = io("https://car-db.aundoautoservice.de"); 
 export const SERVER_URL = "https://car-db.aundoautoservice.de";
-
-
 
 
 
@@ -68,14 +65,10 @@ export const profilePhotoUpload = (data: File) => {
   });
 };
 
-
-
-
 export const changePasswordWithEmail = (passwordData: IChangePassword) => {
   const url = `${SERVER_URL}/user/changePasswordWithEmail`;
   return axios.put(url, passwordData);
 };
-
 
 export const deleteAccount = (confirmDelete: boolean) => {
   const url = `${SERVER_URL}/user/deleteAccount`;
@@ -83,8 +76,6 @@ export const deleteAccount = (confirmDelete: boolean) => {
     data: { confirmDelete }, // Sende die Bestätigung mit
   });
 };
-
- 
 
 
 export const requestPasswordReset = (email: string) => {

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { string } from "yup";
+ 
 
 interface IAppState {
   isMenuOpen: boolean;

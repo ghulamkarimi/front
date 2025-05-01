@@ -3,7 +3,7 @@ const MenuItems = () => {
         { title: 'Home', url: '/' },
         { title: 'Fahrzeugvermietung', url: '/fahrzeugvermietung' },
         { title: 'Fahrzeuge An-& Verkaufen', url: '/fahrzeugkaufen' },
-        { title: 'Werkstatt-Service', url: '/werkstatt-service' },
+        { title: 'Aufbreitung', url: '/Aufbreitung' },
         { title: 'Kontakt', url: '/kontakt' },
         { title: 'Impressum', url: '/impressum' },
         { title: 'Datenschutz', url: '/datenschutz' },
