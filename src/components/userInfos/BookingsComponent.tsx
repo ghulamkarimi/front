@@ -36,7 +36,7 @@ const BookingsComponent = () => {
               : "bg-gray-200 text-gray-800 hover:bg-orange-200"
             }`}
         >
-         Kfz-Dienstleistungen
+        KFZ-Terminservice
         </button>
         <button
           onClick={() => setActiveSection("rental")}
