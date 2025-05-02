@@ -22,10 +22,10 @@ const cards = [
         description: "Nutzen Sie unsere flexible Autovermietung, um das perfekte Fahrzeug für Ihre Bedürfnisse zu finden. Ideal für Reisen, Events oder alltägliche Fahrten."
     },
     {
-        title: "Werkstatt-Service",
+        title: "Aufbreitung",
         imageUrl: "/werkzeug.jpeg",
         url: "/werkstatt-service",
-        description: "Unser Werkstatt-Service bietet umfassende Wartung und Reparatur für Ihr Fahrzeug. Vertrauen Sie auf unsere Experten für zuverlässige Lösungen."
+        description: "Verleihen Sie Ihrem Fahrzeug neuen Glanz mit unserem professionellen Aufbereitungsservice. Wir kümmern uns um die Reinigung, Pflege und Aufbereitung Ihres Fahrzeugs."
     },
 ]
 

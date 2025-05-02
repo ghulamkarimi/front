@@ -166,7 +166,7 @@ const UserCalendar: React.FC = () => {
     const [services, setServices] = useState([
         {
             title: "Aufbreitung",
-            description: "Eine gründliche Überprüfung aller sicherheitsrelevanten Komponenten Ihres Fahrzeugs, einschließlich Bremsen, Reifen, Lenkung und Beleuchtung. Unsere Aufbreitung sorgt dafür, dass Ihr Fahrzeug in bestem Zustand bleibt und die gesetzlichen Anforderungen erfüllt, damit Sie sorgenfrei unterwegs sind.",
+            description: "Eine umfassende Kontrolle aller sicherheitsrelevanten Fahrzeugkomponenten wie Bremsen, Reifen, Lenkung und Beleuchtung. Unsere professionelle Aufbereitung stellt sicher, dass Ihr Fahrzeug technisch und optisch in Top-Zustand ist und alle gesetzlichen Vorgaben erfüllt – für eine sichere und sorgenfreie Fahrt auf allen Straßen.",
             image: "/aufbreitung.jpg",
             expanded: false,
         },
@@ -210,7 +210,7 @@ const UserCalendar: React.FC = () => {
             className="home-background">
             <div className="">
                 <div className="p-6  min-h-screen py-20">
-                    <h1 className="text-2xl font-bold mb-4 text-center text-gray-200">Willkommen zu Ihrem persönlichen Werkstatt-Terminplaner {"-"} Einfach. Schnell. Bequem.</h1>
+                    <h1 className="text-2xl font-bold mb-4 text-center text-gray-200">Willkommen zu Ihrem persönlichen Terminplaner {"-"} Einfach. Schnell. Bequem.</h1>
                     <div className="text-center text-gray-200 text-2xl font-bold py-6">
                         <p>Usere Öffnungszeiten</p>
                         <p>Montag - Samstag: 07:30 - 18:00 Uhr</p>
