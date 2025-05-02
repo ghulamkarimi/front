@@ -36,7 +36,7 @@ const BookingsComponent = () => {
               : "bg-gray-200 text-gray-800 hover:bg-orange-200"
             }`}
         >
-          Werkstatt
+          Leistungen
         </button>
         <button
           onClick={() => setActiveSection("rental")}
@@ -53,7 +53,7 @@ const BookingsComponent = () => {
       {activeSection === "workshop" && (
         <section>
           <h2 className="text-3xl md:text-4xl font-semibold mb-10 text-orange-500 text-center">
-            Werkstatt Buchungen
+          Ihr Service-Termin
           </h2>
           {workshopAppointments.length > 0 ? (
             <ul className="space-y-6 md:space-y-10">
