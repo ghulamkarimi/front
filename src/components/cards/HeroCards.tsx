@@ -22,10 +22,10 @@ const cards = [
         description: "Nutzen Sie unsere flexible Autovermietung, um das perfekte Fahrzeug für Ihre Bedürfnisse zu finden. Ideal für Reisen, Events oder alltägliche Fahrten."
     },
     {
-        title: "Aufbreitung",
+        title: "Service Termine",
         imageUrl: "/werkzeug.jpeg",
         url: "/werkstatt-service",
-        description: "Verleihen Sie Ihrem Fahrzeug neuen Glanz mit unserem professionellen Aufbereitungsservice. Wir kümmern uns um die Reinigung, Pflege und Aufbereitung Ihres Fahrzeugs."
+        description: "Buchen Sie Ihren nächsten Termin ganz einfach online. Wir bieten eine breite Palette von Dienstleistungen an, um Ihr Fahrzeug in Top-Zustand zu halten."
     },
 ]
 
